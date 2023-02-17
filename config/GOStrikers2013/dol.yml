@@ -1,0 +1,32 @@
+path: orig/GOStrikers2013/InazumaWii.dol
+r13: 0x80514400
+r2: 0x805167e0
+
+section_defs:
+    text:
+      - name: .init
+      - name: .text
+    
+    data:
+      - name: extab_
+        attr: a
+      - name: extabindex_
+        attr: a
+      - name: .ctors
+        balign: 0
+      - name: .dtors
+        balign: 0
+      - name: .rodata
+      - name: .data
+      - name: .sdata
+      - name: .sdata2
+    
+    bss:
+      - name: .sbss
+        nobits: true
+      - name: .sbss2
+        nobits: true
+        bss_forced_size: 0x28
+      - name: .bss
+        nobits: true
+        bss_start_align: 0x40
