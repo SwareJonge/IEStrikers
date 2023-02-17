@@ -10,14 +10,14 @@ Decompilation of Inazuma Eleven Strikers
 - Python 3.8+
 
 ### Instructions
-- Dump a copy of the Inazuma Eleven Go Strikers 2013 and extract main.dol
-- rename main.dol to InazumaWii.dol
-- clone the repo using `git clone https://github.com/SwareJonge/IEStrikers/`
-- Place InazumaWii.dol in `orig/GOStrikers2013/`
+- Dump a copy of the Inazuma Eleven Go Strikers 2013 and extract `main.dol`
+- rename `main.dol` to `InazumaWii.dol`
+- clone the repo using `git clone https://github.com/SwareJonge/IEStrikers/ --recursive`
+- Place `InazumaWii.dol` in `orig/GOStrikers2013/`
 - Place the required compilers in `tools`
 - (first time only) Install the modules from requirements.txt (`pip install -r requirementstxt`)
-- Run configure.py
-- Run ninja
+- Run `python configure.py` you also need to run this when you made a change to `dol_slices.yml`
+- Run `ninja`
 
 ## Credits
 - [Seeky](https://github.com/SeekyCt) for helping me setting it all up
