@@ -131,7 +131,7 @@ PROGRESS = f"{PYTHON} {PPCDIS}/progress.py"
 # Codewarrior
 TOOLS = "tools"
 
-SDK_CW = os.path.join(TOOLS, "0x4302_145")
+SDK_CW = os.path.join(TOOLS, "0x4302_151") # original version was 0x4302_145, however we don't have this
 SDK_CC = os.path.join(SDK_CW, "mwcceppc")
 CODEWARRIOR = os.path.join(TOOLS, "0x4302_213")
 # TODO: figure out what compiler is used by the game, mobiclip uses Wii MW 1.5(0x4302_188) which isn't available(closest build i have is build 0x4302_182(some 1.4 build))
@@ -217,16 +217,16 @@ INCDIRS = [
 MWCC_INCLUDES = ' '.join(f"-i {d}" for d in INCDIRS)
 GCC_INCLUDES = ' '.join(f"-I {d}" for d in INCDIRS)
 
-DEFINES = [ # probably add a flag for European build
+#DEFINES = [ # probably add a flag for European build
     #"DEBUG"
     #"EU_RELEASE"
-]
-MWCC_DEFINES = ' '.join(f"-d {d}" for d in DEFINES)
-GCC_DEFINES = ' '.join(f"-D {d}" for d in DEFINES)
+#]
+#MWCC_DEFINES = ' '.join(f"-d {d}" for d in DEFINES)
+#GCC_DEFINES = ' '.join(f"-D {d}" for d in DEFINES)
 
 CPPFLAGS = ' '.join([
     "-nostdinc",
-    GCC_DEFINES,
+    #GCC_DEFINES,
     GCC_INCLUDES
 ])
 
@@ -236,16 +236,20 @@ CFLAGS = [
     "-enum int",
     "-enc SJIS",
     "-nodefaults",
-    "-Cpp_exceptions off",   
     "-str pool",
     "-Cpp_exceptions off",
+    "-fp hard"
     #"-char signed",
     #"-use_lmw_stmw on",
-    MWCC_DEFINES
+    #MWCC_DEFINES
 ]
 
 
-BASE_DOL_CFLAGS = CFLAGS + ["O4, s"]
+BASE_DOL_CFLAGS = CFLAGS + [
+    "-O4,s",
+    "-func_align 4",  # get rid of 0s
+    "-inline off" # probably only for shade std library?
+    ]
 
 LOCAL_CFLAGS = [
     "-nostdinc",

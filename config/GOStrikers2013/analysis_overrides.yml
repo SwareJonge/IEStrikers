@@ -1,2 +1,12 @@
+forced_types:
+  0x802cce28: FUNCTION # TRKExceptionHandler
+  0x802cd040: FUNCTION # TRKInterruptHandlerEnableInterrupts
+  0x803fb340: FUNCTION # ExecCommand__Q34nw4r3snd13RemoteSpeakerFQ44nw4r3snd13RemoteSpeaker14SpeakerCommand
+
+blocked_target_ranges: # pointing to stuff in extab dangerous
+  - [0x80006720, 0x80012840]
+  - [0x80012840, 0x80020b00]
+
 blocked_pointers:
-- 0x80512d40
+  - 0x80494bf4
+  - 0x80512d40

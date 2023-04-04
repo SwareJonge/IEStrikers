@@ -532,6 +532,9 @@ class CSource(Source):
         self.cc = c.CC # if a library uses a different compiler, change it here
         self.cflags = ctx.cflags
 
+        if(path.startswith("src/PowerPC_EABI_Support/")):
+            self.cc = c.SDK_CC
+
         self.iconv_path = f"$builddir/iconv/{path}"
 
         # Find generated includes
