@@ -9,8 +9,10 @@ section_defs:
     
     data:
       - name: extab_
+        balign: 0
         attr: a
       - name: extabindex_
+        balign: 0
         attr: a
       - name: .ctors
         balign: 0

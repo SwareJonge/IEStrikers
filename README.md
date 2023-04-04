@@ -19,6 +19,9 @@ Decompilation of Inazuma Eleven Strikers
 - Run `python configure.py` you also need to run this when you made a change to `dol_slices.yml`
 - Run `ninja`
 
+### Bugs
+- currently ctors and extab don't work, when doing so it will result in an internal linker error
+
 ## Credits
 - [Seeky](https://github.com/SeekyCt) for helping me setting it all up
 
