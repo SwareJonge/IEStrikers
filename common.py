@@ -247,9 +247,23 @@ CFLAGS = [
 
 BASE_DOL_CFLAGS = CFLAGS + [
     "-O4,s",
+    "-func_align 16", # stupid
+    "-ipa file" # also stupid
+]
+
+BASE_RUNTIME_CLFAGS = CFLAGS + [
+    "-O4,p",
+    "-str pool,readonly,reuse",
+    "-use_lmw_stmw on",
+    "-inline on",
     "-func_align 4",  # get rid of 0s
-    "-inline off" # probably only for shade std library?
-    ]
+    "-inline off"
+]
+
+BASE_SHD_STD_CLFAGS = BASE_DOL_CFLAGS + [
+    "-func_align 4",  # get rid of 0s
+    "-inline off"  # probably only for shade std library?
+]
 
 LOCAL_CFLAGS = [
     "-nostdinc",
@@ -259,6 +273,9 @@ LOCAL_CFLAGS = [
     MWCC_INCLUDES
 ]
 DOL_CFLAGS = ' '.join(BASE_DOL_CFLAGS + LOCAL_CFLAGS)
+SHD_STD_CLFAGS = ' '.join(BASE_SHD_STD_CLFAGS + LOCAL_CFLAGS)
+RUNTIME_CFLAGS = ' '.join(BASE_RUNTIME_CLFAGS + LOCAL_CFLAGS)
+
 
 LDFLAGS = ' '.join([
     "-fp hard",

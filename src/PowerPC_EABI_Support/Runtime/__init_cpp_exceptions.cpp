@@ -1,10 +1,11 @@
-#include "PowerPC_EABI_Support/Runtime/__init_cpp_exceptions.h"
-#include "PowerPC_EABI_Support/Runtime/NMWException.h"
+
+#include "PowerPC_EABI_Support/Runtime/__ppc_eabi_init.h"
 #include "PowerPC_EABI_Support/Runtime/__ppc_eabi_linker.h"
+#include "PowerPC_EABI_Support/Runtime/NMWException.h"
 
 static int fragmentID = -2;
 
-static inline void __exception_info_constants(void **info, char **R2)
+extern void __exception_info_constants(void **info, char **R2)
 {
     register char *temp;
     asm {	mr temp, r2; }
@@ -12,7 +13,7 @@ static inline void __exception_info_constants(void **info, char **R2)
     *info = (void *)_eti_init_info;
 }
 
-extern void __init_cpp_exceptions(void)
+void __init_cpp_exceptions(void)
 {
     char *R2;
     void *info;
@@ -23,7 +24,7 @@ extern void __init_cpp_exceptions(void)
     }
 }
 
-extern void __fini_cpp_exceptions(void)
+void __fini_cpp_exceptions(void)
 {
     if (fragmentID != -2)
     {

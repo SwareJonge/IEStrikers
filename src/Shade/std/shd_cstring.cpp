@@ -32,15 +32,14 @@ void hstrcat(char *str1, const char *str2)
     }
     do
     {
-        cur = *str2;
-        *str1++ = *str2++;
-    } while (cur != '\0');
+        *str1++ = *str2;
+    } while (*str2++ != '\0');
 }
 
 int hstrncmp(const char *str1, const char *str2, int n)
 {
     char cur;
-    for (; n > 0; n--)
+    while (n-- > 0)
     {
         cur = *str1;
         if (*str1++ != *str2++)

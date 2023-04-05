@@ -464,6 +464,7 @@ class GenAsmSource(Source):
         # Add ctors to forcefiles
         if section == ".ctors":
             forcefiles.append(name + ".o")
+            print(name)
 
     def build(self):
         n.build(
@@ -532,14 +533,17 @@ class CSource(Source):
         self.cc = c.CC # if a library uses a different compiler, change it here
         self.cflags = ctx.cflags
 
-        if(path.startswith("src/PowerPC_EABI_Support/")):
-            self.cc = c.SDK_CC
+        if(path.startswith("src/PowerPC_EABI_Support/Runtime")):
+            self.cflags = c.RUNTIME_CFLAGS
+        if(path.startswith("src/Shade/std")):
+            self.cflags = c.SHD_STD_CLFAGS
 
         self.iconv_path = f"$builddir/iconv/{path}"
 
         # Find generated includes
         with open(path, encoding="utf-8") as f:
             gen_includes = GeneratedInclude.find(ctx, path, f.read())
+
 
         self.s_path = f"$builddir/{path}.s"
         super().__init__(True, path, f"$builddir/{path}.o", gen_includes)

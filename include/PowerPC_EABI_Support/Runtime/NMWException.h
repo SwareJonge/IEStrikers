@@ -19,11 +19,11 @@ extern "C" {
 
 #define DTORCALL_COMPLETE(dtor, objptr) (((void (*)(void*, DTORARG_TYPE))dtor)(objptr, -1))
 
-void __unregister_fragment(int fragmentID);
-//struct __eti_init_info* info
-int __register_fragment(void* info, char* TOC);
-void* __register_global_object(void* object, void* destructor, void* regmem);
-void __destroy_global_chain(void);
+extern void __unregister_fragment(int fragmentID);
+// struct __eti_init_info* info
+extern int __register_fragment(void *info, char *TOC);
+extern void *__register_global_object(void *object, void *destructor, void *regmem);
+extern void __destroy_global_chain(void);
 
 #ifdef __cplusplus
 }

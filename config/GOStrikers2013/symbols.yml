@@ -5344,6 +5344,7 @@ global:
     0x802940e0: __OSRelaunchTitle
     0x80004360: __init_hardware
     0x802942f0: __init_user
+    0x80294310: __init_cpp
     0x80294360: exit
     0x80004390: __flush_cache
     0x802943b0: PSMTXIdentity
@@ -5841,9 +5842,9 @@ global:
     0x80004714: memset
     0x802b1e30: strlen
     0x802b1e4c: __va_arg
-    #0x8050e0c0: __global_destructor_chain
-    #0x802b1f14: __register_global_object
-    #0x802b1f2c: __destroy_global_chain
+    0x8050e0c0: __global_destructor_chain
+    0x802b1f14: __register_global_object
+    0x802b1f2c: __destroy_global_chain
     0x8050cf90: __RTTI__Q23std9exception
     0x802b1f7c: terminate__3stdFv
     0x802b1f88: unexpected__3stdFv
@@ -5893,11 +5894,13 @@ global:
     0x802b2ae4: __shr2u
     0x802b2b08: __cvt_sll_dbl
     0x802b2bb8: __cvt_dbl_ull
-    #0x802b2c60: __init_cpp_exceptions
-    #0x802b2c9c: __fini_cpp_exceptions
+    0x802b2c60: __init_cpp_exceptions
+    0x802b2c9c: __fini_cpp_exceptions
+    # disable_this
     #0x80480080: __init_cpp_exceptions_reference
     #0x80480160: __destroy_global_chain_reference
     #0x80480164: __fini_cpp_exceptions_reference
+    ####
     0x802b2cd0: __register_fragment
     0x802b2d1c: __unregister_fragment
     0x804e5518: __vt__Q23std13bad_exception
@@ -12002,7 +12005,7 @@ global:
     #0x80006678: _rom_copy_info
     #0x800066fc: _bss_init_info
     #0x80480080: _ctors
-    # 0x8048014c: _ctors$99
+    #0x8048014c: _ctors$99
     #0x80480160: _dtors
     #0x80480168: _dtors$99
     #0x80020ad8: _eti_init_info
@@ -28212,9 +28215,6 @@ src/OSPlayTime.c:
     # 0x8050ce58: @1520
     # 0x804dec9c: @1521
 
-src/__ppc_eabi_init.cpp:
-    0x80294310: __init_cpp
-
 src/mtx.c:
     0x8050ce60: Unit01
     # 0x80511440: @1635
@@ -28991,11 +28991,7 @@ src/runtime.c:
     0x802b2614: __save_gpr
     0x802b2660: __restore_gpr
 
-src/PowerPC_EABI_Support/Runtime/__init_cpp_exceptions.cpp:
-    0x8050cfa0: fragmentID
-
 src/Gecko_ExceptionPPC.cp:
-    0x808b45e8: fragmentinfo
     0x802b2d44: ExPPC_FindExceptionFragment__FPcP12FragmentInfo
     0x802b2ddc: ExPPC_FindExceptionRecord__FPcP15MWExceptionInfo
     # 0x800119ac: @283
