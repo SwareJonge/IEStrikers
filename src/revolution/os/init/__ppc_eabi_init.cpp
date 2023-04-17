@@ -1,7 +1,7 @@
 #include "PowerPC_EABI_Support/Runtime/__ppc_eabi_init.h"
 #include "PowerPC_EABI_Support/Runtime/__ppc_eabi_linker.h"
 
-#include <rvl/base/PPCArch.h>
+#include <revolution/base/PPCArch.h>
 
 #ifdef __cplusplus
 extern "C"

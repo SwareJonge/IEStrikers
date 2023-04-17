@@ -3,29 +3,40 @@
 #########################################################
 
 # Paths relative to src/
+# extab, extabindex and ctor sections should be disabled(if a file has a ctor section then just don't compile it)
+# these should work but just don't, results in linker errors
 
-rvl/os/init/__ppc_eabi_init.cpp:
-  .init: [0x80004360, 0x800043c4]
-  .text: [0x802942f0, 0x802943b0]
+#revolution/os/init/__start.c:
+  #.init: [0x80004000, 0x80004360]
+  #.sbss: [0x8050dc80, 0x8050dc88]
 
-PowerPC_EABI_Support/Runtime/global_destructor_chain.c:
-  .text: [0x802b1f14, 0x802b1f74]
-  .sbss: [0x8050e0c0, 0x8050e0c8]
+#revolution/os/init/__ppc_eabi_init.cpp:
+  #.init: [0x80004360, 0x800043c4]
+  #.text: [0x802942f0, 0x802943b0]
+
+#PowerPC_EABI_Support/Runtime/global_destructor_chain.c:
+  #.text: [0x802b1f14, 0x802b1f74]
+  #.sbss: [0x8050e0c0, 0x8050e0c8]
 
 #PowerPC_EABI_Support/Runtime/NMWException.cp:
   #.text: [0x802b1f74, 0x802b24f4]
   #.sdata: [0x8050cf98, 0x8050cfa0]
-  #extab_: [0x8001196c, 0x800119ac]
-  #extabindex_: [0x8001fdb8, 0x8001fde8]
+  #extab: [0x8001196c, 0x800119ac]
+  #extabindex: [0x8001fdb8, 0x8001fde8]
 
-PowerPC_EABI_Support/Runtime/__init_cpp_exceptions.cpp:
-  .text: [0x802b2c60, 0x802b2cd0]
-  .sdata: [0x8050cfa0, 0x8050cfa8]
-  .ctors: [0x80480080, 0x80480084]
-  .dtors: [0x80480160, 0x80480168]
-
-Shade/std/shd_cstring.cpp:
-  .text: [0x803346e0, 0x803347d0]
+#PowerPC_EABI_Support/Runtime/__init_cpp_exceptions.cpp:
+  #.text: [0x802b2c60, 0x802b2cd0]
+  #.sdata: [0x8050cfa0, 0x8050cfa8]
+  #.ctors: [0x80480080, 0x80480084]
+  #.dtors: [0x80480160, 0x80480168]
 
 Shade/std/shd_stdarg.cpp:
-  .text: [0x803347d0, 0x8033496c]
+  #extab: [0x800120a4, 0x800120b4]
+  #extabindex: [0x8002037c, 0x80020394] 
+  .text: [0x803346e0, 0x8033496c]
+
+nw4r/db/db_console.cpp:
+  .text: [0x80392fb0, 0x8039308c]
+
+nw4r/snd/snd_adpcm.cpp:
+  .text: [0x8040e7e0, 0x8040e86c]

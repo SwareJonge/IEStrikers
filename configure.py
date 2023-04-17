@@ -433,8 +433,7 @@ class Source(ABC):
         self.decompiled = decompiled
         self.src_path = src_path
         self.o_path = o_path
-        filename = src_path.split('/')[-1]
-        self.dep = filename.rpartition('.')[0] + '.d'
+        self.o_stem = o_path[:-2]
         self.gen_includes = gen_includes
 
     def build(self):
@@ -537,6 +536,10 @@ class CSource(Source):
             self.cflags = c.RUNTIME_CFLAGS
         if(path.startswith("src/Shade/std")):
             self.cflags = c.SHD_STD_CLFAGS
+        if (path.startswith("src/nw4r")):
+            self.cflags = c.NW4R_CFLAGS
+            if (path.startswith("src/nw4r/snd/snd_adpcm")):
+                self.cc = c.REVO_EX_CC
 
         self.iconv_path = f"$builddir/iconv/{path}"
 
@@ -562,7 +565,6 @@ class CSource(Source):
             variables = {
                 "cc": self.cc,
                 "cflags" : self.cflags,
-                "dep" : self.dep
             }
         )
         # Optional manual debug target
@@ -573,7 +575,6 @@ class CSource(Source):
             implicit = [inc.path for inc in self.gen_includes],
             variables = {
                 "cflags" : self.cflags,
-                "dep" : self.dep
             }
         )
 

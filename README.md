@@ -20,7 +20,7 @@ Decompilation of Inazuma Eleven Strikers
 - Run `ninja`
 
 ### Bugs
-- currently ctors and extab don't work, when doing so it will result in an internal linker error
+- currently ctors and extab don't work, this might get fixed in the future
 
 ## Credits
 - [Seeky](https://github.com/SeekyCt) for helping me setting it all up

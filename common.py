@@ -133,6 +133,10 @@ TOOLS = "tools"
 
 SDK_CW = os.path.join(TOOLS, "0x4302_151") # original version was 0x4302_145, however we don't have this
 SDK_CC = os.path.join(SDK_CW, "mwcceppc")
+
+REVO_EX_CW = os.path.join(TOOLS, "0x4199_60831") # also used for nw4r/snd/snd_adpcm.cpp
+REVO_EX_CC = os.path.join(REVO_EX_CW, "mwcceppc")
+
 CODEWARRIOR = os.path.join(TOOLS, "0x4302_213")
 # TODO: figure out what compiler is used by the game, mobiclip uses Wii MW 1.5(0x4302_188) which isn't available(closest build i have is build 0x4302_182(some 1.4 build))
 # However i think the main game code(GO at least) is compiled with Wii MW 1.7(0x4302_213), DWC is compiled with Wii MW 1.6(0x4302_202)
@@ -232,35 +236,40 @@ CPPFLAGS = ' '.join([
 
 # there are a lot of diffrenet libraries that probably need their own libraries, this is just a base
 CFLAGS = [
-    "-lang=c++",
+    "-O4,p",
     "-enum int",
     "-enc SJIS",
     "-nodefaults",
-    "-str pool",
-    "-Cpp_exceptions off",
-    "-fp hard"
+    "-fp hard",
+    "-proc gekko",
     #"-char signed",
-    #"-use_lmw_stmw on",
+    "-use_lmw_stmw on"
     #MWCC_DEFINES
 ]
 
-
 BASE_DOL_CFLAGS = CFLAGS + [
     "-O4,s",
-    "-func_align 16", # stupid
-    "-ipa file" # also stupid
+    "-ipa file"  # also stupid
+]
+
+BASE_NW4R_CFLAGS = CFLAGS + [
+    "-lang=c++",
+    "-inline auto",
+    "-Cpp_exceptions off",
+    "-RTTI off"
 ]
 
 BASE_RUNTIME_CLFAGS = CFLAGS + [
-    "-O4,p",
     "-str pool,readonly,reuse",
-    "-use_lmw_stmw on",
     "-inline on",
     "-func_align 4",  # get rid of 0s
     "-inline off"
 ]
 
 BASE_SHD_STD_CLFAGS = BASE_DOL_CFLAGS + [
+    "-lang=c++",
+    "-use_lmw_stmw off",
+    "-Cpp_exceptions off", # should be disabled normally
     "-func_align 4",  # get rid of 0s
     "-inline off"  # probably only for shade std library?
 ]
@@ -275,6 +284,7 @@ LOCAL_CFLAGS = [
 DOL_CFLAGS = ' '.join(BASE_DOL_CFLAGS + LOCAL_CFLAGS)
 SHD_STD_CLFAGS = ' '.join(BASE_SHD_STD_CLFAGS + LOCAL_CFLAGS)
 RUNTIME_CFLAGS = ' '.join(BASE_RUNTIME_CLFAGS + LOCAL_CFLAGS)
+NW4R_CFLAGS = ' '.join(BASE_NW4R_CFLAGS + LOCAL_CFLAGS)
 
 
 LDFLAGS = ' '.join([

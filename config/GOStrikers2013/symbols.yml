@@ -1,3 +1,5 @@
+# because MWLD is annoying to work with, comment out certain functions from the runtime library
+
 global:
     0x8050e7e0: shd_init_flag
     0x8050e7e4: shd_pktbf_sz
@@ -5225,8 +5227,8 @@ global:
     0x8028d220: OSLoadFont
     0x8028d600: OSGetFontTexel
     0x8028d890: OSDisableInterrupts
-    0x8028d890: __RAS_OSDisableInterrupts_begin
-    0x8028d89c: __RAS_OSDisableInterrupts_end
+    #0x8028d890: __RAS_OSDisableInterrupts_begin
+    #0x8028d89c: __RAS_OSDisableInterrupts_end
     0x8028d8b0: OSEnableInterrupts
     0x8028d8d0: OSRestoreInterrupts
     0x8028d900: __OSSetInterruptHandler
@@ -5842,9 +5844,9 @@ global:
     0x80004714: memset
     0x802b1e30: strlen
     0x802b1e4c: __va_arg
-    0x8050e0c0: __global_destructor_chain
-    0x802b1f14: __register_global_object
-    0x802b1f2c: __destroy_global_chain
+    #0x8050e0c0: __global_destructor_chain
+    #0x802b1f14: __register_global_object
+    #0x802b1f2c: __destroy_global_chain
     0x8050cf90: __RTTI__Q23std9exception
     0x802b1f7c: terminate__3stdFv
     0x802b1f88: unexpected__3stdFv
@@ -5894,9 +5896,9 @@ global:
     0x802b2ae4: __shr2u
     0x802b2b08: __cvt_sll_dbl
     0x802b2bb8: __cvt_dbl_ull
-    0x802b2c60: __init_cpp_exceptions
-    0x802b2c9c: __fini_cpp_exceptions
     # disable_this
+    #0x802b2c60: __init_cpp_exceptions
+    #0x802b2c9c: __fini_cpp_exceptions
     #0x80480080: __init_cpp_exceptions_reference
     #0x80480160: __destroy_global_chain_reference
     #0x80480164: __fini_cpp_exceptions_reference
