@@ -4,7 +4,7 @@
 
 #include <revolution/mem/mem_allocator.h>
 
-void shdInitMem();
+int shdInitMem();
 
 void *shdMemGet(u32 size, int alignment, s8 flag); // TODO: investigate flag
 void shdMemFree(void *mem);

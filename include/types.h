@@ -1,6 +1,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include "macros.h"
+
 typedef signed char s8;
 typedef signed short s16;
 typedef signed long s32;
@@ -27,6 +29,9 @@ typedef float f32;
 typedef double f64;
 typedef volatile f32 vf32;
 typedef volatile f64 vf64;
+
+typedef int UNKWORD;
+typedef void UNKTYPE;
 
 typedef int BOOL;
 

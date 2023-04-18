@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_GX_PIXEL_H
 #define RVL_SDK_GX_PIXEL_H
-#include <revolution/GX/GXTypes.h>
+#include <revolution/gx/GXTypes.h>
 #include "types.h"
 #ifdef __cplusplus
 extern "C" {
@@ -16,6 +16,9 @@ void GXSetZCompLoc(u8);
 
 void GXSetDither(u8);
 void GXSetDstAlpha(u8, u8);
+
+// Unsure
+void GXSetPixelFmt(u8, u8);
 
 #ifdef __cplusplus
 }

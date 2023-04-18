@@ -14,16 +14,6 @@
 
 #define LINE 112
 
-#define DISABLE_DEBUG 1
-#define UNK_0x2 2
-#define ENABLE_HBM 4
-#define FORCE_4_3 0x8
-#define FORCE_16_9 0x10
-#define DVD_THING 0x100 // something related to dvd file loading, always resets readsize to 0 (8032eaac)
-#define ENABLE_WIIMOTE 0x200
-#define UNK_0x400 0x400 // no reference to this
-#define ENABLE_GCN 0x800
-
 // Dates:
 // JP: Jun  1 2011
 // 2012: Oct  5 2011
@@ -94,22 +84,22 @@ void shdInit1(void)
     shdsys.nextbuf = (u32 *)shdMemGet(0x8100, 64, 0);
 
     shdwk.field_0x1c6a = 32;
-    shdwk.field_0x30 = shdwk.field_0x1c6a;
+    shdwk.frame_cnted = shdwk.field_0x1c6a;
 
-    shdwk.field_0x34 = (f32)shdwk.field_0x30;
-    shdwk.field_0x38 = shdwk.field_0x34 / 32.0f;
+    shdwk.frame_cntedf = (f32)shdwk.frame_cnted;
+    shdwk.frame_rate = shdwk.frame_cntedf / 32.0f;
 
-    shdwk.efb_height = 640;
-    shdwk.xfb_height = 640;
-    shdwk.efb_width = 480;
-    shdwk.xfb_width = 480;
+    shdwk.efb_width = 640;
+    shdwk.xfb_width = 640;
+    shdwk.efb_height = 480;
+    shdwk.xfb_height = 480;
     shdwk.field_0x24 = 16;
     shdwk.field_0x26 = 24;
     //
     shdsys.field_0x184 = 0x1005;
     shdsys.field_0x188 = 0x1009;
-    shdsys.field_0xf0 = 0;
-    shdsys.field_0xf4 = 1.0f;
+    shdsys.vi_yDiff = 0;
+    shdsys.vi_yScale = 1.0f;
     //
     shdwk.field_0xdc = 4;
     shdwk.field_0xdd = 0;

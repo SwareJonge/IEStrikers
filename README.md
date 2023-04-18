@@ -23,5 +23,6 @@ Decompilation of Inazuma Eleven Strikers
 - currently ctors and extab don't work, this might get fixed in the future
 
 ## Credits
+- [kiwi](https://github.com/kiwi515) for [open_rvl](https://github.com/kiwi515/open_rvl)
 - [Seeky](https://github.com/SeekyCt) for helping me setting it all up
 
