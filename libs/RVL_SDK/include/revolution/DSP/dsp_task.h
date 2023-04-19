@@ -10,6 +10,7 @@ typedef struct DSPTask;
 typedef struct OSContext;
 
 typedef enum {
+    DSP_TASK_REMOVED,
     DSP_TASK_ACTIVE = (1 << 0),
     DSP_TASK_CANCELED = (1 << 1),
 } DSPTaskFlags;
@@ -24,9 +25,9 @@ typedef enum {
 typedef void (*DSPTaskCallback)(struct DSPTask* task);
 
 typedef struct DSPTask {
-    u32 state;          // at 0x0
+    volatile u32 state; // at 0x0
     u32 prio;           // at 0x4
-    u32 flags;          // at 0x8
+    volatile u32 flags; // at 0x8
     void* iramMmemAddr; // at 0xC
     u32 iramMmemLen;    // at 0x10
     void* iramDspAddr;  // at 0x14

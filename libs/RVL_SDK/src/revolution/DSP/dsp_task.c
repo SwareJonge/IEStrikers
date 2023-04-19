@@ -269,6 +269,10 @@ void __DSP_boot_task(DSPTask* task) {
                        task->startVector);
 }
 
+void __DSP_add_task(DSPTask* task) {
+    __DSP_debug_printf("__DSP_add_task() : Added task    : 0x%08X\n", task);
+}
+
 void __DSP_insert_task(DSPTask* task) {
     DSPTask* it;
     DSPTask* first;
@@ -313,7 +317,7 @@ void __DSP_insert_task(DSPTask* task) {
 }
 
 void __DSP_remove_task(DSPTask* task) {
-    task->flags = 0;
+    task->flags = DSP_TASK_REMOVED;
     task->state = DSP_TASK_STATE_3;
 
     if (__DSP_first_task == task) {

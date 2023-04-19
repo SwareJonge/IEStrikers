@@ -2,7 +2,7 @@
 #include <revolution/OS.h>
 
 const char* __DSPVersion =
-    "<< RVL_SDK - DSP \trelease build: Nov 30 2006 03:26:46 (0x4199_60831) >>";
+    "<< RVL_SDK - DSP \trelease build: Aug 23 2010 17:30:03 (0x4302_145) >>";
 
 static BOOL __DSP_init_flag = FALSE;
 
@@ -40,8 +40,8 @@ void DSPAssertInt(void) {
 void DSPInit(void) {
     BOOL enabled;
 
-    __DSP_debug_printf("DSPInit(): Build Date: %s %s\n", "Nov 30 2006",
-                       "03:26:46");
+    __DSP_debug_printf("DSPInit(): Build Date: %s %s\n", "Aug 23 2010",
+                       "17:30:03");
 
     if (__DSP_init_flag == TRUE) {
         return;
@@ -59,7 +59,7 @@ void DSPInit(void) {
          ~(DSP_CSR_AIDINT | DSP_CSR_ARINT | DSP_CSR_DSPINT)) |
         DSP_CSR_RES;
 
-    DSP_HW_REGS[DSP_CSR] &=
+    DSP_HW_REGS[DSP_CSR] = DSP_HW_REGS[DSP_CSR] &
         ~(DSP_CSR_HALT | DSP_CSR_AIDINT | DSP_CSR_ARINT | DSP_CSR_DSPINT);
 
     __DSP_tmp_task = NULL;
@@ -97,17 +97,17 @@ DSPTask* DSPAssertTask(DSPTask* task) {
 
     enabled = OSDisableInterrupts();
 
-    if (__DSP_curr_task == task) {
-        __DSP_rude_task_pending = TRUE;
+    if (__DSP_curr_task == task) {        
         __DSP_rude_task = task;
+        __DSP_rude_task_pending = TRUE;
         OSRestoreInterrupts(enabled);
         return task;
     }
 
-    if (task->prio < __DSP_curr_task->prio) {
-        __DSP_rude_task_pending = TRUE;
+    if (task->prio < __DSP_curr_task->prio) {        
         __DSP_rude_task = task;
-
+        __DSP_rude_task_pending = TRUE;
+        
         if (__DSP_curr_task->state == DSP_TASK_STATE_1) {
             DSPAssertInt();
         }
