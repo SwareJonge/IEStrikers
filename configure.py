@@ -531,14 +531,14 @@ class CSource(Source):
     def __init__(self, ctx: c.SourceContext, path: str):
         self.cc = c.CC # if a library uses a different compiler, change it here
         self.cflags = ctx.cflags
-
-        if(path.startswith("src/PowerPC_EABI_Support/Runtime")):
-            self.cflags = c.RUNTIME_CFLAGS
-        if(path.startswith("src/Shade/std")):
+        print(path)
+        if(path.startswith("./src/Shade/std")):
             self.cflags = c.SHD_STD_CLFAGS
-        if (path.startswith("src/nw4r")):
+        if (path.startswith("./libs/PowerPC_EABI_Support/Runtime")):
+            self.cflags = c.RUNTIME_CFLAGS
+        if (path.startswith("./libs/nw4r")):
             self.cflags = c.NW4R_CFLAGS
-            if (path.startswith("src/nw4r/snd/snd_adpcm")):
+            if (path.startswith("./libs/nw4r/snd/snd_adpcm")):
                 self.cc = c.REVO_EX_CC
 
         self.iconv_path = f"$builddir/iconv/{path}"
@@ -580,7 +580,7 @@ class CSource(Source):
 
 def load_sources(ctx: c.SourceContext):
     raw = c.get_cmd_stdout(
-        f"{c.SLICES} {ctx.binary} {ctx.slices} -o -p {ctx.srcdir}/"
+        f"{c.SLICES} {ctx.binary} {ctx.slices} -o -p ./"
     )
     return [Source.make(ctx, s) for s in json.loads(raw)]
 

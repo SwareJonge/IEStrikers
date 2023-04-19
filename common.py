@@ -45,7 +45,7 @@ def get_containing_slice(addr: int) -> Tuple[Binary, SourceDesc]:
     """Finds the binary containing an address and its source file
     Source file is empty string if not decompiled"""
 
-    dol_raw = get_cmd_stdout(f"{SLICES} {DOL_YML} {DOL_SLICES} -p {DOL_SRCDIR}/ --containing {addr:x}")
+    dol_raw = get_cmd_stdout(f"{SLICES} {DOL_YML} {DOL_SLICES} -p {DOL_SRCDIR} --containing {addr:x}")
     containing = json.loads(dol_raw)
     return (Binary.DOL, containing)
 
@@ -86,7 +86,7 @@ VERSION = "GOStrikers2013"
 OUTNAME = "InazumaWii" # fun fact: in all other versions it's InazmaWii, only took them a few years to notice it
 
 # Directory for decompiled dol code
-DOL_SRCDIR = "src"
+DOL_SRCDIR = "./"
 
 # Include directory
 INCDIR = "include"
@@ -131,15 +131,20 @@ PROGRESS = f"{PYTHON} {PPCDIS}/progress.py"
 # Codewarrior
 TOOLS = "tools"
 
-SDK_CW = os.path.join(TOOLS, "0x4302_151") # original version was 0x4302_145, however we don't have this
-SDK_CC = os.path.join(SDK_CW, "mwcceppc")
 
-REVO_EX_CW = os.path.join(TOOLS, "0x4199_60831") # also used for nw4r/snd/snd_adpcm.cpp
+# also used for nw4r/snd/snd_adpcm.cpp
+REVO_EX_CW = os.path.join(TOOLS, "0x4199_60831")
 REVO_EX_CC = os.path.join(REVO_EX_CW, "mwcceppc")
 
-CODEWARRIOR = os.path.join(TOOLS, "0x4302_213")
+# SDK Used 0x4302_145, however we don't have this, this is the closest version in terms of codegen
+# This compiler also gets used for nw4r, which used 0x4302_158
+SDK_CW = os.path.join(TOOLS, "0x4302_151") 
+SDK_CC = os.path.join(SDK_CW, "mwcceppc")
+
 # TODO: figure out what compiler is used by the game, mobiclip uses Wii MW 1.5(0x4302_188) which isn't available(closest build i have is build 0x4302_182(some 1.4 build))
 # However i think the main game code(GO at least) is compiled with Wii MW 1.7(0x4302_213), DWC is compiled with Wii MW 1.6(0x4302_202)
+CODEWARRIOR = os.path.join(TOOLS, "0x4302_213")
+
 CC = os.path.join(CODEWARRIOR, "mwcceppc")
 LD = os.path.join(CODEWARRIOR, "mwldeppc")
 if platform != "win32":

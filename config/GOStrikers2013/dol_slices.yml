@@ -2,7 +2,6 @@
 # You must re-run configure.py after changing this file #
 #########################################################
 
-# Paths relative to src/
 # extab, extabindex and ctor sections should be disabled(if a file has a ctor section then just don't compile it)
 # these should work but just don't, results in linker errors
 
@@ -30,13 +29,13 @@
   #.ctors: [0x80480080, 0x80480084]
   #.dtors: [0x80480160, 0x80480168]
 
-Shade/std/shd_stdarg.cpp:
+src/Shade/std/shd_stdarg.cpp:
   #extab: [0x800120a4, 0x800120b4]
   #extabindex: [0x8002037c, 0x80020394] 
   .text: [0x803346e0, 0x8033496c]
 
-nw4r/db/db_console.cpp:
+libs/nw4r/db/db_console.cpp:
   .text: [0x80392fb0, 0x8039308c]
 
-nw4r/snd/snd_adpcm.cpp:
+libs/nw4r/snd/snd_adpcm.cpp:
   .text: [0x8040e7e0, 0x8040e86c]
