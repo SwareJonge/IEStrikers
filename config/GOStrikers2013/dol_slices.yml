@@ -46,6 +46,10 @@ libs/RVL_SDK/src/revolution/AI/ai.c:
   #.ctors: [0x80480080, 0x80480084]
   #.dtors: [0x80480160, 0x80480168]
 
+libs/RVL_SDK/src/revolution/MEM/mem_allocator.c:
+  .text: [0x802cf950, 0x802cf9ac]
+  .sdata2: [0x80511bd0, 0x80511bd8]
+
 src/Shade/std/shd_stdarg.cpp:
   #extab: [0x800120a4, 0x800120b4]
   #extabindex: [0x8002037c, 0x80020394] 

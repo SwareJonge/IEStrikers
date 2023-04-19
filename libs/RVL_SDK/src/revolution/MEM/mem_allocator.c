@@ -27,7 +27,7 @@ void MEMFreeToAllocator(MEMAllocator* allocator, void* block) {
 
 void MEMInitAllocatorForExpHeap(MEMAllocator* allocator, MEMiHeapHead* heap,
                                 s32 align) {
-    static MEMAllocatorFuncs sAllocatorFunc = {AllocatorAllocForExpHeap_,
+    static const MEMAllocatorFuncs sAllocatorFunc = {AllocatorAllocForExpHeap_,
                                                AllocatorFreeForExpHeap_};
     allocator->funcs = &sAllocatorFunc;
     allocator->heap = heap;
