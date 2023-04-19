@@ -19,16 +19,34 @@ typedef enum {
     SC_AREA_ASI,
     SC_AREA_LTN,
     SC_AREA_SAF,
+    SC_AREA_CHN,
 } SCProductArea;
+
+typedef enum {
+    SC_REGION_JP,
+    SC_REGION_US,
+    SC_REGION_EU,
+    SC_REGION_AU, // Guess?
+    SC_REGION_KR,
+    SC_REGION_CN,
+} SCProductGameRegion;
 
 typedef struct SCRegion {
     s8 area;      // at 0x0
     char name[4]; // at 0x1
+} SCArea;
+
+typedef struct SCGameRegion {
+    s8 region;      // at 0x0
+    char name[3]; // at 0x1
 } SCRegion;
 
 BOOL __SCF1(const char* type, char* buf, u32 sz);
 BOOL SCGetProductAreaString(char* buf, u32 sz);
 s8 SCGetProductArea(void);
+char* SCGetProductCode();
+s8 SCGetProductSN(u32 ret);
+s8 SCGetProductGameRegion(void);
 
 #ifdef __cplusplus
 }

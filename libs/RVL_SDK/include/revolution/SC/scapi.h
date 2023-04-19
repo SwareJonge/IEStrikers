@@ -49,6 +49,10 @@ typedef struct SCBtDeviceInfoArray {
     SCBtDeviceInfo active[6];      // at 0x2BD
 } SCBtDeviceInfoArray;
 
+typedef struct SCBtCmpDevInfoArray {
+    u8 unk0[0x205];
+} SCBtCmpDevInfoArray;
+
 u8 SCGetAspectRatio(void);
 s8 SCGetDisplayOffsetH(void);
 u8 SCGetEuRgb60Mode(void);
@@ -66,6 +70,7 @@ void SCSetWpadMotorMode(u8 mode);
 u8 SCGetWpadSensorBarPosition(void);
 u8 SCGetWpadSpeakerVolume(void);
 void SCSetWpadSpeakerVolume(u8 vol);
+u32 SCCheckPCMessageRestriction(void);
 
 #ifdef __cplusplus
 }
