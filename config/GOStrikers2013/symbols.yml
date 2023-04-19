@@ -29467,7 +29467,7 @@ src/DebuggerDriver.c:
 src/exi2.c:
     0x802cdfd0: __EXI2Imm
 
-src/mem_heapCommon.c:
+libs/RVL_SDK/src/revolution/MEM/mem_heapCommon.c:
     0x8050e198: sRootListInitialized
     0x802ce760: FindContainHeap_
     0x808b7260: sRootList
@@ -29479,7 +29479,7 @@ src/mem_expHeap.c:
     0x802ceee0: AllocFromTail_
     0x802cefb0: RecycleRegion_
 
-src/mem_allocator.c:
+libs/RVL_SDK/src/revolution/MEM/mem_allocator.c:
     0x802cf950: AllocatorAllocForExpHeap_
     0x802cf960: AllocatorFreeForExpHeap_
 

@@ -37,7 +37,7 @@ void MEMInitAllocatorForExpHeap(MEMAllocator* allocator, MEMiHeapHead* heap,
 
 void MEMInitAllocatorForFrmHeap(MEMAllocator* allocator, MEMiHeapHead* heap,
                                 s32 align) {
-    static MEMAllocatorFuncs sAllocatorFunc = {AllocatorAllocForFrmHeap_,
+    static const MEMAllocatorFuncs sAllocatorFunc = {AllocatorAllocForFrmHeap_,
                                                AllocatorFreeForFrmHeap_};
     allocator->funcs = &sAllocatorFunc;
     allocator->heap = heap;

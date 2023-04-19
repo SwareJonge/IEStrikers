@@ -224,6 +224,7 @@ INCDIRS = [
     "include",
     "libs/RVL_SDK/include",
     "libs/RVL_SDK/include/stl",
+    "libs/RVL_SDK/include/stl/internal",
 ]
 MWCC_INCLUDES = ' '.join(f"-i {d}" for d in INCDIRS)
 GCC_INCLUDES = ' '.join(f"-I {d}" for d in INCDIRS)

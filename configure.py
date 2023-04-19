@@ -21,6 +21,7 @@ import common as c
 ####################
 
 # Check CW was added
+# os.path.exists("tools/0x4201_142/mwcceppc.exe") and \
 assert os.path.exists("tools/0x4199_60831/mwcceppc.exe") and \
     os.path.exists("tools/0x4302_151/mwcceppc.exe") and \
     os.path.exists("tools/0x4302_213/mwcceppc.exe") and \

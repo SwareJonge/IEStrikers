@@ -479,6 +479,7 @@ IPCResult IUSB_WriteCtrlMsgAsync(s32 fd, u8 requestType, u8 request, u16 value,
                         callback, callbackArg, TRUE);
 }
 
+/* Addec Some other strings to this, might belong in a file that got deadstripped */
 CW_FORCE_STRINGS(usb_c_3, "GetStrCb returned: %d\n",
                  "GetStrCb: buf = 0x%x buflen = %u\n",
                  "Failed to convert buffer from unicode 2 ascii\n",
@@ -493,4 +494,7 @@ CW_FORCE_STRINGS(usb_c_3, "GetStrCb returned: %d\n",
                  "GetDevDescrAsync: Not enough memory\n",
                  "DeviceRemovalNotifyAsync\n",
                  "Invalid parameters for ISO transfer request\n",
-                 "IUSB_IsoMsgAsync: Not enough memory\n", "Open(%s) failed\n");
+                 "IUSB_IsoMsgAsync: Not enough memory\n", "Open(%s) failed\n",
+                 "Invalid path or devClass in insertion notification call\n",
+                 "IUSB_RegisterInsertionNotifyWithIdAsync",
+                 "%s: Not enough memory\n", "Failed to open %s: %d\n");
