@@ -113,6 +113,14 @@ void SCSetBtDeviceInfoArray(const SCBtDeviceInfoArray* info) {
     SCReplaceByteArrayItem(info, sizeof(SCBtDeviceInfoArray), SC_ITEM_BT_DINF);
 }
 
+void SCGetBtCmpDevInfoArray(SCBtCmpDevInfoArray* info) {
+    SCFindByteArrayItem(info, sizeof(SCBtCmpDevInfoArray), SC_ITEM_BT_CINF);
+}
+
+void SCSetBtCmpDevInfoArray(const SCBtCmpDevInfoArray* info) {
+    SCReplaceByteArrayItem(info, sizeof(SCBtCmpDevInfoArray), SC_ITEM_BT_CINF);
+}
+
 u32 SCGetBtDpdSensibility(void) {
     u32 item;
 
@@ -166,3 +174,14 @@ u8 SCGetWpadSpeakerVolume(void) {
 }
 
 void SCSetWpadSpeakerVolume(u8 vol) { SCReplaceU8Item(vol, SC_ITEM_BT_SPKV); }
+
+u32 SCCheckPCMessageRestriction(void) {
+    u32 item;
+
+    OSReport("<< RVL_SDK - SCCheckPCMessageRestriction >>\n");
+    if (!SCFindU32Item(&item, SC_ITEM_NET_CTPC)) {
+        item = 0;
+    }
+
+    return (item >> 1) & 1;
+}

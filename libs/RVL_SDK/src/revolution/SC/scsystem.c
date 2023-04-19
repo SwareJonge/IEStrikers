@@ -6,7 +6,7 @@
 #define SYSCONF_END_MAGIC "SCed"
 
 const char* __SCVersion =
-    "<< RVL_SDK - SC \trelease build: Nov 30 2006 03:33:00 (0x4199_60831) >>";
+    "<< RVL_SDK - SC \trelease build: Aug 23 2010 17:33:48 (0x4302_145) >>";
 
 static SCControl Control;
 static u8 ConfBuf[SYSCONF_SIZE] ALIGN(32);
