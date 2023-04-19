@@ -54,7 +54,9 @@ void VISetNextFrameBuffer(void* fb);
 void VISetBlack(BOOL black);
 s32 VIGetRetraceCount(void);
 
-VITvFormat VIGetTvFormat(void);
+int VIGetDTVStatus();
+
+u32 VIGetTvFormat(void);
 VIScanMode VIGetScanMode(void);
 
 #ifdef __cplusplus

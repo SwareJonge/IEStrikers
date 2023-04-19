@@ -222,6 +222,8 @@ INCDIRS = [
     PPCDIS_INCDIR,
     BUILD_INCDIR,
     "include",
+    "libs/RVL_SDK/include",
+    "libs/RVL_SDK/include/stl",
 ]
 MWCC_INCLUDES = ' '.join(f"-i {d}" for d in INCDIRS)
 GCC_INCLUDES = ' '.join(f"-I {d}" for d in INCDIRS)
@@ -248,16 +250,24 @@ CFLAGS = [
     "-fp hard",
     "-proc gekko",
     #"-char signed",
-    "-use_lmw_stmw on"
     #MWCC_DEFINES
 ]
 
 BASE_DOL_CFLAGS = CFLAGS + [
     "-O4,s",
+    "-use_lmw_stmw on",
     "-ipa file"  # also stupid
 ]
 
+BASE_RVL_SDK_CFLAGS = CFLAGS + [
+    "-Cpp_exceptions off",
+    "-inline auto",
+    "-ipa file",
+    "-func_align 16"
+]
+
 BASE_NW4R_CFLAGS = CFLAGS + [
+    "-use_lmw_stmw on",
     "-lang=c++",
     "-inline auto",
     "-Cpp_exceptions off",
@@ -265,6 +275,7 @@ BASE_NW4R_CFLAGS = CFLAGS + [
 ]
 
 BASE_RUNTIME_CLFAGS = CFLAGS + [
+    "-use_lmw_stmw on",
     "-str pool,readonly,reuse",
     "-inline on",
     "-func_align 4",  # get rid of 0s
@@ -280,13 +291,13 @@ BASE_SHD_STD_CLFAGS = BASE_DOL_CFLAGS + [
 ]
 
 LOCAL_CFLAGS = [
-    "-nostdinc",
     "-proc gekko",
     "-maxerrors 1",
     "-I-",
     MWCC_INCLUDES
 ]
 DOL_CFLAGS = ' '.join(BASE_DOL_CFLAGS + LOCAL_CFLAGS)
+RVL_SDK_CFLAGS = ' '.join(BASE_RVL_SDK_CFLAGS + LOCAL_CFLAGS)
 SHD_STD_CLFAGS = ' '.join(BASE_SHD_STD_CLFAGS + LOCAL_CFLAGS)
 RUNTIME_CFLAGS = ' '.join(BASE_RUNTIME_CLFAGS + LOCAL_CFLAGS)
 NW4R_CFLAGS = ' '.join(BASE_NW4R_CFLAGS + LOCAL_CFLAGS)

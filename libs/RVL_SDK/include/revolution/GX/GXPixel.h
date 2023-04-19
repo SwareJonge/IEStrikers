@@ -17,6 +17,9 @@ void GXSetZCompLoc(u8);
 void GXSetDither(u8);
 void GXSetDstAlpha(u8, u8);
 
+// Unsure
+void GXSetPixelFmt(u8, u8);
+
 #ifdef __cplusplus
 }
 #endif

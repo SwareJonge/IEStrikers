@@ -14,6 +14,8 @@ typedef enum { SC_ASPECT_STD, SC_ASPECT_WIDE } SCAspectRatio;
 
 typedef enum { SC_EURGB_50_HZ, SC_EURGB_60_HZ } SCEuRgb60Mode;
 
+typedef enum { SC_INTERLACED, SC_PROGRESSIVE } SCScanMode; // made up, use VIScanMode instead?
+
 typedef enum {
     SC_LANG_JP,
     SC_LANG_EN,

@@ -147,8 +147,10 @@ void PPCMtfpscr(register u32 val) {
 
     asm {
         li r4, 0
+        // these 2 inctructions are swapped, not sure if that's because of the compiler or that it's not written in asm?
+        stw r4, fpscr.tmp 
         stw val, fpscr.data
-        stw r4, fpscr.tmp
+        
         lfd f31, fpscr.tmp
         mtfs f31
     }

@@ -1,5 +1,6 @@
 #ifndef RVL_SDK_GX_INIT_H
 #define RVL_SDK_GX_INIT_H
+#include <revolution/GX/GXFifo.h>
 #include <revolution/types.h>
 #ifdef __cplusplus
 extern "C" {
@@ -40,6 +41,8 @@ typedef struct _GXData {
 } GXData;
 
 extern GXData* const __GXData;
+
+GXFifoObj* GXInit(void*, u32);
 
 #ifdef __cplusplus
 }

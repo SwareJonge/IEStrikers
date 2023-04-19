@@ -13,6 +13,9 @@ void GXLoadPosMtxImm(const Mtx, u32);
 
 void GXLoadNrmMtxImm(const Mtx, u32);
 
+void GXSetScissor(u32, u32, u32, u32);
+void GXSetScissorBoxOffset(s32, s32);
+
 void GXSetCurrentMtx(u32);
 
 void __GXSetViewport(void);

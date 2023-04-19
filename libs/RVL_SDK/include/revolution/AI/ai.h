@@ -19,8 +19,11 @@ AIDMACallback AIRegisterDMACallback(AIDMACallback callback);
 void AIInitDMA(void* buffer, u32 length);
 void AIStartDMA(void);
 u32 AIGetDMABytesLeft(void);
+u32 AIGetDMAStartAddr(void);
 void AISetDSPSampleRate(u32 rate);
 u32 AIGetDSPSampleRate(void);
+u32 AIGetDMALength(void);
+BOOL AICheckInit(void);
 void AIInit(void* stack);
 void __AIDHandler(s16 intr, struct OSContext* ctx);
 

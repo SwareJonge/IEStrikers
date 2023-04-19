@@ -1,10 +1,8 @@
 #include <nw4r/g3d/g3d_init.h>
 #include <revolution/GX.h>
-#include <revolution/os/OS.h>
-#include <revolution/os/OSArena.h>
-#include <revolution/os/OSError.h>
-#include <revolution/sc/scapi.h>
-#include <revolution/vi/vi.h>
+#include <revolution/OS.h>
+#include <revolution/SC.h>
+#include <revolution/VI.h>
 #include <Shade/shd.h>
 #include <Shade/shd_memory.h>
 #include <Shade/wii.h>
@@ -12,11 +10,11 @@
 // WIP
 
 int vcnted = 32;
-const GXRenderModeObj *RMNtscInt  /* = GXNtsc480IntDf*/;
-const GXRenderModeObj *RMNtscProg /* = GXNtsc480Prog*/;
-const GXRenderModeObj *RMPalInt   /* = GXPal528IntDf*/;
-const GXRenderModeObj *RMPalProg  /* = GXEurgb60Hz480Prog*/;
-const GXRenderModeObj *RMPal60Hz  /* = GXEurgb60Hz480Int*/;
+const GXRenderModeObj *RMNtscInt  = &GXNtsc480IntDf;
+const GXRenderModeObj *RMNtscProg = &GXNtsc480Prog;
+const GXRenderModeObj *RMPalInt   = &GXPal528IntDf;
+const GXRenderModeObj *RMPalProg = &GXEurgb60Hz480Prog;
+const GXRenderModeObj *RMPal60Hz = &GXEurgb60Hz480Int;
 
 void *Arena1;
 void *Arena2;

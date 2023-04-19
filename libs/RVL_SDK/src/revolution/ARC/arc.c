@@ -66,7 +66,7 @@ BOOL ARCInitHandle(void* bin, ARCHandle* handle) {
     ARCNode* nodes;
     ARCHeader* header = (ARCHeader*)bin;
 
-#line 73
+#line 74
     OSAssert(header->magic == ARC_FILE_MAGIC,
              "ARCInitHandle: bad archive format");
     handle->header = header;
