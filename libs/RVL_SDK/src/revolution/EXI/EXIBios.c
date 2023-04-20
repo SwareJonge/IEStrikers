@@ -3,12 +3,14 @@
 #include <string.h>
 
 const char* __EXIVersion =
-    "<< RVL_SDK - EXI \trelease build: Nov 30 2006 03:26:56 (0x4199_60831) >>";
+    "<< RVL_SDK - EXI \trelease build: Aug 23 2010 17:30:08 (0x4302_145) >>";
 
 static EXIData Ecb[EXI_MAX_CHAN];
 static u32 IDSerialPort1;
 
 static BOOL __EXIProbe(EXIChannel chan);
+
+#pragma schedule off // might be a hack
 
 static void SetExiInterruptMask(EXIChannel chan, EXIData* exi) {
     EXIData* exi2 = &Ecb[EXI_CHAN_2];
