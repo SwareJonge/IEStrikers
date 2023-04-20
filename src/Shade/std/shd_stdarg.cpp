@@ -1,5 +1,5 @@
-#include <stl/stdarg.h>
-#include <stl/internal/printf.h>
+#include <stdarg.h>
+#include <printf.h>
 #include <Shade/shd.h>
 #include <Shade/shd_debug.h>
 #include <Shade/std/shd_cstring.h>

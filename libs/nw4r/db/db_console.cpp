@@ -1,6 +1,6 @@
 
 #include <revolution/os/OSInterrupt.h>
-#include "stl/stdarg.h"
+#include <stdarg.h>
 #include "nw4r/db/db_console.h"
 
 // NOTE: this file is incomplete, it misses a lot of functions presumably because it got ifdefd out(Mario Kart Wii has a lot more functions)

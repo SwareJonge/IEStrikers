@@ -60,6 +60,97 @@ libs/RVL_SDK/src/revolution/DSP/dsp_task.c:
   #.ctors: [0x80480080, 0x80480084]
   #.dtors: [0x80480160, 0x80480168]
 
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/buffer_io.c:
+  #.text: [0x802b73ec, 0x802b76f8]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/direct_io.c:
+  #.text: [0x802b76f8, 0x802b7d48]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/file_io.c:
+  #.text: [0x802b7d48, 0x802b82b8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/FILE_POS.c:
+  .text: [0x802b82b8, 0x802b8574]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/mbstring.c:
+  .text: [0x802b8574, 0x802b876c]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/mem.c:
+  .text: [0x802b876c, 0x802b88dc]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/mem_funcs.c:
+  .text: [0x802b88dc, 0x802b8bac]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/math_api.c:
+  .text: [0x802b8bac, 0x802b8ca0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/misc_io.c:
+  .text: [0x802b8ca0, 0x802b8cc0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/printf.c:
+  .text: [0x802b8cc0, 0x802bb184]
+  .rodata: [0x804ac048, 0x804ac070]
+  .data: [0x804e59e8, 0x804e5c18]
+  .sdata: [0x8050cfb0, 0x8050cfb8]
+  .sdata2: [0x80511678, 0x80511680]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/qsort.c:
+  #.text: [0x802bb184, 0x0x802bb2f4]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/rand.c:
+  .text: [0x802bb2f4, 0x802bb31c]
+  .sdata: [0x8050cfb8, 0x8050cfc0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/scanf.c:
+  .text: [0x802bb31c, 0x802bc800]
+  .rodata: [0x804ac070, 0x804ac098]
+  .data: [0x804e5c18, 0x804e5e88]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/signal.c:
+  .text: [0x802bc800, 0x802bc8a8]
+  .bss: [0x808b4aa0, 0x808b4ac0]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/string.c:
+  #.text: [0x802bc8a8, 0x802bcde4]
+  #.sdata: [0x8050cfc0, 0x8050cfc8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/strtold.c:
+  .text: [0x802bcde4, 0x802be164]
+  .rodata: [0x804ac098, 0x804ac0a8]
+  .sdata2: [0x80511688, 0x805116a8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/strtoul.c:
+  .text: [0x802be164, 0x802bec78]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/wmem.c:
+  .text: [0x802bec78, 0x802beca8]  
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/wprintf.c:
+  .text: [0x802beca8, 0x802c0ec8]
+  .rodata: [0x804ac6a8, 0x804ac6b0]
+  .data: [0x804e5e88, 0x804e6128]
+  .sdata2: [0x805116a8, 0x805116b0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/wstring.c:
+  .text: [0x802c0ec8, 0x802c0fa4]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/wchar_io.c:
+  .text: [0x802c0fa4, 0x802c101c]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/extras.c:
+  .text: [0x802c5350, 0x802c5494]
+
+libs/RVL_SDK/src/revolution/EXI/EXIBios.c:
+  .text: [0x802c54a0, 0x802c6d98]
+  .data: [0x804e6128, 0x804e6170]
+  .sdata: [0x8050cfd8, 0x8050cfe0]
+  .sbss: [0x8050e100, 0x8050e108]
+  .bss: [0x808b4ac0, 0x808b4b80]
+
+libs/RVL_SDK/src/revolution/EXI/EXICommon.c:
+  .text: [0x802c70e0, 0x802c7268]
+  .sdata2: [0x80511bc0, 0x80511bc8]
+
 libs/RVL_SDK/src/revolution/MEM/mem_heapCommon.c:
   .text: [0x802ce760, 0x802cebcc]
   .sbss: [0x8050e198, 0x8050e1a0]

@@ -465,7 +465,6 @@ class GenAsmSource(Source):
         # Add ctors to forcefiles
         if section == ".ctors":
             forcefiles.append(name + ".o")
-            print(name)
 
     def build(self):
         n.build(
@@ -533,14 +532,22 @@ class CSource(Source):
     def __init__(self, ctx: c.SourceContext, path: str):
         self.cc = c.CC # if a library uses a different compiler, change it here
         self.cflags = ctx.cflags
+
         print(path)
+        
         if(path.startswith("./src/Shade/std")):
             self.cflags = c.SHD_STD_CLFAGS
-        if (path.startswith("./libs/PowerPC_EABI_Support/Runtime")):
+        if (path.startswith("./libs/PowerPC_EABI_Support/src/MSL/MSL_C")):
+            self.cflags = c.MSL_C_FLAGS
+        if (path.startswith("./libs/PowerPC_EABI_Support/src/Runtime")):
             self.cflags = c.RUNTIME_CFLAGS
         if (path.startswith("./libs/RVL_SDK/src/revolution")):
-            self.cflags = c.RVL_SDK_CFLAGS
             self.cc = c.SDK_CC
+            if not path.startswith("./libs/RVL_SDK/src/revolution/EXI/EXIBios"):
+                self.cflags = c.RVL_SDK_CFLAGS
+            else:
+                self.cflags = c.EXI_CFLAGS
+                        
         if (path.startswith("./libs/nw4r")):
             self.cflags = c.NW4R_CFLAGS
             if (path.startswith("./libs/nw4r/snd/snd_adpcm")):

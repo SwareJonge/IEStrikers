@@ -131,7 +131,6 @@ PROGRESS = f"{PYTHON} {PPCDIS}/progress.py"
 # Codewarrior
 TOOLS = "tools"
 
-
 # also used for nw4r/snd/snd_adpcm.cpp
 REVO_EX_CW = os.path.join(TOOLS, "0x4199_60831")
 REVO_EX_CC = os.path.join(REVO_EX_CW, "mwcceppc")
@@ -223,8 +222,9 @@ INCDIRS = [
     BUILD_INCDIR,
     "include",
     "libs/RVL_SDK/include",
-    "libs/RVL_SDK/include/stl",
-    "libs/RVL_SDK/include/stl/internal",
+    "libs/PowerPC_EABI_Support/include",
+    "libs/PowerPC_EABI_Support/include/stl",
+    "libs/PowerPC_EABI_Support/include/stl/internal",
 ]
 MWCC_INCLUDES = ' '.join(f"-i {d}" for d in INCDIRS)
 GCC_INCLUDES = ' '.join(f"-I {d}" for d in INCDIRS)
@@ -244,7 +244,6 @@ CPPFLAGS = ' '.join([
 
 # there are a lot of diffrenet libraries that probably need their own libraries, this is just a base
 CFLAGS = [
-    "-O4,p",
     "-enum int",
     "-enc SJIS",
     "-nodefaults",
@@ -260,14 +259,33 @@ BASE_DOL_CFLAGS = CFLAGS + [
     "-ipa file"  # also stupid
 ]
 
+BASE_MSL_C_FLAGS = CFLAGS + [
+    "-O4,p",
+    "-use_lmw_stmw on",
+    "-func_align 4",
+    "-Cpp_exceptions off",
+     "-inline on",
+     "-str pool, readonly, reuse",
+     "-ipa file"
+]
+
 BASE_RVL_SDK_CFLAGS = CFLAGS + [
+    "-O4,p",
+    "-Cpp_exceptions off",
+    "-inline auto",
+    "-ipa file"
+]
+
+BASE_EXI_CFLAGS = CFLAGS + [ # only for EXICommon
     "-Cpp_exceptions off",
     "-inline auto",
     "-ipa file",
+    "-O3,p",
     "-func_align 16"
 ]
 
 BASE_NW4R_CFLAGS = CFLAGS + [
+    "-O4,p",
     "-use_lmw_stmw on",
     "-lang=c++",
     "-inline auto",
@@ -276,6 +294,7 @@ BASE_NW4R_CFLAGS = CFLAGS + [
 ]
 
 BASE_RUNTIME_CLFAGS = CFLAGS + [
+    "-O4,p",
     "-use_lmw_stmw on",
     "-str pool,readonly,reuse",
     "-inline on",
@@ -298,8 +317,10 @@ LOCAL_CFLAGS = [
     MWCC_INCLUDES
 ]
 DOL_CFLAGS = ' '.join(BASE_DOL_CFLAGS + LOCAL_CFLAGS)
+EXI_CFLAGS = ' '.join(BASE_EXI_CFLAGS + LOCAL_CFLAGS)
 RVL_SDK_CFLAGS = ' '.join(BASE_RVL_SDK_CFLAGS + LOCAL_CFLAGS)
 SHD_STD_CLFAGS = ' '.join(BASE_SHD_STD_CLFAGS + LOCAL_CFLAGS)
+MSL_C_FLAGS = ' '.join(BASE_MSL_C_FLAGS + LOCAL_CFLAGS)
 RUNTIME_CFLAGS = ' '.join(BASE_RUNTIME_CLFAGS + LOCAL_CFLAGS)
 NW4R_CFLAGS = ' '.join(BASE_NW4R_CFLAGS + LOCAL_CFLAGS)
 

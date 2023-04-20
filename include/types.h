@@ -30,6 +30,11 @@ typedef double f64;
 typedef volatile f32 vf32;
 typedef volatile f64 vf64;
 
+#ifndef __cplusplus
+typedef unsigned short wchar_t;
+typedef wchar_t wint_t;
+#endif
+
 typedef int UNKWORD;
 typedef void UNKTYPE;
 

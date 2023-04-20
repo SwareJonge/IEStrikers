@@ -10,8 +10,6 @@ static u32 IDSerialPort1;
 
 static BOOL __EXIProbe(EXIChannel chan);
 
-#pragma schedule off // might be a hack
-
 static void SetExiInterruptMask(EXIChannel chan, EXIData* exi) {
     EXIData* exi2 = &Ecb[EXI_CHAN_2];
 
