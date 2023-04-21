@@ -543,10 +543,10 @@ class CSource(Source):
             self.cflags = c.RUNTIME_CFLAGS
         if (path.startswith("./libs/RVL_SDK/src/revolution")):
             self.cc = c.SDK_CC
-            if not path.startswith("./libs/RVL_SDK/src/revolution/EXI/EXIBios"):
-                self.cflags = c.RVL_SDK_CFLAGS
-            else:
-                self.cflags = c.EXI_CFLAGS
+            self.cflags = c.RVL_SDK_CFLAGS
+            if path.endswith("EXIBios.c"):
+                self.cflags = self.cflags.replace("-O4,p", "-O3,p")
+                
                         
         if (path.startswith("./libs/nw4r")):
             self.cflags = c.NW4R_CFLAGS

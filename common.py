@@ -273,14 +273,7 @@ BASE_RVL_SDK_CFLAGS = CFLAGS + [
     "-O4,p",
     "-Cpp_exceptions off",
     "-inline auto",
-    "-ipa file"
-]
-
-BASE_EXI_CFLAGS = CFLAGS + [ # only for EXICommon
-    "-Cpp_exceptions off",
-    "-inline auto",
     "-ipa file",
-    "-O3,p",
     "-func_align 16"
 ]
 
@@ -317,7 +310,6 @@ LOCAL_CFLAGS = [
     MWCC_INCLUDES
 ]
 DOL_CFLAGS = ' '.join(BASE_DOL_CFLAGS + LOCAL_CFLAGS)
-EXI_CFLAGS = ' '.join(BASE_EXI_CFLAGS + LOCAL_CFLAGS)
 RVL_SDK_CFLAGS = ' '.join(BASE_RVL_SDK_CFLAGS + LOCAL_CFLAGS)
 SHD_STD_CLFAGS = ' '.join(BASE_SHD_STD_CLFAGS + LOCAL_CFLAGS)
 MSL_C_FLAGS = ' '.join(BASE_MSL_C_FLAGS + LOCAL_CFLAGS)
