@@ -6,9 +6,8 @@ forced_types:
 blocked_targets:
   - 0x80004000
   - 0x80480168
-blocked_target_ranges: # pointing to stuff in extab dangerous
-  - [0x80006720, 0x80012840]
-  - [0x80012840, 0x80020b00]
+blocked_target_ranges: # nothing should ever point to here
+  - [0x80004000, 0x80020b00]
 
 blocked_pointers:
   - 0x80494bf4

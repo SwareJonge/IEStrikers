@@ -458,7 +458,7 @@ typedef enum { TRKSuccess = 0, TRKError100 = 0x100, TRKError301 = 0x301, TRKErro
 
 extern BOOL gTRKBigEndian;
 
-u32 TRKDoConnect(TRKBuffer*);
+u32 TRK_DoConnect(TRKBuffer*);
 u32 TRKDoDisconnect(TRKBuffer*);
 u32 TRKDoReset(TRKBuffer*);
 u32 TRKDoVersions(TRKBuffer*);
@@ -478,9 +478,9 @@ void InitMetroTRK_BBA(void);
 void EnableMetroTRKInterrupts(void);
 
 void TRKDestructEvent(TRKEvent*);
-TRKResult TRKDispatchMessage(TRKBuffer*);
+TRKResult TRK_DispatchMessage(TRKBuffer*);
 void* TRKGetBuffer(int);
-void TRKReleaseBuffer(int);
+void TRK_ReleaseBuffer(int);
 void TRKGetInput();
 BOOL TRKGetNextEvent(TRKEvent*);
 
@@ -491,15 +491,15 @@ void TRKTargetSetStopped(uint);
 TRKResult TRKTargetSupportRequest();
 
 TRKResult TRKAppendBuffer_ui8(TRKBuffer*, u8*, int);
-TRKResult TRKSetBufferPosition(TRKBuffer*, u32);
+TRKResult TRK_SetBufferPosition(TRKBuffer*, u32);
 
-TRKResult TRKMessageSend(TRK_Msg*);
 void TRKSwapAndGo(void);
-TRKResult TRKWriteUARTN(const void* bytes, u32 length);
-TRKResult TRKInitializeNub(void);
-TRKResult TRKTerminateNub(void);
-void TRKNubWelcome(void);
-void TRKNubMainLoop(void);
+TRKResult TRK_MessageSend(TRK_Msg *);
+TRKResult TRK_WriteUARTN(const void* bytes, u32 length);
+TRKResult TRK_InitializeNub(void);
+TRKResult TRK_TerminateNub(void);
+void TRK_NubWelcome(void);
+void TRK_NubMainLoop(void);
 
 TRKResult TRKInitializeMutex(void*);
 TRKResult TRKAcquireMutex(void*);
@@ -507,8 +507,9 @@ TRKResult TRKReleaseMutex(void*);
 void* TRK_memcpy(void* dst, const void* src, size_t n);
 
 TRKResult TRKInitializeEventQueue();
-TRKResult TRKInitializeMessageBuffers();
+TRKResult TRK_InitializeMessageBuffers();
 TRKResult TRKInitializeDispatcher();
+BOOL TRK_InitializeEndian();
 TRKResult InitializeProgramEndTrap();
 TRKResult TRKInitializeSerialHandler();
 TRKResult TRKInitializeTarget();
@@ -551,7 +552,7 @@ typedef enum {
 } UARTBaudRate;
 
 UARTError InitializeUART(UARTBaudRate baudRate);
-TRKResult TRKInitializeIntDrivenUART(unknown, unknown, void*);
+TRKResult TRK_InitializeIntDrivenUART(unknown, unknown, void*);
 void usr_put_initialize();
 void TRKTargetSetInputPendingPtr(void*);
 extern void* gTRKInputPendingPtr;

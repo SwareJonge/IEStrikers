@@ -2,7 +2,6 @@
 
 TRKEventQueue gTRKEventQueue;
 
-
 static inline TRKResult TRKReleaseMutex(void* p1) { return TRKSuccess; }
 static inline TRKResult TRKAcquireMutex(void* p1) { return TRKSuccess; }
 static inline TRKResult TRKInitializeMutex(void* p1) { return TRKSuccess; }
@@ -78,4 +77,4 @@ void TRKConstructEvent(TRKEvent* event, int eventType)
 }
 
 
-void TRKDestructEvent(TRKEvent* event) { TRKReleaseBuffer(event->mBufferIndex); }
+void TRKDestructEvent(TRKEvent* event) { TRK_ReleaseBuffer(event->mBufferIndex); }

@@ -222,6 +222,7 @@ INCDIRS = [
     BUILD_INCDIR,
     "include",
     "libs/RVL_SDK/include",
+    "libs/NdevExi2A/include",
     "libs/PowerPC_EABI_Support/include",
     "libs/PowerPC_EABI_Support/include/stl",
     "libs/PowerPC_EABI_Support/include/stl/internal",
@@ -259,31 +260,12 @@ BASE_DOL_CFLAGS = CFLAGS + [
     "-ipa file"  # also stupid
 ]
 
-BASE_MSL_C_FLAGS = CFLAGS + [
-    "-O4,p",
-    "-use_lmw_stmw on",
-    "-func_align 4",
-    "-Cpp_exceptions off",
-     "-inline on",
-     "-str pool, readonly, reuse",
-     "-ipa file"
-]
-
 BASE_RVL_SDK_CFLAGS = CFLAGS + [
     "-O4,p",
     "-Cpp_exceptions off",
     "-inline auto",
     "-ipa file",
     "-func_align 16"
-]
-
-BASE_NW4R_CFLAGS = CFLAGS + [
-    "-O4,p",
-    "-use_lmw_stmw on",
-    "-lang=c++",
-    "-inline auto",
-    "-Cpp_exceptions off",
-    "-RTTI off"
 ]
 
 BASE_RUNTIME_CLFAGS = CFLAGS + [
@@ -295,12 +277,42 @@ BASE_RUNTIME_CLFAGS = CFLAGS + [
     "-inline off"
 ]
 
+BASE_MSL_C_FLAGS = CFLAGS + [
+    "-O4,p",
+    "-use_lmw_stmw on",
+    "-func_align 4",
+    "-Cpp_exceptions off",
+     "-inline on",
+     "-str pool, readonly, reuse",
+     "-ipa file"
+]
+
+BASE_NDEVEXI2A_CLFAGS = [
+    "-Cpp_exceptions off",
+    "-enum int",
+    "-inline auto", 
+    "-ipa file", 
+    "-fp hard", 
+    "-O4,p", 
+    "-nodefaults", 
+    "-func_align 4"
+]
+
 BASE_SHD_STD_CLFAGS = BASE_DOL_CFLAGS + [
     "-lang=c++",
     "-use_lmw_stmw off",
-    "-Cpp_exceptions off", # should be disabled normally
+    "-Cpp_exceptions off",  # should be disabled normally
     "-func_align 4",  # get rid of 0s
     "-inline off"  # probably only for shade std library?
+]
+
+BASE_NW4R_CFLAGS = CFLAGS + [
+    "-O4,p",
+    "-use_lmw_stmw on",
+    "-lang=c++",
+    "-inline auto",
+    "-Cpp_exceptions off",
+    "-RTTI off"
 ]
 
 LOCAL_CFLAGS = [
@@ -311,9 +323,10 @@ LOCAL_CFLAGS = [
 ]
 DOL_CFLAGS = ' '.join(BASE_DOL_CFLAGS + LOCAL_CFLAGS)
 RVL_SDK_CFLAGS = ' '.join(BASE_RVL_SDK_CFLAGS + LOCAL_CFLAGS)
-SHD_STD_CLFAGS = ' '.join(BASE_SHD_STD_CLFAGS + LOCAL_CFLAGS)
-MSL_C_FLAGS = ' '.join(BASE_MSL_C_FLAGS + LOCAL_CFLAGS)
 RUNTIME_CFLAGS = ' '.join(BASE_RUNTIME_CLFAGS + LOCAL_CFLAGS)
+MSL_C_FLAGS = ' '.join(BASE_MSL_C_FLAGS + LOCAL_CFLAGS)
+NDEVEXI2A_CLFAGS = ' '.join(BASE_NDEVEXI2A_CLFAGS + LOCAL_CFLAGS)
+SHD_STD_CLFAGS = ' '.join(BASE_SHD_STD_CLFAGS + LOCAL_CFLAGS)
 NW4R_CFLAGS = ' '.join(BASE_NW4R_CFLAGS + LOCAL_CFLAGS)
 
 

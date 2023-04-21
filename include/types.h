@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include "macros.h"
+#include <revolution/macros.h>
 
 typedef signed char s8;
 typedef signed short s16;
@@ -34,6 +34,8 @@ typedef volatile f64 vf64;
 typedef unsigned short wchar_t;
 typedef wchar_t wint_t;
 #endif
+
+typedef u32 unknown;
 
 typedef int UNKWORD;
 typedef void UNKTYPE;

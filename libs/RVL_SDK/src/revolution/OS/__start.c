@@ -241,8 +241,7 @@ _no_args:
      * support, so that could explain the unusual DVD device code address.
      */
 _init_os:
-    // Initialize the OS and its debug monitor
-    bl DBInit
+    // Initialize the OS
     bl OSInit
 
     // Load DVD device code address
@@ -283,8 +282,38 @@ _after_init_metro_trk_bba:
     // clang-format on
 }
 
+// not entirely sure if this was written in asm, however i don't believe it's
+// possible to generate cmplwi + blelr with unsigned int/long
 DECL_SECTION(".init")
-static void __copy_rom_section(void* dst, const void* src, size_t size) {
+asm static void __my_flush_cache(register void* ptr, register unsigned int n){
+    // clang-format off
+    nofralloc
+
+    cmplwi n, 0
+    blelr
+    clrlwi r5, ptr, 27
+    add n, n, r5
+    addi n, n, 31
+    rlwinm n, n, 27, 5, 31
+    mtctr n
+
+_loop:
+    dcbf 0,ptr
+    addi ptr, ptr, 0x20
+    bdnz _loop
+
+    mfhid0 r6
+    ori r7, r6, 0x8
+    mthid0 r7
+    isync 
+    sync 
+    mthid0 r6
+    blr
+    // clang-format on
+}
+
+DECL_SECTION(".init") static void __copy_rom_section(void* dst, const void* src,
+                                                     size_t size) {
     if (size == 0 || dst == src) {
         return;
     }
@@ -300,6 +329,7 @@ static void __init_bss_section(void* dst, size_t size) {
     }
 
     memset(dst, 0, size);
+    __my_flush_cache(dst, size);
 }
 
 DECL_SECTION(".init") static asm void __init_registers(void) {

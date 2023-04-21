@@ -10,7 +10,7 @@ namespace std{
     terminate_handler thandler = dthandler;
 }
 
-CW_FORCE_STRINGS(MWRTTI_cpp, "???", "!std::exception!!std::bad_typeid!!");
+//CW_FORCE_STRINGS(MWRTTI_cpp, "???", "!std::exception!!std::bad_typeid!!");
 
 typedef struct type_info_struct type_info_struct;
 

@@ -29454,7 +29454,7 @@ src/targimpl.c:
 src/target_options.c:
     0x8050e178: bUseSerialIO
 
-src/DebuggerDriver.c:
+libs/NdevExi2A/src/DebuggerDriver.c:
     0x8050e180: __DBMtrCallback
     0x8050e184: __DBDbgCallback
     0x8050e188: __DBEXIInputFlag

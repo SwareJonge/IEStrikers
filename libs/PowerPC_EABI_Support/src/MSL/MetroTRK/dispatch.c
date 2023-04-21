@@ -1,17 +1,16 @@
 #include "PowerPC_EABI_Support/MetroTRK/dispatch.h"
 
-u32 TRKDispatchMessage(MessageBuffer* messageBuffer) {
+u32 TRK_DispatchMessage(MessageBuffer *messageBuffer)
+{
     u32 result = 0x500;
     MessageBuffer* temp = messageBuffer;
     
-    TRKSetBufferPosition(messageBuffer, 0);
+    TRK_SetBufferPosition(messageBuffer, 0);
     
-    u8 command = temp->commandId;
-    
-    switch(command){
+    switch(temp->commandId){
         case 1:
-            result = TRKDoConnect(temp);
-        	break;
+            result = TRK_DoConnect(temp);
+            break;
         case 2:
             result = TRKDoDisconnect(temp);
         	break;

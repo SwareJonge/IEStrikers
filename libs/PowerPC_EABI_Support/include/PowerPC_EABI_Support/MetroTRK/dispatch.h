@@ -9,7 +9,7 @@ typedef struct MessageBuffer {
 } MessageBuffer;
 
 
-extern u32 TRKDoConnect(MessageBuffer*);
+extern u32 TRK_DoConnect(MessageBuffer*);
 extern u32 TRKDoDisconnect(MessageBuffer*);
 extern u32 TRKDoReset(MessageBuffer*);
 extern u32 TRKDoOverride(MessageBuffer*);

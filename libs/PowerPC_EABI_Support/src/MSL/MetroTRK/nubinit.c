@@ -1,8 +1,10 @@
 #include "PowerPC_EABI_Support/MetroTRK/trk.h"
 
+#pragma dont_inline on
+
 BOOL gTRKBigEndian;
 
-TRKResult TRKInitializeNub(void)
+TRKResult TRK_InitializeNub(void)
 {
 	TRKResult TVar1;
 	TRKResult TVar2;
@@ -13,7 +15,7 @@ TRKResult TRKInitializeNub(void)
 		TVar1 = TRKInitializeEventQueue();
 	}
 	if (TVar1 == TRKSuccess) {
-		TVar1 = TRKInitializeMessageBuffers();
+		TVar1 = TRK_InitializeMessageBuffers();
 	}
 	InitializeProgramEndTrap();
 	if (TVar1 == TRKSuccess) {
@@ -24,7 +26,7 @@ TRKResult TRKInitializeNub(void)
 	}
 	if (TVar1 == TRKSuccess) {
 
-		TVar2 = TRKInitializeIntDrivenUART(1, 0, &gTRKInputPendingPtr);
+		TVar2 = TRK_InitializeIntDrivenUART(1, 0, &gTRKInputPendingPtr);
 		TRKTargetSetInputPendingPtr(gTRKInputPendingPtr);
 		if (TVar2 != TRKSuccess) {
 			TVar1 = TVar2;
@@ -34,17 +36,15 @@ TRKResult TRKInitializeNub(void)
 }
 
 extern TRKResult TRKTerminateSerialHandler(void);
-TRKResult TRKTerminateNub(void)
+TRKResult TRK_TerminateNub(void)
 {
-
 	TRKTerminateSerialHandler();
 	return TRKSuccess;
 }
 
 extern void TRK_board_display(char*);
-void TRKNubWelcome(void)
+void TRK_NubWelcome(void)
 {
-
 	TRK_board_display("MetroTRK for Revolution v0.4");
 	return;
 }
@@ -52,7 +52,7 @@ void TRKNubWelcome(void)
 BOOL TRK_InitializeEndian(void)
 {
 	u8 bendian[4];
-	BOOL result   = FALSE;
+	TRKResult result = FALSE;
 	gTRKBigEndian = TRUE;
 
 	bendian[0] = 0x12;

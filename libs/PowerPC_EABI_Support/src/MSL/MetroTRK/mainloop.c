@@ -13,11 +13,8 @@ void TRKHandleSupportEvent(void){
 void TRKIdle(void){
 }
 
-/*
- * Perhaps the switch case takes TRK CMD defines as inputs?
- * As seen in Dolphin/trk.h
- */
-void TRKNubMainLoop(void)
+
+void TRK_NubMainLoop(void)
 {
 	void* msg;
 	TRKEvent sp8;
@@ -34,7 +31,7 @@ void TRKNubMainLoop(void)
 				break;
 			case 2:
 				msg = TRKGetBuffer(sp8.mBufferIndex);
-				TRKDispatchMessage(msg);
+				TRK_DispatchMessage(msg);
 				break;
 			case 1:
 				var_r31 = TRUE;

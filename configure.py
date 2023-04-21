@@ -198,7 +198,7 @@ n.rule(
 
 n.rule(
     "as",
-    command = f"$as $asflags -c $in -o $out",
+    command= ALLOW_CHAIN + f"$as $asflags -c $in -o $out && dtk elf fixup $out $out",
     description = "AS $in"
 )
 
@@ -532,25 +532,25 @@ class CSource(Source):
     def __init__(self, ctx: c.SourceContext, path: str):
         self.cc = c.CC # if a library uses a different compiler, change it here
         self.cflags = ctx.cflags
-
         print(path)
         
-        if(path.startswith("./src/Shade/std")):
-            self.cflags = c.SHD_STD_CLFAGS
-        if (path.startswith("./libs/PowerPC_EABI_Support/src/MSL/MSL_C")):
-            self.cflags = c.MSL_C_FLAGS
-        if (path.startswith("./libs/PowerPC_EABI_Support/src/Runtime")):
-            self.cflags = c.RUNTIME_CFLAGS
         if (path.startswith("./libs/RVL_SDK/src/revolution")):
             self.cc = c.SDK_CC
             self.cflags = c.RVL_SDK_CFLAGS
             if path.endswith("EXIBios.c"):
                 self.cflags = self.cflags.replace("-O4,p", "-O3,p")
-                
-                        
-        if (path.startswith("./libs/nw4r")):
+        elif (path.startswith("./libs/PowerPC_EABI_Support/src/MSL")):
+            self.cflags = c.MSL_C_FLAGS
+            if path.endswith("nubevent.c") or path.endswith("nubinit.c") or path.endswith("msg.c"):
+                self.cflags = self.cflags.replace("-str pool, readonly, reuse", "-str pool, reuse")
+        elif (path.startswith("./libs/NdevExi2A/src/")):
+            self.cflags = c.NDEVEXI2A_CLFAGS
+            self.cc = c.REVO_EX_CC
+        elif (path.startswith("./src/Shade/std")):
+            self.cflags = c.SHD_STD_CLFAGS
+        elif (path.startswith("./libs/nw4r")):
             self.cflags = c.NW4R_CFLAGS
-            if (path.startswith("./libs/nw4r/snd/snd_adpcm")):
+            if path.endswith("snd_adpcm.cpp"):
                 self.cc = c.REVO_EX_CC
 
         self.iconv_path = f"$builddir/iconv/{path}"

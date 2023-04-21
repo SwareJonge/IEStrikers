@@ -1,13 +1,19 @@
 #ifndef _EXCEPTION
 #define _EXCEPTION
 
-
-namespace std{
-    extern void dthandler();
+namespace std
+{
+    static void dthandler();
+    static void duhandler();
+    extern void terminate();
+    extern void unexpected();
     typedef void (*terminate_handler)();
+    typedef void (*unexpected_handler)();
     extern terminate_handler thandler;
+    extern unexpected_handler uhandler;
 
-    class exception{
+    class exception
+    {
     };
 }
 
