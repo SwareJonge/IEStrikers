@@ -60,17 +60,40 @@ libs/RVL_SDK/src/revolution/DSP/dsp_task.c:
   #.ctors: [0x80480080, 0x80480084]
   #.dtors: [0x80480160, 0x80480168]
 
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/alloc.c:
+  #.text: [0x802b441c, 0x802b5854]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/ansi_files.c:
+  #.text: [0x802b5854, 0x802b5b4c]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/ansi_fp.c:
+  #.text: [0x802b5b4c, 0x802b73cc]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/arith.c:
+  .text: [0x802b73cc, 0x802b73ec]
+
 #libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/buffer_io.c:
   #.text: [0x802b73ec, 0x802b76f8]
 
+# this got deadstripped
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/ctype.c:
+
 #libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/direct_io.c:
   #.text: [0x802b76f8, 0x802b7d48]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/errno.c:
+  .sbss: [0x8050e0d0, 0x8050e0d8]
 
 #libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/file_io.c:
   #.text: [0x802b7d48, 0x802b82b8]
 
 libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/FILE_POS.c:
   .text: [0x802b82b8, 0x802b8574]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/locale.c:
+  .rodata: [0x804abf40, 0x804ac048]
+  .data: [0x804e57f0, 0x804e59e8]
+  .sdata2: [0x80511660, 0x80511678]
 
 libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/mbstring.c:
   .text: [0x802b8574, 0x802b876c]
@@ -121,6 +144,9 @@ libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/strtold.c:
 
 libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/strtoul.c:
   .text: [0x802be164, 0x802bec78]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/float.c:
+  .sdata: [0x8050cfc8, 0x8050cfd8]
 
 libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/wmem.c:
   .text: [0x802bec78, 0x802beca8]  

@@ -136,8 +136,20 @@ void __close_all()
 	}
 }
 
-//unused
-void __flush_line_buffered_output_files(){
+u32 __flush_line_buffered_output_files()
+{
+	u32 retval = 0;
+	FILE *__stream;
+	__stream = &__files[0];
+	while (__stream)
+	{
+		if ((__stream->mMode.file_kind) && (__stream->mMode.buffer_mode) && (__stream->mState.free_buffer == 1) && (fflush(__stream)))
+		{
+			retval = -1;
+		}
+		__stream = __stream->mNextFile;
+	};
+	return retval;
 }
 
 u32 __flush_all()

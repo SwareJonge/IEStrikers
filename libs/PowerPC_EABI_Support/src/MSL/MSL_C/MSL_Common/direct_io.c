@@ -8,20 +8,20 @@
 #include "stdio.h"
 #include "PowerPC_EABI_Support/MSL_C/MSL_Common/misc_io.h"
 
-
-//unused
-void fread(){
+size_t fread(const void *pPtr, size_t memb_size, size_t num_memb, FILE *pFile) {
+    __fread(pPtr, memb_size, num_memb, pFile);
 }
 
-//unused
-void __fread(){
+size_t __fread(const void *pPtr, size_t memb_size, size_t num_memb, FILE *pFile) {
+    // TODO
 }
 
-//unused
-void fwrite(){
+size_t fwrite(const void *pPtr, size_t memb_size, size_t num_memb, FILE *pFile) {
+    __fwrite(pPtr, memb_size, num_memb, pFile);
 }
 
-size_t __fwrite(const void *pPtr, size_t memb_size, size_t num_memb, FILE *pFile) {
+size_t __fwrite(const void *pPtr, size_t memb_size, size_t num_memb, FILE *pFile)
+{
     unsigned char* cur_ptr;
     size_t num_bytes, rem_bytes, bytes_written;
     int res, buff;

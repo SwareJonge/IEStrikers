@@ -266,8 +266,8 @@ static __mem_pool* get_malloc_pool(void) {
 	return &protopool;
 }
 
-//unused
 void allocate_from_fixed_pools(){
+    // TODO
 }
 
 void deallocate_from_fixed_pools(__mem_pool_obj* pool_obj, void* ptr, unsigned long size) {
@@ -327,8 +327,8 @@ void deallocate_from_fixed_pools(__mem_pool_obj* pool_obj, void* ptr, unsigned l
     }
 }
 
-//unused
-void __pool_allocate_resize(){
+void __pool_allocate_resize() {
+    // TODO
 }
 
 //unused
