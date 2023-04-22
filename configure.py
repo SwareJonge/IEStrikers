@@ -196,9 +196,10 @@ n.rule(
     pool="console"
 )
 
+# && dtk elf fixup $out $out
 n.rule(
     "as",
-    command= ALLOW_CHAIN + f"$as $asflags -c $in -o $out && dtk elf fixup $out $out",
+    command= f"$as $asflags -c $in -o $out",
     description = "AS $in"
 )
 
