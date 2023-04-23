@@ -24,7 +24,7 @@ char* const __DVDErrorMessageDefault[] = {
 
     // SC_LANG_DE
     "\n\n\nEin Fehler ist aufgetreten.\n"
-    "D\x72\xFC\x63ke den Ausgabeknopf, entnimm die\n"
+    "Dr\xFC\x63ke den Ausgabeknopf, entnimm die\n"
     "Disc und schalte die Wii-Konsole aus.\n"
     "Bitte lies die Wii-Bedienungsanleitung,\n"
     "um weitere Informationen zu erhalten.",
@@ -77,7 +77,7 @@ char* const __DVDErrorMessageEurope[] = {
 
     // SC_LANG_DE
     "\n\n\nEin Fehler ist aufgetreten.\n"
-    "D\x72\xFC\x63ke den Ausgabeknopf, entnimm die\n"
+    "Dr\xFC\x63ke den Ausgabeknopf, entnimm die\n"
     "Disc und schalte die Wii-Konsole aus.\n"
     "Bitte lies die Wii-Bedienungsanleitung,\n"
     "um weitere Informationen zu erhalten.",
