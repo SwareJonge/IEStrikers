@@ -113,6 +113,13 @@ FILE __files[4] =
 };
 // clang-format on
 
+void *__find_unopened_file() {
+
+}
+
+void __init_file(FILE *param_1,char **param_2,char *param_3,size_t param_4) {
+	
+}
 
 void __close_all()
 {

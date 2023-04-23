@@ -39,10 +39,11 @@ typedef struct __file_states {
 typedef void* __ref_con;
 typedef void (*__idle_proc)(void);
 typedef int (*__pos_proc)(__file_handle file, fpos_t* position, int mode, __ref_con ref_con);
-typedef int (*__io_proc)(__file_handle file, char* buff, size_t* count, __ref_con ref_con);
+typedef int (*__io_proc)(__file_handle file, u8 *buff, size_t *count, __ref_con ref_con);
 typedef int (*__close_proc)(__file_handle file);
 
-struct _IO_FILE {
+struct _IO_FILE
+	{
 	__file_handle mHandle;                           // _00
 	file_modes mMode;                                // _04
 	file_states mState;                              // _08
@@ -52,9 +53,9 @@ struct _IO_FILE {
 	u8 mUngetcBuffer[__ungetc_buffer_size];          // _0F
 	wchar_t mUngetcWideBuffer[__ungetc_buffer_size]; // _12
 	u32 mPosition;                                   // _18
-	char* mBuffer;                                   // _1C
+	u8* mBuffer;                                   // _1C
 	u32 mBufferSize;                                 // _20
-	char* mBufferPtr;                                // _24
+	u8 *mBufferPtr;									 // _24
 	u32 mBufferLength;                               // _28
 	u32 mBufferAlignment;                            // _2C
 	u32 mBufferLength2;                              // _30
@@ -65,7 +66,7 @@ struct _IO_FILE {
 	__close_proc closeFunc;                          // _44
 	__ref_con ref_con;                               // _48
 	_IO_FILE* mNextFile;                             // _4C
-};
+	};
 
 typedef struct _IO_FILE FILE;
 

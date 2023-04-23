@@ -118,8 +118,8 @@ static const unsigned long fix_pool_sizes[] = {4, 12, 20, 36, 52, 68};
 	(_sb = (SubBlock*)((char*)(ths) + 16)),                    \
 	SubBlock_is_free(_sb) && SubBlock_size(_sb) == Block_size((ths)) - 24
 
-//unused
 void Block_subBlock(){
+    // TODO
 }
 
 void Block_link(Block* ths, SubBlock* sb) {
@@ -225,8 +225,8 @@ static Block* __unlink(__mem_pool_obj* pool_obj, Block* bp) {
 	return result;
 }
 
-//unused
 void allocate_from_var_pools(){
+    // TODO
 }
 
 static void deallocate_from_var_pools(__mem_pool_obj* pool_obj, void *ptr) {
@@ -242,12 +242,12 @@ static void deallocate_from_var_pools(__mem_pool_obj* pool_obj, void *ptr) {
 	}
 }
 
-//unused
 void soft_allocate_from_var_pools(){
+    // TODO
 }
 
-//unused
 void FixBlock_construct(){
+    // TODO
 }
 
 void __init_pool_obj(__mem_pool* pool_obj) {
@@ -382,21 +382,21 @@ void __pool_realloc(){
 void __pool_alloc_clear(){
 }
 
-//unused
-void malloc(){
+void malloc() {
+    // TODO
 }
 
 void free(void *ptr) {
     __pool_free(get_malloc_pool(), ptr);
 }
 
-
-//unused
 void realloc(){
+    // TODO
 }
 
-//unused
+
 void calloc(){
+    // TODO
 }
 
 //unused
