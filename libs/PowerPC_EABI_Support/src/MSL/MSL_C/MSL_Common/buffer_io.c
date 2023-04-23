@@ -32,7 +32,6 @@ int __load_buffer(FILE *file, u32 *n, int flag)
 	if(res != 0) {
 		return res;
 	}
-
 	
 	file->mPosition += file->mBufferLength;
 
