@@ -88,9 +88,13 @@ libs/PowerPC_EABI_Support/src/MSL/Runtime/runtime.c:
 
 #libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/ansi_files.c:
   #.text: [0x802b5854, 0x802b5b4c]
+  #.data: [0x804e5548, 0x804e5688]
 
-#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/ansi_fp.c:
-  #.text: [0x802b5b4c, 0x802b73cc]
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/ansi_fp.c:
+  .text: [0x802b5b4c, 0x802b73cc]
+  .data: [0x804e5688, 0x804e57f0]
+  .rodata: [0x804aba60, 0x804abb40]
+  .sdata2: [0x80511628, 0x80511660]
 
 libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/arith.c:
   .text: [0x802b73cc, 0x802b73ec]
@@ -98,8 +102,8 @@ libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/arith.c:
 #libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/buffer_io.c:
   #.text: [0x802b73ec, 0x802b76f8]
 
-# this got deadstripped
-#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/ctype.c:
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/ctype.c:
+  .rodata: [0x804abb40, 0x804abf40]
 
 #libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/direct_io.c:
   #.text: [0x802b76f8, 0x802b7d48]
