@@ -146,11 +146,11 @@ void __DVDShowFatalMessage(void) {
         default:
         errMsg = __DVDErrorMessageDefault;
         break;
-        case 2:
+        case SC_REGION_EU:
         errMsg = __DVDErrorMessageEurope;
         break;
-        case 4:
-        case 5:
+        case SC_REGION_KR:
+        case SC_REGION_CN:
         errMsg = __DVDErrorMessageChinaKorea;
         break;
     }
