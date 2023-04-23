@@ -6,7 +6,7 @@ typedef void (*FatalFuncType)(void);
 static FatalFuncType FatalFunc = NULL;
 
 // TODO: Fix text formatting by adding defines for normal ascii characters with accents
-char* const __DVDErrorMessageDefault[] = {
+const char* const __DVDErrorMessageDefault[] = {
     // clang-format off
 
     // SC_LANG_JP
@@ -59,7 +59,7 @@ char* const __DVDErrorMessageDefault[] = {
     // clang-format on
 };
 
-char* const __DVDErrorMessageEurope[] = {
+const char* const __DVDErrorMessageEurope[] = {
     // clang-format off
 
     // SC_LANG_JP
@@ -112,7 +112,7 @@ char* const __DVDErrorMessageEurope[] = {
     // clang-format on
 };
 
-char* __DVDErrorMessageChinaKorea[] = {
+const char* __DVDErrorMessageChinaKorea[] = {
     // clang-format off
 
     "\n\nエラーコード１０４。\n"
@@ -127,12 +127,13 @@ char* __DVDErrorMessageChinaKorea[] = {
     "Game Disc, and turn the power off.\n"
     "Please read the Wii Operations Manual\n"
     "for more information."
+    
     // clang-format on
 };
 
 void __DVDShowFatalMessage(void) {
     const char* msg;
-    char * const*  errMsg;
+    const char* const* errMsg;
     const GXColor bgColor = {0, 0, 0, 0};
     const GXColor textColor = {255, 255, 255, 0};
 

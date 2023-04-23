@@ -18,7 +18,7 @@ typedef struct FSStats {
 typedef struct FSFileStats {
     u32 length;   // at 0x0
     u32 position; // at 0x4
-} FSFileStats ALIGN(32);
+} FSFileStats;
 
 s32 ISFS_OpenLib(void);
 s32 ISFS_CreateDir(const char* path, u32 attr, u32 ownerPerm, u32 groupPerm,

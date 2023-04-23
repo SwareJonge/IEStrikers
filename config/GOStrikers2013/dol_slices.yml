@@ -39,10 +39,14 @@ libs/RVL_SDK/src/revolution/DVD/dvdfatal.c:
   .sbss: [0x8050dd88, 0x8050dd90]
   .sdata2: [0x80511498, 0x805114a0]
 
+# arc
+
 #libs/RVL_SDK/src/revolution/ARC/arc.c:
   #.text: [0x802d9ce0, 0x802da6b8]
   #.data: [0x804e8718, 0x804e8788]
   #.sdata: [0x8050d198, 0x8050d1a0]
+
+# ai
 
 libs/RVL_SDK/src/revolution/AI/ai.c:
   .text: [0x802a4ad0, 0x802a507c]
@@ -484,6 +488,13 @@ libs/RVL_SDK/src/revolution/MEM/mem_allocator.c:
 
 libs/RVL_SDK/src/revolution/MEM/mem_list.c:
   .text: [0x802cf9b0, 0x802cfad0]
+
+# fs
+libs/RVL_SDK/src/revolution/FS/fs.c:
+  .text: [0x802cfe50, 0x802d13f0]
+  .data: [0x804e6560, 0x804e6588]
+  .sdata: [0x8050cff0, 0x8050d000]
+  .sbss: [0x8050e1b0, 0x8050e1c8]
 
 libs/RVL_SDK/src/revolution/SC/scapi.c:
   .text: [0x802d91d0, 0x802d96d0]
