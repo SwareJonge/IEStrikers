@@ -146,18 +146,17 @@ void __DVDShowFatalMessage(void) {
         default:
         errMsg = __DVDErrorMessageDefault;
         break;
-        case 2:
+        case SC_REGION_EU:
         errMsg = __DVDErrorMessageEurope;
         break;
-        case 4:
-        case 5:
+        case SC_REGION_KR:
+        case SC_REGION_CN:
         errMsg = __DVDErrorMessageChinaKorea;
         break;
     }
 
-        msg = (SCGetLanguage() > SC_LANG_NL) ? errMsg[SC_LANG_EN]
+    msg = (SCGetLanguage() > SC_LANG_NL) ? errMsg[SC_LANG_EN]
                                              : errMsg[SCGetLanguage()];
-
     OSFatal(textColor, bgColor, msg);
 }
 
