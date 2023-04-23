@@ -501,6 +501,12 @@ libs/RVL_SDK/src/revolution/IPC/ipcMain.c:
   .text: [0x802d13f0, 0x802d14d8]
   .sbss: [0x8050e1c8, 0x8050e1e0]
 
+#libs/RVL_SDK/src/revolution/IPC/ipcclt.c:
+  #.text: [0x802d14e0, 0x802d2e44]
+  #.sdata: [0x8050d000, 0x8050d008]
+  #.sbss: [0x8050e1e0, 0x8050e1f0]
+  #.bss: [0x808b72a0, 0x808b73e0]
+
 libs/RVL_SDK/src/revolution/IPC/ipcProfile.c:
   .text: [0x802d3380, 0x802d378c]
   .sbss: [0x8050e1f0, 0x8050e1f8]

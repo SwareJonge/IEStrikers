@@ -1,8 +1,9 @@
 #include <revolution/IPC.h>
 #include <revolution/OS.h>
 
-#define IPC_QUEUE_CAPACITY 16
-#define IPC_HEAP_SIZE 0x800
+#define IPC_QUEUE_CAPACITY 48
+#define IPC_HEAP_SIZE_OLD 0x1000
+#define IPC_HEAP_SIZE 0x2000
 
 typedef struct IPCRequestQueue {
     u32 sent;                                // at 0x0
@@ -15,10 +16,14 @@ typedef struct IPCRequestQueue {
 static s32 __mailboxAck = 1;
 static s32 hid = -1;
 
-static BOOL __relnchFl = FALSE;
+static u32 __relnchFl = FALSE;
 static IPCRequestEx* __relnchRpc = NULL;
+static IPCRequestEx* __relnchRpcSave = NULL;
 
 static IPCRequestQueue __responses;
+
+static OSAlarm __timeout_alarm;
+static IPCRequestEx __rpcBuf;
 
 size_t strnlen(const char* s, size_t maxlen);
 
@@ -39,18 +44,14 @@ static s32 ipcFree(void* block) {
     return IPC_RESULT_OK;
 }
 
+#define ipc_minmax(a, b)                                                        \
+    (a < b) ? 1 - (volatile u32)b + (volatile u32)a - 1 : a - b
+
 static inline s32 __ipcQueueRequest(IPCRequestEx* req) {
     s32 ret = IPC_RESULT_OK;
     s32 waiting;
 
-    waiting =
-        (__responses.queued < __responses.sent)
-            // Difference of count
-            ? __responses.queued - __responses.sent
-            // Is queue full?
-            : (__responses.queued - __responses.sent) >= IPC_QUEUE_CAPACITY;
-
-    if (waiting != 0) {
+    if (ipc_minmax(__responses.queued, __responses.sent) >= IPC_QUEUE_CAPACITY) {
         ret = IPC_RESULT_BUSY_INTERNAL;
     } else {
         __responses.queue[__responses.back] = req;
@@ -67,13 +68,7 @@ static inline s32 __ipcSendRequest(void) {
     IPCRequestEx* req;
     s32 waiting;
 
-    waiting = (__responses.queued < __responses.sent)
-                  // Difference of sent/queued
-                  ? __responses.queued - __responses.sent
-                  // Are no requests waiting
-                  : (__responses.queued - __responses.sent) == 0;
-
-    if (waiting != 0) {
+    if (ipc_minmax(__responses.queued, __responses.sent) == 0) {
         ret = IPC_RESULT_BUSY_INTERNAL;
     } else {
         req = __responses.queue[__responses.front];
@@ -82,8 +77,6 @@ static inline s32 __ipcSendRequest(void) {
         }
 
         if (req->reboot) {
-            __relnchFl = TRUE;
-            __relnchRpc = req;
             __mailboxAck--;
         }
 
@@ -98,7 +91,7 @@ exit:
     return ret;
 }
 
-static void IpcReplyHandler(s16 intr, OSContext* ctx) {
+static void IpcReplyHandler(s32 intr, OSContext* ctx) {
 #pragma unused(intr)
 
     IPCRequestEx* req;
@@ -238,7 +231,24 @@ s32 IPCCltInit(void) {
             __OSUnmaskInterrupts(OS_INTR_MASK(OS_INTR_PI_ACR));
             IPCWriteReg(1, 0x38);
             IPCiProfInit();
+            OSCreateAlarm(&__timeout_alarm);
         }
+    }
+
+    return err;
+}
+
+s32 IPCCltReInit(void) {
+
+    s32 err = 0;
+    void* lo;
+
+    lo = IPCGetBufferLo();
+    if ((char*)lo + IPC_HEAP_SIZE_OLD > IPCGetBufferHi()) {
+        err = IPC_RESULT_ALLOC_FAILED;
+    } else {
+        hid = iosCreateHeap(lo, IPC_HEAP_SIZE_OLD);
+        IPCSetBufferLo((char*)lo + IPC_HEAP_SIZE_OLD);
     }
 
     return err;
@@ -314,6 +324,12 @@ static s32 __ios_Ipc2(IPCRequestEx* req, IPCAsyncCallback callback) {
     return ret;
 }
 
+// unused
+void __ios_Ipc2WithTimeout() {}
+
+// unused
+void __timeout_cb() {}
+
 static s32 __ios_Open(IPCRequestEx* req, const char* path, IPCOpenMode mode) {
     s32 ret = IPC_RESULT_OK;
 
@@ -321,7 +337,7 @@ static s32 __ios_Open(IPCRequestEx* req, const char* path, IPCOpenMode mode) {
         ret = IPC_RESULT_INVALID_INTERNAL;
     } else {
         DCFlushRange(path, strnlen(path, 64) + 1);
-        req->base.open.path = (const char*)OSCachedToPhysical(path);
+        req->base.open.path = (char*)OSCachedToPhysical(path);
         req->base.open.mode = mode;
     }
 
@@ -355,6 +371,9 @@ s32 IOS_Open(const char* path, IPCOpenMode mode) {
     return ret;
 }
 
+// unused
+void IOS_OpenWithTimeout() {}
+
 s32 IOS_CloseAsync(s32 fd, IPCAsyncCallback callback, void* callbackArg) {
     IPCRequestEx* req;
     s32 ret = __ios_Ipc1(fd, IPC_REQ_CLOSE, callback, callbackArg, &req);
@@ -374,6 +393,9 @@ s32 IOS_Close(s32 fd) {
 
     return ret;
 }
+
+// unused
+void IOS_CloseWithTimeout() {}
 
 static s32 __ios_Read(IPCRequestEx* req, void* buf, s32 len) {
     s32 ret = IPC_RESULT_OK;
@@ -484,6 +506,7 @@ s32 IOS_SeekAsync(s32 fd, s32 offset, IPCSeekMode mode,
     return ret;
 }
 
+// unused
 s32 IOS_Seek(s32 fd, s32 offset, IPCSeekMode mode) {
     IPCRequestEx* req;
     s32 ret = __ios_Ipc1(fd, IPC_REQ_SEEK, NULL, NULL, &req);
@@ -620,13 +643,57 @@ s32 IOS_Ioctlv(s32 fd, s32 type, s32 inCount, s32 outCount,
 
 s32 IOS_IoctlvReboot(s32 fd, s32 type, s32 inCount, s32 outCount,
                      IPCIOVector* vectors) {
+    s32 ret;
     IPCRequestEx* req;
-    s32 ret = __ios_Ipc1(fd, IPC_REQ_IOCTLV, NULL, NULL, &req);
-    if (ret == IPC_RESULT_OK) {
-        req->reboot = TRUE;
-        ret = __ios_Ioctlv(req, type, inCount, outCount, vectors);
+    IPCRequest* reqbase;
+    BOOL enabled;
+    
+    enabled = OSDisableInterrupts();
+
+    if (__relnchFl) {
+        OSRestoreInterrupts(enabled);
+        ret = -10;
+    } else {
+        __relnchFl = TRUE;
+        OSRestoreInterrupts(enabled);
+        ret = __ios_Ipc1(fd, IPC_REQ_IOCTLV, NULL, NULL, &req);
+
         if (ret == IPC_RESULT_OK) {
-            ret = __ios_Ipc2(req, NULL);
+            __relnchRpcSave = req;
+            req->reboot = TRUE;
+
+            ret = __ios_Ioctlv(req, type, inCount, outCount, vectors);
+            if (ret == IPC_RESULT_OK) {
+                memcpy(&__rpcBuf, req, sizeof(IPCRequestEx));
+                reqbase = &req->base;
+
+                __relnchRpc = &__rpcBuf;
+
+                OSInitThreadQueue(&__relnchRpc->queue);
+                DCFlushRange(reqbase, sizeof(IPCRequest));
+
+                enabled = OSDisableInterrupts();
+                ret = __ipcQueueRequest((IPCRequestEx*)reqbase);
+
+                if (ret != IPC_RESULT_OK) {
+                    OSRestoreInterrupts(enabled);
+                } else {
+                    if (__mailboxAck > 0) {
+                        __ipcSendRequest();
+                    }
+
+                    OSSleepThread(&__relnchRpc->queue);
+                    OSRestoreInterrupts(enabled);
+                    ret = __relnchRpc->base.ret;
+                }
+            }
+        }
+
+        __relnchFl = FALSE;
+        __relnchRpcSave = NULL;
+
+        if (req != NULL && ret) {
+            ipcFree(req);
         }
     }
 
