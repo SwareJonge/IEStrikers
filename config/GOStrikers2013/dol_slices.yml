@@ -496,6 +496,12 @@ libs/RVL_SDK/src/revolution/FS/fs.c:
   .sdata: [0x8050cff0, 0x8050d000]
   .sbss: [0x8050e1b0, 0x8050e1c8]
 
+# ipc
+libs/RVL_SDK/src/revolution/IPC/ipcMain.c:
+  .text: [0x802d13f0, 0x802d14d8]
+  .sbss: [0x8050e1c8, 0x8050e1e0]
+
+# sc
 libs/RVL_SDK/src/revolution/SC/scapi.c:
   .text: [0x802d91d0, 0x802d96d0]
   .data: [0x804e8688, 0x804e86b8]

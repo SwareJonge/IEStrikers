@@ -14,7 +14,6 @@ typedef struct FSStats {
     char UNK_0x0[0x1C];
 } FSStats;
 
-// Could be more fields, but not larger than 32B
 typedef struct FSFileStats {
     u32 length;   // at 0x0
     u32 position; // at 0x4
@@ -43,6 +42,8 @@ s32 ISFS_Rename(const char* from, const char* to);
 s32 ISFS_RenameAsync(const char* from, const char* to, FSAsyncCallback callback,
                      void* callbackArg);
 s32 ISFS_GetUsage(const char* path, s32* blockCountOut, s32* fileCountOut);
+s32 ISFS_GetUsageAsync(const char* path, u32* blockCountOut, u32* fileCountOut,
+                       FSAsyncCallback callback, void* callbackArg);
 s32 ISFS_CreateFile(const char* path, u32 attr, u32 ownerPerm, u32 groupPerm,
                     u32 otherPerm);
 s32 ISFS_CreateFileAsync(const char* path, u32 attr, u32 ownerPerm,

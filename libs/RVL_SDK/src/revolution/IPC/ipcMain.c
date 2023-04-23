@@ -17,6 +17,11 @@ void IPCInit(void) {
     }
 }
 
+void IPCReInit(void) {
+    Initialized = 0;
+    IPCInit();
+}
+
 u32 IPCReadReg(s32 index) { return IPC_HW_REGS[index]; }
 
 void IPCWriteReg(s32 index, u32 value) { IPC_HW_REGS[index] = value; }
