@@ -72,7 +72,7 @@ typedef struct IPCIOVector {
 } IPCIOVector;
 
 typedef struct IPCOpenArgs {
-    const char* path; // at 0x0
+    char* path; // at 0x0
     IPCOpenMode mode; // at 0x4
 } IPCOpenArgs;
 
@@ -102,7 +102,7 @@ typedef struct IPCIoctlvArgs {
 } IPCIoctlvArgs;
 
 typedef struct IPCRequest {
-    IPCRequestType type; // at 0x0
+    u32 type; // at 0x0
     s32 ret;             // at 0x4
     s32 fd;              // at 0x8
     union {
@@ -121,7 +121,7 @@ typedef struct IPCRequestEx {
     BOOL reboot;               // at 0x28
     OSThreadQueue queue;       // at 0x2C
     char padding[64 - 0x34];
-} IPCRequestEx;
+} IPCRequestEx; // NOTE: might've been reduced in size
 
 s32 IPCCltInit(void);
 s32 IOS_OpenAsync(const char* path, IPCOpenMode mode, IPCAsyncCallback callback,
