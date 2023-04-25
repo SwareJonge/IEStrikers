@@ -340,7 +340,7 @@ static void CheckTargets(void) {
     case 0x81:
         OSReport("OS ERROR: boot program is not for RVL target. Please use "
                  "correct boot program.\n");
-#line 1112
+#line 1160
         OSError("Failed to run app");
         break;
     case 0x80:
@@ -352,13 +352,38 @@ static void CheckTargets(void) {
     case 0x81:
         OSReport("OS ERROR: apploader[D].img is not for RVL target. Please use "
                  "correct apploader[D].img.\n");
-#line 1130
+#line 1178
         OSError("Failed to run app");
         break;
     case 0x80:
     default:
         break;
     }
+}
+
+static void CheckFirmare(void){
+    OSIOSRev rev;
+    u32 myVersion;
+    const GXColor bgColor = {0,0,255,0};
+    const GXColor textColor = {255,255,255,0};
+
+    __OSGetIOSRev(&rev);
+
+    myVersion = rev.idLo << 16 | rev.verMajor << 8 | rev.verMinor;
+    
+    if (rev.idLo != (OS_MINIMUM_IOS_VERSION >> 16)
+        || rev.idLo == (OS_MINIMUM_IOS_VERSION >> 16) && myVersion < OS_MINIMUM_IOS_VERSION) {
+        OSReport("OS ERROR: This firmware is an improper version for this SDK. Please use a correct Firmware.\n");
+        OSFatal(textColor, bgColor, "\n\nERROR #002\n"
+        "An error has occurred.\n"
+        "Press the Eject Button, remove the\n"
+        "Game Disc, and turn off the power to \n"
+        "the console. \n"
+        "Please read the Wii Operations Manual \n"
+        "for further instructions.\n");
+#line 1243
+        OSError("Failed to run app");
+      }
 }
 
 static void ReportOSInfo(void) {
@@ -368,7 +393,7 @@ static void ReportOSInfo(void) {
     u32 tdev;
 
     OSReport("\nRevolution OS\n");
-    OSReport("Kernel built : %s %s\n", "Apr 24 2007", "11:50:47");
+    OSReport("Kernel built : %s %s\n", "Aug 23 2010", "17:33:06");
 
     OSReport("Console Type : ");
     type = OSGetConsoleType();
@@ -598,6 +623,7 @@ void OSInit(void) {
 
         if (!__OSInIPL) {
             CheckTargets();
+            CheckFirmare();
             DVDInit();
 
             if (__OSIsGcam) {

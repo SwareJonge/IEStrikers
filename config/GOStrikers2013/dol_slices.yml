@@ -6,6 +6,19 @@
 # these should work but just don't, results in linker errors
 
 # RVL_SDK.a
+# base
+
+libs/RVL_SDK/src/revolution/BASE/PPCArch.c:
+  .text: [0x802869b0, 0x80286bc0]
+  .data: [0x804d0f18, 0x804d0f50]
+
+#libs/RVL_SDK/src/revolution/OS/OS.c:
+  #.text: [0x80286bc0, 0x802880a0]
+  #.data: [0x804d0f50, 0x804d1360]
+  #.sdata: [0x8050cdd8, 0x8050ce08]
+  #.sbss: [0x8050db88, 0x8050dbd0]
+  #.sdata2: [0x805113e0, 0x805113e8]
+  #s.bss: [0x80898180, 0x808981f0]
 
 #libs/RVL_SDK/src/revolution/OS/__start.c:
   #.init: [0x80004000, 0x80004360]
@@ -15,12 +28,6 @@
   #.init: [0x80004360, 0x800043c4]
   #.text: [0x802942f0, 0x802943b0]
 
-# base
-
-libs/RVL_SDK/src/revolution/BASE/PPCArch.c:
-  .text: [0x802869b0, 0x80286bc0]
-  .data: [0x804d0f18, 0x804d0f50]
-
 # dvd
 # far from complete
 #libs/RVL_SDK/src/revolution/DVD/dvd_broadway.c:
@@ -29,7 +36,6 @@ libs/RVL_SDK/src/revolution/BASE/PPCArch.c:
 
 libs/RVL_SDK/src/revolution/DVD/dvdidutils.c:
   .text: [0x8029ba60, 0x8029bb50]
-
 
 libs/RVL_SDK/src/revolution/DVD/dvdfatal.c:
   .text: [0x8029bb50, 0x8029bcb8]
