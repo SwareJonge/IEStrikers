@@ -56,7 +56,7 @@ const u8* OSUTF8to32(const u8* utf8, u32* utf32) {
         }
     }
 
-    if (full >= 0xD800 && full <= 0xDFFF) {
+    if (0xD800 <= full && full <= 0xDFFF) {
         return NULL;
     }
 
@@ -73,12 +73,12 @@ const wchar_t* OSUTF16to32(const wchar_t* utf16, u32* utf32) {
         utf16++;
     }
 
-    if (hi < 0xD800 || hi > 0xDFFF) {
+    if (0xD800 > hi || hi > 0xDFFF) {
         full = hi;
     } else if (hi <= 0xDBFF) {
         lo = *utf16++;
 
-        if (lo >= 0xDC00 && lo <= 0xDFFF) {
+        if (0xDC00 <= lo && lo <= 0xDFFF) {
             full = (hi & 0x3FF) << 10 | lo & 0x3FF;
             full += 0x10000;
         } else {
@@ -99,11 +99,11 @@ u8 OSUTF32toANSI(u32 utf32) {
         return 0;
     }
 
-    if (utf32 < 0x80 || utf32 > 0x9F) {
+    if (0x80 > utf32 || utf32 > 0x9F) {
         return utf32 & 0xFF;
     }
 
-    if (utf32 >= 0x152 && utf32 <= 0x2122) {
+    if (0x152 <= utf32 && utf32 <= 0x2122) {
         for (i = 0; i < ARRAY_LENGTH(UcsAnsiTable); i++) {
             if (UcsAnsiTable[i] == utf32) {
                 return i + 0x80 & 0xFF;
