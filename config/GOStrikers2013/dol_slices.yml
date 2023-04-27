@@ -25,6 +25,11 @@ libs/RVL_SDK/src/revolution/OS/OSAlarm.c:
   .data: [0x804d1360, 0x804d1370]
   .sbss: [0x8050dbd0, 0x8050dbd8]
 
+libs/RVL_SDK/src/revolution/OS/OSAlloc.c:
+  .text: [0x80288970, 0x80288ba0]
+  .sdata: [0x8050ce08, 0x8050ce10]
+  .sbss: [0x8050dbd8, 0x8050dbe0]
+
 #libs/RVL_SDK/src/revolution/OS/__start.c:
   #.init: [0x80004000, 0x80004360]
   #.sbss: [0x8050dc80, 0x8050dc88]
