@@ -539,6 +539,11 @@ src/Shade/std/shd_stdarg.cpp:
   #extab: [0x800120a4, 0x800120b4]
   #extabindex: [0x8002037c, 0x80020394] 
   
+libs/RVL_SDK/src/revolution/TPL/TPL.c: # why is this all the way over here? part of HBM?
+  .text: [0x80348250, 0x80348390]
+  .data: [0x804f09d8, 0x804f0a08]
+  .sdata: [0x8050d428, 0x8050d430]
+
 libs/nw4r/db/db_console.cpp:
   .text: [0x80392fb0, 0x8039308c]
 

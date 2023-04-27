@@ -36,14 +36,14 @@ u32 GXSetDispCopyYScale(f32 y_scale_factor);
 
 void GXSetDispCopyGamma(u8);
 
-extern const _GXRenderModeObj GXNtsc480IntDf;
-extern const _GXRenderModeObj GXNtsc480Int;
-extern const _GXRenderModeObj GXNtsc480Prog;
-extern const _GXRenderModeObj GXMpal480IntDf;
-extern const _GXRenderModeObj GXPal528IntDf;
-extern const _GXRenderModeObj GXEurgb60Hz480IntDf;
-extern const _GXRenderModeObj GXEurgb60Hz480Int;
-extern const _GXRenderModeObj GXEurgb60Hz480Prog;
+extern const GXRenderModeObj GXNtsc480IntDf;
+extern const GXRenderModeObj GXNtsc480Int;
+extern const GXRenderModeObj GXNtsc480Prog;
+extern const GXRenderModeObj GXMpal480IntDf;
+extern const GXRenderModeObj GXPal528IntDf;
+extern const GXRenderModeObj GXEurgb60Hz480IntDf;
+extern const GXRenderModeObj GXEurgb60Hz480Int;
+extern const GXRenderModeObj GXEurgb60Hz480Prog;
 
 #ifdef __cplusplus
 }
