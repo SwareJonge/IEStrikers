@@ -529,10 +529,10 @@ libs/RVL_SDK/src/revolution/ARC/arc.c:
   .data: [0x804e8718, 0x804e8788]
   .sdata: [0x8050d198, 0x8050d1a0]
 
-#libs/RVL_SDK/src/revolution/USB/usb.c:
-  #.text: [0x80320920, 0x80321830]
-  #.data: [0x804ef910, 0x804f0140]
-  #.sdata: [0x8050d278, 0x8050d288]
+libs/RVL_SDK/src/revolution/USB/usb.c:
+  .text: [0x80320920, 0x80321e6c]
+  .data: [0x804ef910, 0x804f0140]
+  .sdata: [0x8050d278, 0x8050d288]
 
 src/Shade/std/shd_stdarg.cpp:
   .text: [0x803346e0, 0x8033496c]
@@ -543,6 +543,7 @@ libs/RVL_SDK/src/revolution/TPL/TPL.c: # why is this all the way over here? part
   .text: [0x80348250, 0x80348390]
   .data: [0x804f09d8, 0x804f0a08]
   .sdata: [0x8050d428, 0x8050d430]
+  .sbss: [0x8050e348, 0x8050e358]
 
 libs/nw4r/db/db_console.cpp:
   .text: [0x80392fb0, 0x8039308c]
