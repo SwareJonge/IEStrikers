@@ -18,7 +18,7 @@ libs/RVL_SDK/src/revolution/BASE/PPCArch.c:
   #.sdata: [0x8050cdd8, 0x8050ce08]
   #.sbss: [0x8050db88, 0x8050dbd0]
   #.sdata2: [0x805113e0, 0x805113e8]
-  #s.bss: [0x80898180, 0x808981f0]
+  #.bss: [0x80898180, 0x808981f0]
 
 #libs/RVL_SDK/src/revolution/OS/__start.c:
   #.init: [0x80004000, 0x80004360]
@@ -44,13 +44,6 @@ libs/RVL_SDK/src/revolution/DVD/dvdfatal.c:
   .sdata: [0x8050ce90, 0x8050ce98]
   .sbss: [0x8050dd88, 0x8050dd90]
   .sdata2: [0x80511498, 0x805114a0]
-
-# arc
-
-#libs/RVL_SDK/src/revolution/ARC/arc.c:
-  #.text: [0x802d9ce0, 0x802da6b8]
-  #.data: [0x804e8718, 0x804e8788]
-  #.sdata: [0x8050d198, 0x8050d1a0]
 
 # ai
 
@@ -528,6 +521,13 @@ libs/RVL_SDK/src/revolution/SC/scapi_prdinfo.c:
   .data: [0x804e86b8, 0x804e8718]
   .sdata: [0x8050d170, 0x8050d198]
   .sbss: [0x8050e230, 0x8050e238]
+
+# arc
+
+libs/RVL_SDK/src/revolution/ARC/arc.c:
+  .text: [0x802d9ce0, 0x802da6b8]
+  .data: [0x804e8718, 0x804e8788]
+  .sdata: [0x8050d198, 0x8050d1a0]
 
 #libs/RVL_SDK/src/revolution/USB/usb.c:
   #.text: [0x80320920, 0x80321830]
