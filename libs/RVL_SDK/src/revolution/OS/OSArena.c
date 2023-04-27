@@ -36,3 +36,11 @@ void* OSAllocFromMEM1ArenaLo(size_t size, u32 align) {
     OSSetMEM1ArenaLo(blk_end);
     return blk_start;
 }
+
+void* OSAllocFromMEM2ArenaLo(size_t size, u32 align) {
+    u8* blk_start = ROUND_UP_PTR(OSGetMEM2ArenaLo(), align);
+    u8* blk_end = blk_start + size;
+    blk_end = ROUND_UP_PTR(blk_end, align);
+    OSSetMEM2ArenaLo(blk_end);
+    return blk_start;
+}

@@ -30,6 +30,26 @@ libs/RVL_SDK/src/revolution/OS/OSAlloc.c:
   .sdata: [0x8050ce08, 0x8050ce10]
   .sbss: [0x8050dbd8, 0x8050dbe0]
 
+libs/RVL_SDK/src/revolution/OS/OSArena.c:
+  .text: [0x80288ba0, 0x80288cd4]
+  .sdata: [0x8050ce10, 0x8050ce18]
+  .sbss: [0x8050dbe0, 0x8050dbe8]
+
+libs/RVL_SDK/src/revolution/OS/OSContext.c:
+  .text: [0x80289800, 0x8028a0d0]
+  .data: [0x804d1578, 0x804d1730]
+
+libs/RVL_SDK/src/revolution/OS/OSError.c:
+  .text: [0x8028a0d0, 0x8028a81c]
+  .data: [0x804d1730, 0x804d1a10]
+  .sdata: [0x8050ce18, 0x8050ce20]
+  .bss: [0x808981f0, 0x80898240]
+
+libs/RVL_SDK/src/revolution/OS/OSInterrupt.c:
+  .text: [0x8028d890, 0x8028e060]
+  .data: [0x804d2870, 0x804d28a0]
+  .sbss: [0x8050dc10, 0x8050dc28]
+
 #libs/RVL_SDK/src/revolution/OS/__start.c:
   #.init: [0x80004000, 0x80004360]
   #.sbss: [0x8050dc80, 0x8050dc88]
@@ -64,7 +84,7 @@ libs/RVL_SDK/src/revolution/AI/ai.c:
 
 #libs/RVL_SDK/src/revolution/AX/AX.c:
 libs/RVL_SDK/src/revolution/DSP/dsp.c:
-  .text: [0x802a9360, 0x802a95bc]
+  .text: [0x802a9360, 0x802a95c0]
   .data: [0x804e4920, 0x804e49a0]
   .sdata: [0x8050cf28, 0x8050cf30]
   .sbss: [0x8050e040, 0x8050e048]
@@ -476,7 +496,7 @@ libs/NdevExi2A/src/DebuggerDriver.c:
   .sbss: [0x8050e180, 0x8050e198]
 
 libs/NdevExi2A/src/exi2.c:
- .text: [0x802cdfd0, 0x802ce75c]
+ .text: [0x802cdfd0, 0x802ce760]
 
 # mem
 libs/RVL_SDK/src/revolution/MEM/mem_heapCommon.c:

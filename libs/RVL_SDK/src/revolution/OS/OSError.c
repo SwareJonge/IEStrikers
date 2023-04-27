@@ -1,7 +1,6 @@
 #include <revolution/BASE.h>
 #include <revolution/DSP.h>
 #include <revolution/OS.h>
-#include <stdio.h>
 
 OSErrorHandler __OSErrorTable[OS_ERR_MAX];
 u32 __OSFpscrEnableBits =
@@ -10,9 +9,11 @@ u32 __OSFpscrEnableBits =
 void OSReport(const char* msg, ...) {
     va_list list;
     va_start(list, msg);
-    vprintf(msg, list);
+    OSVReport(msg, list);
     va_end(list);
 }
+
+void OSVReport(const char* fmt, va_list list) { vprintf(fmt, list); }
 
 void OSPanic(const char* file, int line, const char* msg, ...) {
     u32 depth;
