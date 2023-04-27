@@ -7,11 +7,11 @@
 
 # RVL_SDK.a
 # base
-
 libs/RVL_SDK/src/revolution/BASE/PPCArch.c:
   .text: [0x802869b0, 0x80286bc0]
   .data: [0x804d0f18, 0x804d0f50]
 
+# os
 #libs/RVL_SDK/src/revolution/OS/OS.c:
   #.text: [0x80286bc0, 0x802880a0]
   #.data: [0x804d0f50, 0x804d1360]
@@ -19,6 +19,11 @@ libs/RVL_SDK/src/revolution/BASE/PPCArch.c:
   #.sbss: [0x8050db88, 0x8050dbd0]
   #.sdata2: [0x805113e0, 0x805113e8]
   #.bss: [0x80898180, 0x808981f0]
+
+libs/RVL_SDK/src/revolution/OS/OSAlarm.c:
+  .text: [0x802880a0, 0x80288970]
+  .data: [0x804d1360, 0x804d1370]
+  .sbss: [0x8050dbd0, 0x8050dbd8]
 
 #libs/RVL_SDK/src/revolution/OS/__start.c:
   #.init: [0x80004000, 0x80004360]
@@ -46,7 +51,6 @@ libs/RVL_SDK/src/revolution/DVD/dvdfatal.c:
   .sdata2: [0x80511498, 0x805114a0]
 
 # ai
-
 libs/RVL_SDK/src/revolution/AI/ai.c:
   .text: [0x802a4ad0, 0x802a507c]
   .data: [0x804e1688, 0x804e16d0]
@@ -54,7 +58,6 @@ libs/RVL_SDK/src/revolution/AI/ai.c:
   .sbss: [0x8050dec0, 0x8050df00]
 
 #libs/RVL_SDK/src/revolution/AX/AX.c:
-
 libs/RVL_SDK/src/revolution/DSP/dsp.c:
   .text: [0x802a9360, 0x802a95bc]
   .data: [0x804e4920, 0x804e49a0]
@@ -70,7 +73,6 @@ libs/RVL_SDK/src/revolution/DSP/dsp_task.c:
   .sbss: [0x8050e048, 0x8050e060]
   
 #Runtime.PPCEABI.H.a
-
 libs/PowerPC_EABI_Support/src/MSL/Runtime/__mem.c:
   .init: [0x800043c4, 0x80004744]
   .text: [0x802b1e30, 0x802b1e4c]
@@ -105,7 +107,6 @@ libs/PowerPC_EABI_Support/src/MSL/Runtime/runtime.c:
   ##extabindex: [0x80020ad8, 0x80020b00]
 
 # MSL_C.PPCEABI.bare.H.a
-
 #libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/alloc.c:
   #.text: [0x802b441c, 0x802b5854]
 
@@ -353,7 +354,6 @@ libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/extras.c:
   .text: [0x802c5350, 0x802c5494]
 
 # exi
-
 libs/RVL_SDK/src/revolution/EXI/EXIBios.c:
   .text: [0x802c54a0, 0x802c6d98]
   .data: [0x804e6128, 0x804e6170]
@@ -465,7 +465,6 @@ libs/PowerPC_EABI_Support/src/MSL/MetroTRK/target_options.c:
   .sbss: [0x8050e178, 0x8050e180]
 
 # NdevExi2AD
-
 libs/NdevExi2A/src/DebuggerDriver.c:
   .text: [0x802cdc9c, 0x802cdfd0]
   .sdata: [0x8050cfe8, 0x8050cff0]
@@ -475,7 +474,6 @@ libs/NdevExi2A/src/exi2.c:
  .text: [0x802cdfd0, 0x802ce75c]
 
 # mem
-
 libs/RVL_SDK/src/revolution/MEM/mem_heapCommon.c:
   .text: [0x802ce760, 0x802cebcc]
   .sbss: [0x8050e198, 0x8050e1a0]
@@ -523,12 +521,12 @@ libs/RVL_SDK/src/revolution/SC/scapi_prdinfo.c:
   .sbss: [0x8050e230, 0x8050e238]
 
 # arc
-
 libs/RVL_SDK/src/revolution/ARC/arc.c:
   .text: [0x802d9ce0, 0x802da6b8]
   .data: [0x804e8718, 0x804e8788]
   .sdata: [0x8050d198, 0x8050d1a0]
 
+# usb
 libs/RVL_SDK/src/revolution/USB/usb.c:
   .text: [0x80320920, 0x80321e6c]
   .data: [0x804ef910, 0x804f0140]

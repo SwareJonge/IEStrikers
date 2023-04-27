@@ -249,3 +249,33 @@ void OSSetAlarmUserData(OSAlarm* alarm, void* userData) {
 }
 
 void* OSGetAlarmUserData(const OSAlarm* alarm) { return alarm->userData; }
+
+void __OSSetInternalAlarmUserData(OSAlarm* alarm, void* userData) {
+    alarm->userData = userData;
+    alarm->tag = 0xffffffff;
+}
+
+void __OSCancelInternalAlarms(OSThread* thread) {
+    BOOL enabled = OSDisableInterrupts();
+    OSAlarm* head = AlarmQueue.head;
+    OSAlarm* temp;
+
+    if (head != NULL)
+        temp = head->next;
+    else
+        temp = NULL;
+
+    while (head != NULL) {
+        if (head->tag == -1 && (OSThread*)head->userData == thread) {
+            OSCancelAlarm(head);
+        }
+
+        head = temp;
+        if (temp != NULL)
+            temp = temp->next;
+        else
+            temp = NULL;
+    }
+
+    OSRestoreInterrupts(enabled);
+}

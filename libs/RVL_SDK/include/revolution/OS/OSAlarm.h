@@ -1,6 +1,7 @@
 #ifndef RVL_SDK_OS_ALARM_H
 #define RVL_SDK_OS_ALARM_H
 #include <revolution/types.h>
+#include <revolution/OS/OSThread.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,6 +37,9 @@ void OSCancelAlarm(OSAlarm* alarm);
 void OSSetAlarmTag(OSAlarm* alarm, u32 tag);
 void OSSetAlarmUserData(OSAlarm* alarm, void* userData);
 void* OSGetAlarmUserData(const OSAlarm* alarm);
+
+void __OSSetInternalAlarmUserData(OSAlarm* alarm, void* userData);
+void __OSCancelInternalAlarms(OSThread* thread);
 
 #ifdef __cplusplus
 }
