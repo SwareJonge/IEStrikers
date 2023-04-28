@@ -8,7 +8,7 @@ extern "C" {
 
 extern BOOL bootThisDol;
 
-void __OSReboot(int arg1, BOOL bootDol);
+void __OSReboot(u32 offset, BOOL bootDol);
 
 #ifdef __cplusplus
 }
