@@ -42,7 +42,7 @@ static void ScreenClear(u8* fb, u16 width, u16 height, GXColor yuv) {
 
 static void ScreenReport(void* fb, u16 width, u16 height, GXColor msgYUV, s32 x,
                          s32 y, u32 lf, const char* msg) {
-    u32 texel[70];
+    u32 texel[72];
     u32 charWidth;
     u8* tmp;
     u8 bright;
@@ -137,9 +137,16 @@ static void ConfigureVideo(u16 width, u16 height) {
         }
         break;
     case VI_TV_FMT_EURGB60:
-        rmode.tvMode = VI_TV_INFO(VI_TV_FMT_EURGB60, VI_SCAN_MODE_NON_INT);
-        rmode.viYOrigin = 0;
-        rmode.xfbMode = VI_XFB_MODE_DF;
+        if (VI_HW_REGS[VI_REG_VICLK] & VI_VICLK_54MHZ) {
+            rmode.tvMode = VI_TV_INFO(VI_TV_FMT_EURGB60, VI_SCAN_MODE_PROG);
+            rmode.viYOrigin = 0;
+            rmode.xfbMode = VI_XFB_MODE_SF;
+        }else {
+            rmode.tvMode = VI_TV_INFO(VI_TV_FMT_EURGB60, VI_SCAN_MODE_NON_INT);
+            rmode.viYOrigin = 0;
+            rmode.xfbMode = VI_XFB_MODE_DF;
+        }
+
         break;
     case VI_TV_FMT_PAL:
         rmode.tvMode = VI_TV_INFO(VI_TV_FMT_PAL, VI_SCAN_MODE_NON_INT);
@@ -226,7 +233,11 @@ void OSFatal(GXColor textColor, GXColor bgColor, const char* msg) {
     GXAbortFrame();
 
     OSSetArenaLo((void*)0x81400000);
-    OSSetArenaHi(bootInfo->fstStart);
+    if (bootInfo->fstStart == NULL)
+        OSSetArenaHi(*(void**)OSPhysicalToCached(OS_PHYS_USABLE_MEM1_END)); // hacky workaround
+    else {
+        OSSetArenaHi(bootInfo->fstStart);
+    }   
 
     FatalParam.textColor = textColor;
     FatalParam.bgColor = bgColor;

@@ -45,6 +45,16 @@ libs/RVL_SDK/src/revolution/OS/OSError.c:
   .sdata: [0x8050ce18, 0x8050ce20]
   .bss: [0x808981f0, 0x80898240]
 
+#libs/RVL_SDK/src/revolution/OS/OSExec.c:
+  #.text: [0x8028a820, 0x8028bf70]
+  #.data: [0x804d1a10, 0x804d1d60]
+
+libs/RVL_SDK/src/revolution/OS/OSFatal.c:
+  .text: [0x8028bf70, 0x8028cb98]
+  .sdata: [0x8050ce30, 0x8050ce38]
+  .sdata2: [0x805113e8, 0x80511428]
+  .bss: [0x80898260, 0x80898540]
+
 libs/RVL_SDK/src/revolution/OS/OSInterrupt.c:
   .text: [0x8028d890, 0x8028e060]
   .data: [0x804d2870, 0x804d28a0]
