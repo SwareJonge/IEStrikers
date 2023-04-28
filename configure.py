@@ -21,7 +21,9 @@ import common as c
 ####################
 
 # Check CW was added
-assert os.path.exists("tools/0x4302_151/mwcceppc.exe") and \
+# os.path.exists("tools/0x4201_142/mwcceppc.exe") and \
+assert os.path.exists("tools/0x4199_60831/mwcceppc.exe") and \
+    os.path.exists("tools/0x4302_151/mwcceppc.exe") and \
     os.path.exists("tools/0x4302_213/mwcceppc.exe") and \
     os.path.exists("tools/0x4302_213/mwldeppc.exe"), \
     "Error: Codewarrior not found!"
@@ -194,9 +196,10 @@ n.rule(
     pool="console"
 )
 
+# && dtk elf fixup $out $out
 n.rule(
     "as",
-    command = f"$as $asflags -c $in -o $out",
+    command= f"$as $asflags -c $in -o $out",
     description = "AS $in"
 )
 
@@ -433,8 +436,7 @@ class Source(ABC):
         self.decompiled = decompiled
         self.src_path = src_path
         self.o_path = o_path
-        filename = src_path.split('/')[-1]
-        self.dep = filename.rpartition('.')[0] + '.d'
+        self.o_stem = o_path[:-2]
         self.gen_includes = gen_includes
 
     def build(self):
@@ -531,15 +533,33 @@ class CSource(Source):
     def __init__(self, ctx: c.SourceContext, path: str):
         self.cc = c.CC # if a library uses a different compiler, change it here
         self.cflags = ctx.cflags
-
-        if(path.startswith("src/PowerPC_EABI_Support/")):
+        print(path)
+        
+        if (path.startswith("./libs/RVL_SDK/src/revolution")):
             self.cc = c.SDK_CC
+            self.cflags = c.RVL_SDK_CFLAGS
+            if path.endswith("EXIBios.c"):
+                self.cflags = self.cflags.replace("-O4,p", "-O3,p")
+        elif (path.startswith("./libs/PowerPC_EABI_Support/src/MSL")):
+            self.cflags = c.MSL_C_FLAGS
+            if path.endswith("nubevent.c") or path.endswith("nubinit.c") or path.endswith("msg.c"):
+                self.cflags = self.cflags.replace("-str pool, readonly, reuse", "-str pool, reuse")
+        elif (path.startswith("./libs/NdevExi2A/src/")):
+            self.cflags = c.NDEVEXI2A_CLFAGS
+            self.cc = c.REVO_EX_CC
+        elif (path.startswith("./src/Shade/std")):
+            self.cflags = c.SHD_STD_CLFAGS
+        elif (path.startswith("./libs/nw4r")):
+            self.cflags = c.NW4R_CFLAGS
+            if path.endswith("snd_adpcm.cpp"):
+                self.cc = c.REVO_EX_CC
 
         self.iconv_path = f"$builddir/iconv/{path}"
 
         # Find generated includes
         with open(path, encoding="utf-8") as f:
             gen_includes = GeneratedInclude.find(ctx, path, f.read())
+
 
         self.s_path = f"$builddir/{path}.s"
         super().__init__(True, path, f"$builddir/{path}.o", gen_includes)
@@ -558,7 +578,6 @@ class CSource(Source):
             variables = {
                 "cc": self.cc,
                 "cflags" : self.cflags,
-                "dep" : self.dep
             }
         )
         # Optional manual debug target
@@ -569,13 +588,12 @@ class CSource(Source):
             implicit = [inc.path for inc in self.gen_includes],
             variables = {
                 "cflags" : self.cflags,
-                "dep" : self.dep
             }
         )
 
 def load_sources(ctx: c.SourceContext):
     raw = c.get_cmd_stdout(
-        f"{c.SLICES} {ctx.binary} {ctx.slices} -o -p {ctx.srcdir}/"
+        f"{c.SLICES} {ctx.binary} {ctx.slices} -o -p ./"
     )
     return [Source.make(ctx, s) for s in json.loads(raw)]
 

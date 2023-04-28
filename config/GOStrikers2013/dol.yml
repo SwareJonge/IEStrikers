@@ -31,4 +31,4 @@ section_defs:
         bss_forced_size: 0x28
       - name: .bss
         nobits: true
-        bss_start_align: 0x40
+        bss_start_align: 0x20 # note: might be a hack

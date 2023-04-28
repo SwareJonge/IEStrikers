@@ -2,32 +2,717 @@
 # You must re-run configure.py after changing this file #
 #########################################################
 
-# Paths relative to src/
+# extab, extabindex and ctor sections should be disabled(if a file has a ctor section then just don't compile it)
+# these should work but just don't, results in linker errors
 
-#extab.s:
-  #extab_:      [0x80006720, 0x80012840]
-  #extabindex_: [0x80012840, 0x80020b00]
+# RVL_SDK.a
+# base
+libs/RVL_SDK/src/revolution/BASE/PPCArch.c:
+  .text: [0x802869b0, 0x80286bc0]
+  .data: [0x804d0f18, 0x804d0f50]
 
-#ctors_dtors.s:
-    #.ctors: [0x80480080, 0x80480160]
-    #.dtors: [0x80480160, 0x80480180]
+# os
+#libs/RVL_SDK/src/revolution/OS/OS.c:
+  #.text: [0x80286bc0, 0x802880a0]
+  #.data: [0x804d0f50, 0x804d1360]
+  #.sdata: [0x8050cdd8, 0x8050ce08]
+  #.sbss: [0x8050db88, 0x8050dbd0]
+  #.sdata2: [0x805113e0, 0x805113e8]
+  #.bss: [0x80898180, 0x808981f0]
 
-#PowerPC_EABI_Support/Runtime/global_destructor_chain.c:
+libs/RVL_SDK/src/revolution/OS/OSAlarm.c:
+  .text: [0x802880a0, 0x80288970]
+  .data: [0x804d1360, 0x804d1370]
+  .sbss: [0x8050dbd0, 0x8050dbd8]
+
+libs/RVL_SDK/src/revolution/OS/OSAlloc.c:
+  .text: [0x80288970, 0x80288ba0]
+  .sdata: [0x8050ce08, 0x8050ce10]
+  .sbss: [0x8050dbd8, 0x8050dbe0]
+
+libs/RVL_SDK/src/revolution/OS/OSArena.c:
+  .text: [0x80288ba0, 0x80288ce0]
+  .sdata: [0x8050ce10, 0x8050ce18]
+  .sbss: [0x8050dbe0, 0x8050dbe8]
+
+libs/RVL_SDK/src/revolution/OS/OSAudioSystem.c:
+  .text: [0x80288ce0, 0x802891a0]
+  .data: [0x804d1370, 0x804d13f0]
+
+libs/RVL_SDK/src/revolution/OS/OSCache.c:
+  .text: [0x802891a0, 0x80289800]
+  .data: [0x804d13f0, 0x804d1578]
+
+libs/RVL_SDK/src/revolution/OS/OSContext.c:
+  .text: [0x80289800, 0x8028a0d0]
+  .data: [0x804d1578, 0x804d1730]
+
+libs/RVL_SDK/src/revolution/OS/OSError.c:
+  .text: [0x8028a0d0, 0x8028a81c]
+  .data: [0x804d1730, 0x804d1a10]
+  .sdata: [0x8050ce18, 0x8050ce20]
+  .bss: [0x808981f0, 0x80898240]
+
+#libs/RVL_SDK/src/revolution/OS/OSExec.c:
+  #.text: [0x8028a820, 0x8028bf70]
+  #.data: [0x804d1a10, 0x804d1d60]
+
+libs/RVL_SDK/src/revolution/OS/OSFatal.c:
+  .text: [0x8028bf70, 0x8028cba0]
+  .sdata: [0x8050ce30, 0x8050ce38]
+  .sdata2: [0x805113e8, 0x80511428]
+  .bss: [0x80898260, 0x80898540]
+
+libs/RVL_SDK/src/revolution/OS/OSFont.c:
+  .text: [0x8028cba0, 0x8028d890]
+  .data: [0x804d1d60, 0x804d2870]
+  .sdata: [0x8050ce38, 0x8050ce40]
+  .sdata2: [0x80511428, 0x80511430]
+  .sbss: [0x8050dc00, 0x8050dc10]
+
+libs/RVL_SDK/src/revolution/OS/OSInterrupt.c:
+  .text: [0x8028d890, 0x8028e060]
+  .data: [0x804d2870, 0x804d28a0]
+  .sbss: [0x8050dc10, 0x8050dc28]
+
+libs/RVL_SDK/src/revolution/OS/OSLink.c:
+  .text: [0x8028e060, 0x8028e080]
+
+libs/RVL_SDK/src/revolution/OS/OSMessage.c:
+  .text: [0x8028e080, 0x8028e360]
+
+libs/RVL_SDK/src/revolution/OS/OSMemory.c:
+  .text: [0x8028e360, 0x8028eb00]
+  .data: [0x804d28a0, 0x804d28b0]
+  .sbss: [0x8050dc28, 0x8050dc30]
+
+libs/RVL_SDK/src/revolution/OS/OSMutex.c:
+  .text: [0x8028eb00, 0x8028ee34]
+
+libs/RVL_SDK/src/revolution/OS/OSReboot.c:
+  .text: [0x8028ee40, 0x8028eed0]
+  .sbss: [0x8050dc30, 0x8050dc38]
+
+libs/RVL_SDK/src/revolution/OS/OSReset.c:
+  .text: [0x8028eed0, 0x8028f800]
+  .data: [0x804d28b0, 0x804d2b18]
+  .sbss: [0x8050dc38, 0x8050dc48]
+
+libs/RVL_SDK/src/revolution/OS/OSRtc.c:
+  .text: [0x8028f800, 0x802902b0]
+  .bss: [0x80898540, 0x80898598]
+
+libs/RVL_SDK/src/revolution/OS/OSSync.c:
+  .text: [0x802902b0, 0x80290330]
+
+libs/RVL_SDK/src/revolution/OS/OSThread.c:
+  .text: [0x80290330, 0x802919c0]
+  .sdata: [0x8050ce40, 0x8050ce48]
+  .sbss: [0x8050dc48, 0x8050dc58]
+  .bss: [0x80898598, 0x80898fa0]
+
+libs/RVL_SDK/src/revolution/OS/OSTime.c:
+  .text: [0x802919c0, 0x80292090]
+  .data: [0x804d2b18, 0x804d2b78]
+
+libs/RVL_SDK/src/revolution/OS/OSUtf.c:
+  .text: [0x80292090, 0x802922e0]
+  .data: [0x804d2b78, 0x804de9b8]
+
+libs/RVL_SDK/src/revolution/OS/OSIpc.c:
+  .text: [0x802922e0, 0x80292320]
+  .sdata: [0x8050ce48, 0x8050ce50]
+  .sbss: [0x8050dc58, 0x8050dc60]
+
+libs/RVL_SDK/src/revolution/OS/OSStateTM.c:
+  .text: [0x80292320, 0x80292a70]
+  .data: [0x804de9b8, 0x804dea80]
+  .sbss: [0x8050dc60, 0x8050dc80]
+  .bss: [0x80898fa0, 0x80899060]
+
+#libs/RVL_SDK/src/revolution/OS/__start.c:
+  #.init: [0x80004000, 0x80004360]
+  #.sbss: [0x8050dc80, 0x8050dc88]
+
+libs/RVL_SDK/src/revolution/OS/OSPlayRecord.c:
+  .text: [0x80292a70, 0x80293190]
+  .data: [0x804dea80, 0x804deac8]
+  .sdata: [0x8050ce50, 0x8050ce58]
+  .sbss: [0x8050dc88, 0x8050dca8]
+  .bss: [0x80899060, 0x80899260]
+
+libs/RVL_SDK/src/revolution/OS/OSStateFlags.c:
+  .text: [0x80293190, 0x802933b0]
+  .data: [0x804deac8, 0x804deaf0]
+  .bss: [0x80899260, 0x80899280]
+
+libs/RVL_SDK/src/revolution/OS/OSNet.c:
+  .text: [0x802933b0, 0x80293464]
+  .data: [0x804deaf0, 0x804dec58]
+
+libs/RVL_SDK/src/revolution/OS/OSNandbootInfo.c:
+  .text: [0x80293470, 0x80293678]
+  .data: [0x804dec58, 0x804dec78]
+
+#libs/RVL_SDK/src/revolution/OS/OSPlayTime.c:
+  #.text: [0x80293680, 0x80293e60]
+  #.data: [0x804dec78, 0x804decb8]
+  #.sdata: [0x8050ce58, 0x8050ce60]
+
+libs/RVL_SDK/src/revolution/OS/OSCrc.c:
+  .text: [0x80293e60, 0x802940e0]
+  .rodata: [0x804ab8f0, 0x804ab950]
+
+#libs/RVL_SDK/src/revolution/OS/OSLaunch.c:
+  #.text: [0x802940e0, 0x802942f0]
+
+#libs/RVL_SDK/src/revolution/OS/__ppc_eabi_init.cpp:
+  #.init: [0x80004360, 0x800043c4]
+  #.text: [0x802942f0, 0x802943b0]
+
+# dvd
+# far from complete
+#libs/RVL_SDK/src/revolution/DVD/dvd_broadway.c:
+  #.text: [0x8029bf50, 0x8029e5f8]
+  #.data: [0x804dfbc0, 0x804e0ac8]
+
+libs/RVL_SDK/src/revolution/DVD/dvdidutils.c:
+  .text: [0x8029ba60, 0x8029bb50]
+
+libs/RVL_SDK/src/revolution/DVD/dvdfatal.c:
+  .text: [0x8029bb50, 0x8029bcb8]
+  .rodata: [0x804ab960, 0x804ab998]
+  .data: [0x804df260, 0x804dfa28]
+  .sdata: [0x8050ce90, 0x8050ce98]
+  .sbss: [0x8050dd88, 0x8050dd90]
+  .sdata2: [0x80511498, 0x805114a0]
+
+# ai
+libs/RVL_SDK/src/revolution/AI/ai.c:
+  .text: [0x802a4ad0, 0x802a507c]
+  .data: [0x804e1688, 0x804e16d0]
+  .sdata: [0x8050cf08, 0x8050cf10]
+  .sbss: [0x8050dec0, 0x8050df00]
+
+#libs/RVL_SDK/src/revolution/AX/AX.c:
+
+# dsp
+libs/RVL_SDK/src/revolution/DSP/dsp.c:
+  .text: [0x802a9360, 0x802a95c0]
+  .data: [0x804e4920, 0x804e49a0]
+  .sdata: [0x8050cf28, 0x8050cf30]
+  .sbss: [0x8050e040, 0x8050e048]
+
+libs/RVL_SDK/src/revolution/DSP/dsp_debug.c:
+  .text: [0x802a95c0, 0x802a9610]
+
+libs/RVL_SDK/src/revolution/DSP/dsp_task.c:
+  .text: [0x802a9610, 0x802a9ea8]
+  .data: [0x804e49a0, 0x804e4ae0]
+  .sbss: [0x8050e048, 0x8050e060]
+  
+# gx
+#libs/RVL_SDK/src/revolution/GX/GXGeometry.c:
+  #.text: [0x802ad190, 0x802ad794]
+
+libs/RVL_SDK/src/revolution/GX/GXLight.c:
+  .text: [0x802ae220, 0x802ae984]
+  .sdata2: [0x80511548, 0x80511580]
+
+libs/RVL_SDK/src/revolution/GX/GXBump.c:
+  .text: [0x802afb50, 0x802affa4]
+  .sdata2: [0x805115b8, 0x805115c0]
+
+libs/RVL_SDK/src/revolution/GX/GXDisplayList.c:
+  .text: [0x802b0e00, 0x802b0e74]
+
+#Runtime.PPCEABI.H.a
+libs/PowerPC_EABI_Support/src/MSL/Runtime/__mem.c:
+  .init: [0x800043c4, 0x80004744]
+  .text: [0x802b1e30, 0x802b1e4c]
+
+libs/PowerPC_EABI_Support/src/MSL/Runtime/__va_arg.c:
+  .text: [0x802b1e4c, 0x802b1f14]
+
+#libs/PowerPC_EABI_Support/src/MSL/Runtime/global_destructor_chain.c:
   #.text: [0x802b1f14, 0x802b1f74]
   #.sbss: [0x8050e0c0, 0x8050e0c8]
+  #.dtors: [0x80480160, 0x80480164]
 
-#PowerPC_EABI_Support/Runtime/NMWException.cp:
+#libs/PowerPC_EABI_Support/src/MSL/Runtime/NMWException.cp:
   #.text: [0x802b1f74, 0x802b24f4]
-  #.sdata: [0x8050cf98, 0x8050cfa0]
-  #extab_: [0x8001196c, 0x800119ac]
-  #extabindex_: [0x8001fdb8, 0x8001fde8]
+  #.rodata: [0x804ab9b8, 0x804ab9c8]
+  #.sdata: [0x8050cf90, 0x8050cfa0]
+  ##extab: [0x8001196c, 0x800119ac]
+  ##extabindex: [0x8001fdb8, 0x8001fde8]
 
-#PowerPC_EABI_Support/Runtime/__init_cpp_exceptions.cpp:
+libs/PowerPC_EABI_Support/src/MSL/Runtime/ptmf.c:
+  .text: [0x802b24f8, 0x802b2520]
+
+libs/PowerPC_EABI_Support/src/MSL/Runtime/runtime.c:
+  .text: [0x802b2520, 0x802b2c60]
+  .rodata: [0x804ab9c8, 0x804ab9e0]
+
+#libs/PowerPC_EABI_Support/src/MSL/Runtime/__init_cpp_exceptions.cpp:
   #.text: [0x802b2c60, 0x802b2cd0]
   #.sdata: [0x8050cfa0, 0x8050cfa8]
+  #.ctors: [0x80480080, 0x80480084]
+  #.dtors: [0x80480164, 0x80480168]
+  ##extabindex: [0x80020ad8, 0x80020b00]
 
-Shade/std/shd_cstring.cpp:
-  .text: [0x803346e0, 0x803347d0]
+# MSL_C.PPCEABI.bare.H.a
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/alloc.c:
+  #.text: [0x802b441c, 0x802b5854]
 
-Shade/std/shd_stdarg.cpp:
-  .text: [0x803347d0, 0x8033496c]
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/ansi_files.c:
+  #.text: [0x802b5854, 0x802b5b4c]
+  #.data: [0x804e5548, 0x804e5688]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/ansi_fp.c:
+  .text: [0x802b5b4c, 0x802b73cc]
+  .data: [0x804e5688, 0x804e57f0]
+  .rodata: [0x804aba60, 0x804abb40]
+  .sdata2: [0x80511628, 0x80511660]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/arith.c:
+  .text: [0x802b73cc, 0x802b73ec]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/buffer_io.c:
+  #.text: [0x802b73ec, 0x802b76f8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/ctype.c:
+  .rodata: [0x804abb40, 0x804abf40]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/direct_io.c:
+  #.text: [0x802b76f8, 0x802b7d48]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/errno.c:
+  .sbss: [0x8050e0d0, 0x8050e0d8]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/file_io.c:
+  #.text: [0x802b7d48, 0x802b82b8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/FILE_POS.c:
+  .text: [0x802b82b8, 0x802b8574]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/locale.c:
+  .rodata: [0x804abf40, 0x804ac048]
+  .data: [0x804e57f0, 0x804e59e8]
+  .sdata2: [0x80511660, 0x80511678]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/mbstring.c:
+  .text: [0x802b8574, 0x802b876c]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/mem.c:
+  .text: [0x802b876c, 0x802b88dc]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/mem_funcs.c:
+  .text: [0x802b88dc, 0x802b8bac]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/math_api.c:
+  .text: [0x802b8bac, 0x802b8ca0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/misc_io.c:
+  .text: [0x802b8ca0, 0x802b8cc0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/printf.c:
+  .text: [0x802b8cc0, 0x802bb184]
+  .rodata: [0x804ac048, 0x804ac070]
+  .data: [0x804e59e8, 0x804e5c18]
+  .sdata: [0x8050cfb0, 0x8050cfb8]
+  .sdata2: [0x80511678, 0x80511680]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/qsort.c:
+  #.text: [0x802bb184, 0x0x802bb2f4]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/rand.c:
+  .text: [0x802bb2f4, 0x802bb31c]
+  .sdata: [0x8050cfb8, 0x8050cfc0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/scanf.c:
+  .text: [0x802bb31c, 0x802bc800]
+  .rodata: [0x804ac070, 0x804ac098]
+  .data: [0x804e5c18, 0x804e5e88]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/signal.c:
+  .text: [0x802bc800, 0x802bc8a8]
+  .bss: [0x808b4aa0, 0x808b4ac0]
+
+#libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/string.c:
+  #.text: [0x802bc8a8, 0x802bcde4]
+  #.sdata: [0x8050cfc0, 0x8050cfc8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/strtold.c:
+  .text: [0x802bcde4, 0x802be164]
+  .rodata: [0x804ac098, 0x804ac0a8]
+  .sdata2: [0x80511688, 0x805116a8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/strtoul.c:
+  .text: [0x802be164, 0x802bec78]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/float.c:
+  .sdata: [0x8050cfc8, 0x8050cfd8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/wmem.c:
+  .text: [0x802bec78, 0x802beca8]  
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/wprintf.c:
+  .text: [0x802beca8, 0x802c0ec8]
+  .rodata: [0x804ac6a8, 0x804ac6b0]
+  .data: [0x804e5e88, 0x804e6128]
+  .sdata2: [0x805116a8, 0x805116b0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/wstring.c:
+  .text: [0x802c0ec8, 0x802c0fa4]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/wchar_io.c:
+  .text: [0x802c0fa4, 0x802c101c]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/PPC_EABI/uart_console_io_gcn.c:
+  .text: [0x802c101c, 0x802c10f4]
+  .sbss: [0x8050e0d8, 0x8050e0e0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/PPC_EABI/abort_exit_ppc_eabi.c:
+  .text: [0x802c10f4, 0x802c1128]
+  .sbss: [0x8050e0e0, 0x8050e0e8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/secure_error.c:
+  .text: [0x802c1128, 0x802c1140]
+  .sbss: [0x8050e0e8, 0x8050e0f0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/math_sun.c:
+  .text: [0x802c1140, 0x802c1180]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_acos.c:
+  .text: [0x802c1180, 0x802c144c]
+  .sdata2: [0x805116b0, 0x80511738]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_asin.c:
+  .text: [0x802c144c, 0x802c16e4]
+  .sdata2: [0x80511738, 0x805117c0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_atan2.c:
+  .text: [0x802c16e4, 0x802c193c]
+  .sdata2: [0x805117c0, 0x80511818]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_fmod.c:
+  .text: [0x802c193c, 0x802c1cbc]
+  .rodata: [0x804ac6b0, 0x804ac6c0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_log.c:
+  .text: [0x802c1cbc, 0x802c1f70]
+  .sbss: [0x8050e0f0, 0x8050e0f8]
+  .sdata2: [0x80511818, 0x80511898]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_log10.c:
+  .text: [0x802c1f70, 0x802c2084]
+  .sbss: [0x8050e0f8, 0x8050e100]
+  .sdata2: [0x80511898, 0x805118c8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_pow.c:
+  .text: [0x802c2084, 0x802c2898]
+  .rodata: [0x804ac6c0, 0x804ac6f0]
+  .sdata2: [0x805118c8, 0x805119d8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_rem_pio2.c:
+  .text: [0x802c2898, 0x802c2c1c]
+  .rodata: [0x804ac6f0, 0x804ac878]
+  .sdata2: [0x805119d8, 0x80511a30]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_cos.c:
+  .text: [0x802c2c1c, 0x802c2d2c]
+  .sdata2: [0x80511a30, 0x80511a78]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_rem_pio2.c:
+  .text: [0x802c2d2c, 0x802c43e4]
+  .rodata: [0x804ac878, 0x804ac8c8]
+  .sdata2: [0x80511a78, 0x80511ab8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_sin.c:
+  .text: [0x802c43e4, 0x802c44a4]
+  .sdata2: [0x80511ab8, 0x80511af0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_tan.c:
+  .text: [0x802c44a4, 0x802c46f4]
+  .rodata: [0x804ac8c8, 0x804ac930]
+  .sdata2: [0x80511af0, 0x80511b28]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_atan.c:
+  .text: [0x802c46f4, 0x802c4924]
+  .rodata: [0x804ac930, 0x804ac9c8]
+  .sdata2: [0x80511b28, 0x80511b50]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_ceil.c:
+  .text: [0x802c4924, 0x802c4a70]
+  .sdata2: [0x80511b50, 0x80511b60]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_copysign.c:
+  .text: [0x802c4a70, 0x802c4a9c]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_cos.c:
+  .text: [0x802c4a9c, 0x802c4b64]
+  .sdata2: [0x80511b60, 0x80511b68]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_floor.c:
+  .text: [0x802c4b64, 0x802c4cb4]
+  .sdata2: [0x80511b68, 0x80511b78]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_frexp.c:
+  .text: [0x802c4cb4, 0x802c4d3c]
+  .sdata2: [0x80511b78, 0x80511b80]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_ldexp.c:
+  .text: [0x802c4d3c, 0x802c4ea8]
+  .sdata2: [0x80511b80, 0x80511ba8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_modf.c:
+  .text: [0x802c4ea8, 0x802c4fa4]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_sin.c:
+  .text: [0x802c4fa4, 0x802c5070]
+  .sdata2: [0x80511ba8, 0x80511bb0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_tan.c:
+  .text: [0x802c5070, 0x802c50e8]
+  .sdata2: [0x80511bb0, 0x80511bb8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_acos.c:
+  .text: [0x802c50e8, 0x802c50ec]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_asin.c:
+  .text: [0x802c50ec, 0x802c50f0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_atan2.c:
+  .text: [0x802c50f0, 0x802c50f4]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_fmod.c:
+  .text: [0x802c50f4, 0x802c50f8]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_log10.c:
+  .text: [0x802c50f8, 0x802c50fc]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_pow.c:
+  .text: [0x802c50fc, 0x802c5100]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_sqrt.c:
+  .text: [0x802c5100, 0x802c5348]
+  .sdata2: [0x80511bb8, 0x80511bc0]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/PPC_EABI/math_ppc.c:
+  .text: [0x802c5348, 0x802c534c]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_sqrt.c:
+  .text: [0x802c534c, 0x802c5350]
+
+libs/PowerPC_EABI_Support/src/MSL/MSL_C/MSL_Common/extras.c:
+  .text: [0x802c5350, 0x802c5494]
+
+# exi
+libs/RVL_SDK/src/revolution/EXI/EXIBios.c:
+  .text: [0x802c54a0, 0x802c6d98]
+  .data: [0x804e6128, 0x804e6170]
+  .sdata: [0x8050cfd8, 0x8050cfe0]
+  .sbss: [0x8050e100, 0x8050e108]
+  .bss: [0x808b4ac0, 0x808b4b80]
+
+libs/RVL_SDK/src/revolution/EXI/EXICommon.c:
+  .text: [0x802c70e0, 0x802c7268]
+  .sdata2: [0x80511bc0, 0x80511bc8]
+
+# TRK_Hollywood_Revolution
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/__exception.s:
+  .init: [0x80004744, 0x80006678]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/targsupp.c: # orignally was.s but whatever
+  .text: [0x802c8948, 0x802c8968]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/custconn/cc_gdev.c:
+  .text: [0x802c8968, 0x802c8be0]
+  .sbss: [0x8050e130, 0x8050e138]
+  .bss: [0x808b4da0, 0x808b52c0]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/custconn/MWCriticalSection_gc.cpp:
+  .text: [0x802c8be0, 0x802c8c1c]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/custconn/CircleBuffer.c:
+  .text: [0x802c8c1c, 0x802c8e58]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/flush_cache.c:
+  .text: [0x802c8e58, 0x802c8e90]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/main_TRK.c:
+  .text: [0x802c8e90, 0x802c8ecc]
+  .sbss: [0x8050e138, 0x8050e140]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/mainloop.c:
+  .text: [0x802c8ecc, 0x802c8fb8]
+
+#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/mem_TRK.c:
+  #.text: [0x802c8fb8, 0x802c921c]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/dispatch.c:
+  .text: [0x802c921c, 0x802c933c]
+  .data: [0x804e6278, 0x804e62e8]
+
+#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/dolphin_trk.c:
+  #.text: [0x802c933c, 0x802c98dc]
+  #.data: [0x804e62e8, 0x804e6328]
+  #.sbss: [0x8050e140, 0x8050e148]
+
+#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/dolphin_trk_glue.c:
+  #.text: [0x802c98dc, 0x802c99fc]
+  #.data: [0x804e6328, 0x804e6410]
+  #.sdata2: [0x80511bc8, 0x80511bd0]
+  #.bss: [0x808b52c0, 0x808b52e8]
+  #.sbss: [0x8050e148, 0x8050e150]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/notify.c:
+  .text: [0x802c99fc, 0x802c9a8c]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/nubevent.c:
+  .text: [0x802c9a8c, 0x802c9c28]
+  .data: [0x804e6410, 0x804e6430]
+  .bss: [0x808b52e8, 0x808b5310]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/nubinit.c:
+  .text: [0x802c9c28, 0x802c9d78]
+  .data: [0x804e6430, 0x804e6450]
+  .sbss: [0x8050e150, 0x8050e158]
+
+#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/serpoll.c:
+  #.text: [0x802c9d78, 0x802c9ec0]
+  #.sbss: [0x8050e158, 0x8050e160]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/string_TRK.c:
+  .text: [0x802c9ec0, 0x802c9edc]
+
+#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/support.c:
+  #.text: [0x802c9edc, 0x802ca500]
+  #.data: [0x804e6450, 0x804e6498]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/targcont.c:
+  .text: [0x802ca500, 0x802ca534]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/mpc_7xx_603e.c:
+  .text: [0x802ca534, 0x802ca85c]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/msg.c:
+  .text: [0x802ca85c, 0x802ca8c0]
+  .sbss: [0x8050e160, 0x8050e168]
+  .data: [0x804e6498, 0x804e64c0]
+
+#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/msgbuf.c:
+  #.text: [0x802ca8c0, 0x802cb0cc]
+
+#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/msghndlr.c:
+  #.text: [0x802cb0cc, 0x802cc050]
+
+#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/mslsupp.c:
+  #.text: [0x802cc050, 0x802cc468]
+
+#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/targimpl.c:
+  #.text: [0x802cc468, 0x802cdc8c]
+
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/target_options.c:
+  .text: [0x802cdc8c, 0x802cdc9c]
+  .sbss: [0x8050e178, 0x8050e180]
+
+# NdevExi2AD
+libs/NdevExi2A/src/DebuggerDriver.c:
+  .text: [0x802cdc9c, 0x802cdfd0]
+  .sdata: [0x8050cfe8, 0x8050cff0]
+  .sbss: [0x8050e180, 0x8050e198]
+
+libs/NdevExi2A/src/exi2.c:
+ .text: [0x802cdfd0, 0x802ce760]
+
+# mem
+libs/RVL_SDK/src/revolution/MEM/mem_heapCommon.c:
+  .text: [0x802ce760, 0x802cebcc]
+  .sbss: [0x8050e198, 0x8050e1a0]
+  .bss: [0x808b7260, 0x808b7288]
+
+libs/RVL_SDK/src/revolution/MEM/mem_allocator.c:
+  .text: [0x802cf950, 0x802cf9ac]
+  .sdata2: [0x80511bd0, 0x80511bd8]
+
+libs/RVL_SDK/src/revolution/MEM/mem_list.c:
+  .text: [0x802cf9b0, 0x802cfad0]
+
+# fs
+libs/RVL_SDK/src/revolution/FS/fs.c:
+  .text: [0x802cfe50, 0x802d13f0]
+  .data: [0x804e6560, 0x804e6588]
+  .sdata: [0x8050cff0, 0x8050d000]
+  .sbss: [0x8050e1b0, 0x8050e1c8]
+
+# ipc
+libs/RVL_SDK/src/revolution/IPC/ipcMain.c:
+  .text: [0x802d13f0, 0x802d14d8]
+  .sbss: [0x8050e1c8, 0x8050e1e0]
+
+#libs/RVL_SDK/src/revolution/IPC/ipcclt.c:
+  #.text: [0x802d14e0, 0x802d2e44]
+  #.sdata: [0x8050d000, 0x8050d008]
+  #.sbss: [0x8050e1e0, 0x8050e1f0]
+  #.bss: [0x808b72a0, 0x808b73e0]
+
+libs/RVL_SDK/src/revolution/IPC/ipcProfile.c:
+  .text: [0x802d3380, 0x802d378c]
+  .sbss: [0x8050e1f0, 0x8050e1f8]
+  .bss: [0x808b7460, 0x808baee0]
+
+#libs/RVL_SDK/src/revolution/NAND/nand.c:
+  #.text: [0x802d3790, 0x802d4b00]
+  #.rodata: [0x804aca50, 0x804aca98]
+
+#libs/RVL_SDK/src/revolution/NAND/NANDOpenClose.c:
+  #.text: [0x802d4b00, 0x802d5c80]
+
+#libs/RVL_SDK/src/revolution/NAND/NANDCore.c:
+  #.text: [0x802d5c80, 0x802d6bfc]
+  #.data: [0x804e65e0, 0x804e6730]
+  #.sdata: [0x8050d020, 0x8050d048]
+  #.sbss: [0x8050e200, 0x8050e208]
+  #.bss: [0x808baee0, 0x808baf40]
+
+# sc
+libs/RVL_SDK/src/revolution/SC/scapi.c:
+  .text: [0x802d91d0, 0x802d96d0]
+  .data: [0x804e8688, 0x804e86b8]
+
+libs/RVL_SDK/src/revolution/SC/scapi_prdinfo.c:
+  .text: [0x802d96d0, 0x802d9a04]
+  .data: [0x804e86b8, 0x804e8718]
+  .sdata: [0x8050d170, 0x8050d198]
+  .sbss: [0x8050e230, 0x8050e238]
+
+# arc
+libs/RVL_SDK/src/revolution/ARC/arc.c:
+  .text: [0x802d9ce0, 0x802da6b8]
+  .data: [0x804e8718, 0x804e8788]
+  .sdata: [0x8050d198, 0x8050d1a0]
+
+# usb
+libs/RVL_SDK/src/revolution/USB/usb.c:
+  .text: [0x80320920, 0x80321e6c]
+  .data: [0x804ef910, 0x804f0140]
+  .sdata: [0x8050d278, 0x8050d288]
+  .sbss: [0x8050e348, 0x8050e358]
+
+src/Shade/std/shd_stdarg.cpp:
+  .text: [0x803346e0, 0x8033496c]
+  #extab: [0x800120a4, 0x800120b4]
+  #extabindex: [0x8002037c, 0x80020394] 
+  
+libs/RVL_SDK/src/revolution/TPL/TPL.c: # why is this all the way over here? part of HBM?
+  .text: [0x80348250, 0x80348390]
+  .data: [0x804f09d8, 0x804f0a08]
+  .sdata: [0x8050d428, 0x8050d430]
+
+libs/nw4r/db/db_console.cpp:
+  .text: [0x80392fb0, 0x8039308c]
+
+libs/nw4r/snd/snd_adpcm.cpp:
+  .text: [0x8040e7e0, 0x8040e86c]
