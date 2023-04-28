@@ -137,8 +137,7 @@ static asm void ConfigMEM2_52MB(void) {
     mtspr 0x238, r3
     isync
     mtspr 0x230, r7
-    mtspr 0x231, r4
-    mtspr 0x230, r3
+    mtspr 0x231, r7
     isync
     mtspr 0x23a, r7
     mtspr 0x23b, r6
@@ -161,16 +160,14 @@ static asm void ConfigMEM2_52MB(void) {
     mtspr 0x23c, r3
     isync
     mtspr 0x234, r7
-    mtspr 0x235, r4
-    mtspr 0x234, r3
+    mtspr 0x235, r7
     isync
     mtspr 0x23e, r7
     mtspr 0x23f, r6
     mtspr 0x23e, r5
     isync
     mtspr 0x236, r7
-    mtspr 0x237, r6
-    mtspr 0x236, r5
+    mtspr 0x237, r7
     isync
     mfmsr r3
     ori r3, r3, 0x30
@@ -200,8 +197,7 @@ static asm void ConfigMEM2_56MB(void) {
     mtspr 0x238, r3
     isync
     mtspr 0x230, r7
-    mtspr 0x231, r4
-    mtspr 0x230, r3
+    mtspr 0x231, r7
     isync
     mtspr 0x23a, r7
     mtspr 0x23b, r6
@@ -224,16 +220,14 @@ static asm void ConfigMEM2_56MB(void) {
     mtspr 0x23c, r3
     isync
     mtspr 0x234, r7
-    mtspr 0x235, r4
-    mtspr 0x234, r3
+    mtspr 0x235, r7
     isync
     mtspr 0x23e, r7
     mtspr 0x23f, r6
     mtspr 0x23e, r5
     isync
     mtspr 0x236, r7
-    mtspr 0x237, r6
-    mtspr 0x236, r5
+    mtspr 0x237, r7
     isync
     mfmsr r3
     ori r3, r3, 0x30
@@ -263,8 +257,7 @@ static asm void ConfigMEM2_64MB(void) {
     mtspr 0x238, r3
     isync
     mtspr 0x230, r7
-    mtspr 0x231, r4
-    mtspr 0x230, r3
+    mtspr 0x231, r7
     isync
     mtspr 0x23a, r7
     mtspr 0x23b, r6
@@ -313,8 +306,7 @@ static asm void ConfigMEM2_112MB(void) {
     mtspr 0x238, r3
     isync
     mtspr 0x230, r7
-    mtspr 0x231, r4
-    mtspr 0x230, r3
+    mtspr 0x231, r7
     isync
     mtspr 0x23a, r7
     mtspr 0x23b, r6
@@ -337,16 +329,14 @@ static asm void ConfigMEM2_112MB(void) {
     mtspr 0x23c, r3
     isync
     mtspr 0x234, r7
-    mtspr 0x235, r4
-    mtspr 0x234, r3
+    mtspr 0x235, r7
     isync
     mtspr 0x23e, r7
     mtspr 0x23f, r6
     mtspr 0x23e, r5
     isync
     mtspr 0x236, r7
-    mtspr 0x237, r6
-    mtspr 0x236, r5
+    mtspr 0x237, r7
     isync
     mfmsr r3
     ori r3, r3, 0x30
@@ -376,8 +366,7 @@ static asm void ConfigMEM2_128MB(void) {
     mtspr 0x238, r3
     isync
     mtspr 0x230, r7
-    mtspr 0x231, r4
-    mtspr 0x230, r3
+    mtspr 0x231, r7
     isync
     mtspr 0x23a, r7
     mtspr 0x23b, r6
@@ -447,35 +436,26 @@ static asm void RealMode(register void* config) {
     // clang-format on
 }
 
-static void BATConfig(void) {
+static void BATConfig(int mode) {
     u32 mem1sim;
     u32 mem1phys;
+    u32 mem2sim;
     void* mem2end;
-
-    if (OS_HOLLYWOOD_REV == 0) {
-        // @bug Checks function address rather than result
-        if (OSGetPhysicalMem1Size == 0) {
-            RealMode(ConfigMEM_ES1_0);
-            return;
-        }
-    }
 
     mem1sim = OSGetConsoleSimulatedMem1Size();
     mem1phys = OSGetPhysicalMem1Size();
-    if (OSGetConsoleSimulatedMem1Size() < mem1phys &&
-        mem1sim == OS_MEM_MB_TO_B(24)) {
+    if (mem1sim < mem1phys && mem1sim == OS_MEM_MB_TO_B(24)) {
         DCInvalidateRange((void*)0x81800000, OS_MEM_MB_TO_B(24));
         MI_HW_REGS[MI_REG_0x28] = 2;
     }
 
     if (mem1sim <= OS_MEM_MB_TO_B(24)) {
         RealMode(ConfigMEM1_24MB);
-    } else if (mem1sim <= OS_MEM_MB_TO_B(48)) {
-        RealMode(ConfigMEM1_48MB);
     }
 
+    mem2sim = OSGetConsoleSimulatedMem2Size();
     mem2end = *(void**)OSPhysicalToCached(OS_PHYS_ACCESSIBLE_MEM2_END);
-    if (OSGetConsoleSimulatedMem2Size() <= OS_MEM_MB_TO_B(64)) {
+    if (mem2sim <= OS_MEM_MB_TO_B(64)) {
         if (mem2end <= (void*)0x93400000) {
             RealMode(ConfigMEM2_52MB);
         } else if (mem2end <= (char*)0x93400000 + OS_MEM_MB_TO_B(4)) {
@@ -483,33 +463,43 @@ static void BATConfig(void) {
         } else {
             RealMode(ConfigMEM2_64MB);
         }
-    } else if (OSGetConsoleSimulatedMem2Size() <= OS_MEM_MB_TO_B(128)) {
+    } else if (mem2sim <= OS_MEM_MB_TO_B(128)) {
         if (mem2end <= (void*)0x97000000) {
             RealMode(ConfigMEM2_112MB);
         } else {
             RealMode(ConfigMEM2_128MB);
         }
     }
+    while (mode != 0xba2cf) {}
+}
+
+void __OSRestoreCodeExecOnMEM1(int mode) {
+    RealMode(ConfigMEM1_24MB);
+    while (mode != 0xba2cf) {}
 }
 
 void __OSInitMemoryProtection(void) {
-    const BOOL enabled = OSDisableInterrupts();
+    static BOOL initialized;
+    if (!initialized) {
+        const BOOL enabled = OSDisableInterrupts();
 
-    MI_HW_REGS[MI_REG_0x20] = 0;
-    MI_HW_REGS[MI_PROT_MEM0] = 0xFF;
+        MI_HW_REGS[MI_REG_0x20] = 0;
+        MI_HW_REGS[MI_PROT_MEM0] = 0xFF;
 
-    __OSMaskInterrupts(
-        OS_INTR_MASK(OS_INTR_MEM_0) | OS_INTR_MASK(OS_INTR_MEM_1) |
-        OS_INTR_MASK(OS_INTR_MEM_2) | OS_INTR_MASK(OS_INTR_MEM_3));
-    __OSSetInterruptHandler(OS_INTR_MEM_0, MEMIntrruptHandler);
-    __OSSetInterruptHandler(OS_INTR_MEM_1, MEMIntrruptHandler);
-    __OSSetInterruptHandler(OS_INTR_MEM_2, MEMIntrruptHandler);
-    __OSSetInterruptHandler(OS_INTR_MEM_3, MEMIntrruptHandler);
-    __OSSetInterruptHandler(OS_INTR_MEM_ADDRESS, MEMIntrruptHandler);
-    OSRegisterShutdownFunction(&ShutdownFunctionInfo);
+        __OSMaskInterrupts(
+            OS_INTR_MASK(OS_INTR_MEM_0) | OS_INTR_MASK(OS_INTR_MEM_1) |
+            OS_INTR_MASK(OS_INTR_MEM_2) | OS_INTR_MASK(OS_INTR_MEM_3));
+        __OSSetInterruptHandler(OS_INTR_MEM_0, MEMIntrruptHandler);
+        __OSSetInterruptHandler(OS_INTR_MEM_1, MEMIntrruptHandler);
+        __OSSetInterruptHandler(OS_INTR_MEM_2, MEMIntrruptHandler);
+        __OSSetInterruptHandler(OS_INTR_MEM_3, MEMIntrruptHandler);
+        __OSSetInterruptHandler(OS_INTR_MEM_ADDRESS, MEMIntrruptHandler);
+        OSRegisterShutdownFunction(&ShutdownFunctionInfo);
 
-    BATConfig();
-    __OSUnmaskInterrupts(OS_INTR_MASK(OS_INTR_MEM_ADDRESS));
+        BATConfig(0xba2cf);
+        __OSUnmaskInterrupts(OS_INTR_MASK(OS_INTR_MEM_ADDRESS));
+        initialized = TRUE;
+        OSRestoreInterrupts(enabled);
+    }
 
-    OSRestoreInterrupts(enabled);
 }

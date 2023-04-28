@@ -27963,7 +27963,7 @@ src/OSInterrupt.c:
     0x8028da00: SetInterruptMask
     0x8028e010: ExternalInterruptHandler
 
-src/OSMemory.c:
+OSMemory.c:
     0x804d28a0: ShutdownFunctionInfo
     0x8028e390: OnShutdown
     0x8028e3d0: MEMIntrruptHandler

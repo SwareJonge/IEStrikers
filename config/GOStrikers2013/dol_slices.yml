@@ -50,6 +50,19 @@ libs/RVL_SDK/src/revolution/OS/OSInterrupt.c:
   .data: [0x804d2870, 0x804d28a0]
   .sbss: [0x8050dc10, 0x8050dc28]
 
+libs/RVL_SDK/src/revolution/OS/OSLink.c:
+  .text: [0x8028e060, 0x8028e080]
+
+libs/RVL_SDK/src/revolution/OS/OSMessage.c:
+  .text: [0x8028e080, 0x8028e360]
+
+libs/RVL_SDK/src/revolution/OS/OSMemory.c:
+  .text: [0x8028e360, 0x8028eb00]
+  .data: [0x804d28a0, 0x804d28b0]
+  .sbss: [0x8050dc28, 0x8050dc30]
+
+libs/RVL_SDK/src/revolution/OS/OSMutex.c:
+  .text: [0x8028eb00, 0x8028ee34]
 
 libs/RVL_SDK/src/revolution/OS/OSTime.c:
   .text: [0x802919c0, 0x80292090]
