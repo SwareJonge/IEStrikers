@@ -663,6 +663,20 @@ libs/RVL_SDK/src/revolution/IPC/ipcProfile.c:
   .sbss: [0x8050e1f0, 0x8050e1f8]
   .bss: [0x808b7460, 0x808baee0]
 
+#libs/RVL_SDK/src/revolution/NAND/nand.c:
+  #.text: [0x802d3790, 0x802d4b00]
+  #.rodata: [0x804aca50, 0x804aca98]
+
+#libs/RVL_SDK/src/revolution/NAND/NANDOpenClose.c:
+  #.text: [0x802d4b00, 0x802d5c80]
+
+#libs/RVL_SDK/src/revolution/NAND/NANDCore.c:
+  #.text: [0x802d5c80, 0x802d6bfc]
+  #.data: [0x804e65e0, 0x804e6730]
+  #.sdata: [0x8050d020, 0x8050d048]
+  #.sbss: [0x8050e200, 0x8050e208]
+  #.bss: [0x808baee0, 0x808baf40]
+
 # sc
 libs/RVL_SDK/src/revolution/SC/scapi.c:
   .text: [0x802d91d0, 0x802d96d0]
