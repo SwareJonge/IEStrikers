@@ -138,16 +138,16 @@ libs/RVL_SDK/src/revolution/OS/OSStateFlags.c:
   .bss: [0x80899260, 0x80899280]
 
 libs/RVL_SDK/src/revolution/OS/OSNet.c:
-  .text: [0x802933b0, 0x80293470]
+  .text: [0x802933b0, 0x80293464]
   .data: [0x804deaf0, 0x804dec58]
 
 #libs/RVL_SDK/src/revolution/OS/OSNandbootInfo.c:
   #.text: [0x80293470, 0x80293680]
   #.data: [0x804dec58, 0x804dec78]
 
-#libs/RVL_SDK/src/revolution/OS/OSCrc.c:
-  #.rodata: [0x804ab8f0, 0x804ab950]
-  #.text: [0x80293e60, 0x802940e0]
+libs/RVL_SDK/src/revolution/OS/OSCrc.c:
+  .rodata: [0x804ab8f0, 0x804ab950]
+  .text: [0x80293e60, 0x802940e0]
 
 #libs/RVL_SDK/src/revolution/OS/__ppc_eabi_init.cpp:
   #.init: [0x80004360, 0x800043c4]
