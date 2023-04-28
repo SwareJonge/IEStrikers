@@ -50,10 +50,17 @@ libs/RVL_SDK/src/revolution/OS/OSError.c:
   #.data: [0x804d1a10, 0x804d1d60]
 
 libs/RVL_SDK/src/revolution/OS/OSFatal.c:
-  .text: [0x8028bf70, 0x8028cb98]
+  .text: [0x8028bf70, 0x8028cba0]
   .sdata: [0x8050ce30, 0x8050ce38]
   .sdata2: [0x805113e8, 0x80511428]
   .bss: [0x80898260, 0x80898540]
+
+libs/RVL_SDK/src/revolution/OS/OSFont.c:
+  .text: [0x8028cba0, 0x8028d890]
+  .data: [0x804d1d60, 0x804d2870]
+  .sdata: [0x8050ce38, 0x8050ce40]
+  .sdata2: [0x80511428, 0x80511430]
+  .sbss: [0x8050dc00, 0x8050dc10]
 
 libs/RVL_SDK/src/revolution/OS/OSInterrupt.c:
   .text: [0x8028d890, 0x8028e060]
