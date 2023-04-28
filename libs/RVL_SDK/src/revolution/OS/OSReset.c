@@ -6,6 +6,8 @@
 #include <string.h>
 
 static OSShutdownFunctionQueue ShutdownFunctionQueue;
+BOOL __OSIsReturnToIdle;
+static BOOL bootThisDol;
 
 static void KillThreads(void);
 
@@ -77,7 +79,6 @@ void __OSShutdownDevices(u32 event) {
 
     switch (event) {
     case 0:
-    case 4:
     case 5:
     case 6:
         keepEnable = FALSE;
@@ -115,25 +116,22 @@ void __OSShutdownDevices(u32 event) {
     KillThreads();
 }
 
-// TODO: There must be a better way....
 void __OSGetDiscState(u8* out) {
+    u8 state;
     u32 flags;
 
+    state = *out;
+
     if (__DVDGetCoverStatus() != 2) {
-        *out = 3;
-    } else if (*out == 1) {
-        if (!__OSGetRTCFlags(&flags) || flags == 0) {
-            goto status_1;
-        }
-
-    status_2:
-        *out = 2;
+        state = 3;
     } else {
-        goto status_2;
-
-    status_1:
-        *out = 1;
+        if (state == 1 && __OSGetRTCFlags(&flags) && flags == 0) {
+            state = 1;
+        } else {
+            state = 2;
+        }
     }
+    *out = state;
 }
 
 static void KillThreads(void) {
@@ -143,9 +141,9 @@ static void KillThreads(void) {
     for (iter = OS_THREAD_QUEUE.head; iter != NULL; iter = next) {
         next = iter->nextActive;
 
-        switch (iter->state) {
-        case OS_THREAD_STATE_SLEEPING:
+        switch (iter->state) {        
         case OS_THREAD_STATE_READY:
+        case OS_THREAD_STATE_SLEEPING:
             OSCancelThread(iter);
             break;
         }
@@ -181,6 +179,7 @@ void OSShutdownSystem(void) {
     __OSGetIOSRev(&iosRev);
 
     if (idleMode.wc24 == TRUE) {
+        __OSIsReturnToIdle = TRUE;
         OSDisableScheduler();
         __OSShutdownDevices(5);
         OSEnableScheduler();
@@ -192,8 +191,30 @@ void OSShutdownSystem(void) {
     }
 }
 
-void OSReturnToMenu(void) {
+void OSRestart(int arg) {
+    u8 apptype = OSGetAppType();
+    __OSStopPlayRecord();
+    __OSUnRegisterStateEvent();
+    if (apptype == 0x81) {
+        OSDisableScheduler();
+        __OSShutdownDevices(4);
+        OSEnableScheduler();
+        __OSRelaunchTitle(arg);
+    } else if (apptype == 0x80) {
+        OSDisableScheduler();
+        __OSShutdownDevices(4);
+        OSEnableScheduler();
+        __OSReboot(arg, bootThisDol);
+    }
+    OSDisableScheduler();
+    __OSShutdownDevices(1);
+    __OSHotResetForError();
+}
+
+static void __OSReturnToMenu(int state) {
     OSStateFlags stateFlags;
+    void* mem;
+    s32 playtime1, playtime2;
 
     __OSStopPlayRecord();
     __OSUnRegisterStateEvent();
@@ -202,20 +223,78 @@ void OSReturnToMenu(void) {
     __OSReadStateFlags(&stateFlags);
     __OSGetDiscState(&stateFlags.discState);
     stateFlags.BYTE_0x5 = 3;
+    stateFlags.BYTE_0x7 = state;
     __OSClearRTCFlags();
     __OSWriteStateFlags(&stateFlags);
 
+    OSSetArenaLo((void*)0x81280000); // I Assume there are macros for these?
+    OSSetArenaHi((void*)0x812f0000);
+
+    if (ESP_InitLib()) {
+        __OSReturnToMenuForError();
+    }
+
+    mem = OSAllocFromMEM1ArenaLo(0xe0, 0x20); // TODO: struct
+    if(mem == NULL) {
+        __OSReturnToMenuForError();
+    }
+    memset(mem, 0, 0xe0);
+
+    if (!ESP_DiGetTicketView(0, mem) && OSPlayTimeIsLimited()) {
+        playtime1 = 0;
+        playtime2 = -1;
+        __OSGetPlayTime(mem, &playtime1, &playtime2);
+        if (playtime2 == 0) {
+            __OSWriteExpiredFlagIfSet();
+        }
+    }
+
     OSDisableScheduler();
     __OSShutdownDevices(5);
-    OSEnableScheduler();
 
+    OSEnableScheduler();    
+    __OSLaunchMenu();
+    OSDisableScheduler();
+
+    __VISetRGBModeImm();
+    __OSHotResetForError();
+}
+
+void OSReturnToMenu(void) {
+    __OSReturnToMenu(0);
+#line 895
+    OSError("OSReturnToMenu(): Falied to boot system menu.\n");
+}
+
+void OSReturnToDataManager() {
+    __OSReturnToMenu(1);
+#line 913
+    OSError("OSReturnToDataManager(): Falied to boot system menu.\n");
+}
+
+void __OSReturnToMenuForError() {
+    OSStateFlags stateFlags;
+    __OSReadStateFlags(&stateFlags);
+
+    stateFlags.discState = 2;
+    stateFlags.BYTE_0x5 = 3;
+    __OSClearRTCFlags();
+    __OSWriteStateFlags(&stateFlags);
     __OSLaunchMenu();
     OSDisableScheduler();
     __VISetRGBModeImm();
-    __OSHotReset();
+    __OSHotResetForError();
+#line 1010
+    OSError("__OSReturnToMenu(): Falied to boot system menu.\n");
+}
 
-#line 843
-    OSError("OSReturnToMenu(): Falied to boot system menu.\n");
+void __OSHotResetForError() {
+    if (__OSInNandBoot || __OSInReboot) {
+        __OSInitSTM();
+    }
+    __OSHotReset();
+#line 1034
+    OSError("__OSHotReset(): Falied to reset system.\n");
 }
 
 u32 OSGetResetCode(void) {
@@ -226,11 +305,22 @@ u32 OSGetResetCode(void) {
     return PI_HW_REGS[PI_RESET] >> 3;
 }
 
+CW_FORCE_STRINGS(OSReset_c, "Calendar/Calendar_index.html",
+                 "Display/Display_index.html", "Sound/Sound_index.html",
+                 "Parental_Control/Parental_Control_index.html",
+                 "Internet/Internet_index.html",
+                 "WiiConnect24/Wiiconnect24_index.html",
+                 "Update/Update_index.html",
+                 "OSReturnToSetting(): You can't specify %d.  \n")
+
 void OSResetSystem(u32 arg0, u32 arg1, u32 arg2) {
 #pragma unused(arg0)
 #pragma unused(arg1)
 #pragma unused(arg2)
 
-#line 1020
+#line 1185
     OSError("OSResetSystem() is obsoleted. It doesn't work any longer.\n");
 }
+
+CW_FORCE_STRINGS(OSReset_c_2,
+                 "OSSetBootDol() is obsoleted. It doesn't work any longer.\n")

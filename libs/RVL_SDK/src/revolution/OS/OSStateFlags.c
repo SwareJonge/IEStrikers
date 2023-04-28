@@ -2,6 +2,8 @@
 #include <revolution/OS.h>
 #include <string.h>
 
+#define STATE_PATH "/title/00000001/00000002/data/state.dat"
+
 static OSStateFlags StateFlags ALIGN(32);
 
 static u32 CheckSum(const OSStateFlags* state) {
@@ -22,8 +24,7 @@ BOOL __OSWriteStateFlags(const OSStateFlags* state) {
     memcpy(&StateFlags, state, sizeof(OSStateFlags));
     StateFlags.checksum = CheckSum(&StateFlags);
 
-    if (NANDOpen("/title/00000001/00000002/data/state.dat", &file,
-                 NAND_ACCESS_WRITE) == NAND_RESULT_OK) {
+    if (NANDOpen(STATE_PATH, &file, NAND_ACCESS_WRITE) == NAND_RESULT_OK) {
         if (NANDWrite(&file, &StateFlags, sizeof(OSStateFlags)) !=
             sizeof(OSStateFlags)) {
             NANDClose(&file);
@@ -42,15 +43,14 @@ BOOL __OSWriteStateFlags(const OSStateFlags* state) {
 BOOL __OSReadStateFlags(OSStateFlags* state) {
     NANDFileInfo file;
 
-    if (NANDOpen("/title/00000001/00000002/data/state.dat", &file,
-                 NAND_ACCESS_READ) == NAND_RESULT_OK) {
+    if (NANDOpen(STATE_PATH, &file, NAND_ACCESS_READ) == NAND_RESULT_OK) {
 
         const s32 bytesRead =
             NANDRead(&file, &StateFlags, sizeof(OSStateFlags));
         NANDClose(&file);
 
         if (bytesRead != sizeof(OSStateFlags)) {
-            NANDDelete("/title/00000001/00000002/data/state.dat");
+            NANDDelete(STATE_PATH);
             memset(state, 0, sizeof(OSStateFlags));
             return FALSE;
         }

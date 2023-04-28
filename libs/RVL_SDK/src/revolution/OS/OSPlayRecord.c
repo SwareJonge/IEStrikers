@@ -226,11 +226,11 @@ static void PlayRecordCallback(s32 result, NANDCommandBlock* block) {
 
 void __OSStartPlayRecord(void) {
     if (NANDInit() == NAND_RESULT_OK) {
+        PlayRecordTerminate = FALSE;
         PlayRecordGet = FALSE;
         PlayRecordState = PLAY_RECORD_STATE_STARTED;
         PlayRecordError = FALSE;
-        PlayRecordRetry = FALSE;
-        PlayRecordTerminate = FALSE;
+        PlayRecordRetry = FALSE;        
         PlayRecordTerminated = FALSE;
         PlayRecordLastError = NAND_RESULT_OK;
         PlayRecordCallback(NAND_RESULT_OK, NULL);

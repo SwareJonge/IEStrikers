@@ -28,6 +28,8 @@ typedef struct OSShutdownFunctionQueue {
     OSShutdownFunctionInfo* tail; // at 0x4
 } OSShutdownFunctionQueue;
 
+extern BOOL __OSIsReturnToIdle;
+
 void OSRegisterShutdownFunction(OSShutdownFunctionInfo* info);
 BOOL __OSCallShutdownFunctions(u32 pass, u32 event);
 void __OSShutdownDevices(u32 event);
@@ -36,6 +38,9 @@ void OSShutdownSystem(void);
 void OSReturnToMenu(void);
 u32 OSGetResetCode(void);
 void OSResetSystem(u32 arg0, u32 arg1, u32 arg2);
+void OSRestart(int arg);
+void __OSReturnToMenuForError();
+void __OSHotResetForError();
 
 #ifdef __cplusplus
 }

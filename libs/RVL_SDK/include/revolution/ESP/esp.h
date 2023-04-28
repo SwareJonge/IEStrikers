@@ -25,8 +25,12 @@ typedef struct ESPTmd {
     char padding[0x4A00 - 0x49E4];
 } ESPTmd;
 
+s32 ESP_InitLib();
+
 s32 ESP_ReadContentFile(UNKWORD, void*, u32);
 s32 ESP_SeekContentFile(UNKWORD, s32, UNKWORD);
+
+s32 ESP_DiGetTicketView(s32, void*); // NOTE: second argument is probably some sort of struct
 
 #ifdef __cplusplus
 }

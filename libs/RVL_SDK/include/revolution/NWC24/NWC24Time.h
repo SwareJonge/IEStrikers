@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-s32 NWC24iSynchronizeRtcCounter(void);
+s32 NWC24iSynchronizeRtcCounter(s32); // might be s64
 
 #ifdef __cplusplus
 }

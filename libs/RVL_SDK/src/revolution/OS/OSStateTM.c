@@ -49,12 +49,20 @@ OSStateCallback OSSetResetCallback(OSStateCallback callback) {
 
     old = ResetCallback;
     ResetCallback = callback;
+    if (callback) {
+        ResetCallback = callback;
+    } else {
+        ResetCallback = __OSDefaultResetCallback;
+    }
 
     if (!StmEhRegistered) {
         __OSRegisterStateEvent();
     }
 
     OSRestoreInterrupts(enabled);
+    if (old == __OSDefaultResetCallback) {
+        return NULL;
+    }
     return old;
 }
 
@@ -65,13 +73,20 @@ OSStateCallback OSSetPowerCallback(OSStateCallback callback) {
     enabled = OSDisableInterrupts();
 
     old = PowerCallback;
-    PowerCallback = callback;
+    if (callback) {
+        PowerCallback = callback;
+    } else {
+        PowerCallback = __OSDefaultPowerCallback;
+    }
 
     if (!StmEhRegistered) {
         __OSRegisterStateEvent();
     }
 
     OSRestoreInterrupts(enabled);
+    if (old == __OSDefaultPowerCallback) {
+        return NULL;
+    }
     return old;
 }
 
@@ -114,7 +129,7 @@ void __OSShutdownToSBY(void) {
 
     VI_HW_REGS[VI_REG_DCR] = 0;
 
-#line 275
+#line 347
     OSAssert(StmReady,
              "Error: The firmware doesn't support shutdown feature.\n");
 
@@ -129,7 +144,7 @@ void __OSShutdownToSBY(void) {
 void __OSHotReset(void) {
     VI_HW_REGS[VI_REG_DCR] = 0;
 
-#line 340
+#line 412
     OSAssert(StmReady, "Error: The firmware doesn't support reboot feature.\n");
 
     IOS_Ioctl(StmImDesc, STM_IOCTL_HOT_RESET, StmImInBuf, sizeof(StmImInBuf),
@@ -255,7 +270,7 @@ static s32 __OSStateEventHandler(s32 result, void* arg) {
     BOOL enabled;
     OSStateCallback callback;
 
-#line 748
+#line 820
     OSAssert(result == IPC_RESULT_OK, "Error on STM state event handler\n");
 
     StmEhRegistered = FALSE;
@@ -270,6 +285,7 @@ static s32 __OSStateEventHandler(s32 result, void* arg) {
             callback();
 
             OSRestoreInterrupts(enabled);
+            VIResetDimmingCount();
         }
         __OSRegisterStateEvent();
     }

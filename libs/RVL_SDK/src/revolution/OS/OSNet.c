@@ -25,12 +25,15 @@ void __OSInitNet(void) {
         }
     }
 
-    error = NWC24iSynchronizeRtcCounter();
-    if (error != 0) {
-        OSReport(
-            "Failed to synchronize time with network resource managers. %d\n",
-            error);
+    if(!__OSInIPL) {
+        error = NWC24iSynchronizeRtcCounter(0);
+        if (error != 0) {
+            OSReport("Failed to synchronize time with network resource "
+                     "managers. %d\n",
+                     error);
+        }
     }
+
 }
 
 CW_FORCE_STRINGS(OSNet_c, "NWC24iPrepareShutdown", "/dev/net/kd/request",

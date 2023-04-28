@@ -123,6 +123,7 @@ typedef struct NANDCommandBlock {
     u32 workBlocks;             // at 0xAC
     u32 workInodes;             // at 0xB0
     const char** dir;           // at 0xB4
+    u8 _unkB8[4]; // TODO: Work on NAND, there probably is a new member somwewhere
 } NANDCommandBlock;
 
 typedef struct NANDBanner {

@@ -18,6 +18,7 @@ extern BOOL __OSInReboot;
 
 void __OSGetExecParams(OSExecParams* out);
 void __OSLaunchMenu(void);
+void __OSRelaunchTitle(int arg);
 
 #ifdef __cplusplus
 }
