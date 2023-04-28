@@ -163,6 +163,9 @@ libs/RVL_SDK/src/revolution/OS/OSCrc.c:
   .text: [0x80293e60, 0x802940e0]
   .rodata: [0x804ab8f0, 0x804ab950]
 
+#libs/RVL_SDK/src/revolution/OS/OSLaunch.c:
+  #.text: [0x802940e0, 0x802942f0]
+
 #libs/RVL_SDK/src/revolution/OS/__ppc_eabi_init.cpp:
   #.init: [0x80004360, 0x800043c4]
   #.text: [0x802942f0, 0x802943b0]
@@ -192,6 +195,8 @@ libs/RVL_SDK/src/revolution/AI/ai.c:
   .sbss: [0x8050dec0, 0x8050df00]
 
 #libs/RVL_SDK/src/revolution/AX/AX.c:
+
+# dsp
 libs/RVL_SDK/src/revolution/DSP/dsp.c:
   .text: [0x802a9360, 0x802a95c0]
   .data: [0x804e4920, 0x804e49a0]
@@ -206,6 +211,21 @@ libs/RVL_SDK/src/revolution/DSP/dsp_task.c:
   .data: [0x804e49a0, 0x804e4ae0]
   .sbss: [0x8050e048, 0x8050e060]
   
+# gx
+#libs/RVL_SDK/src/revolution/GX/GXGeometry.c:
+  #.text: [0x802ad190, 0x802ad794]
+
+libs/RVL_SDK/src/revolution/GX/GXLight.c:
+  .text: [0x802ae220, 0x802ae984]
+  .sdata2: [0x80511548, 0x80511580]
+
+libs/RVL_SDK/src/revolution/GX/GXBump.c:
+  .text: [0x802afb50, 0x802affa4]
+  .sdata2: [0x805115b8, 0x805115c0]
+
+libs/RVL_SDK/src/revolution/GX/GXDisplayList.c:
+  .text: [0x802b0e00, 0x802b0e74]
+
 #Runtime.PPCEABI.H.a
 libs/PowerPC_EABI_Support/src/MSL/Runtime/__mem.c:
   .init: [0x800043c4, 0x80004744]

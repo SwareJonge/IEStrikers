@@ -50,7 +50,7 @@ void GXSetIndTexMtx(GXIndTexMtxID id, const f32 mtx[6], s8 scaleExp) {
         val = 0;
     }
 
-    scaleExp += 0x11;
+    scaleExp = scaleExp + 0x11;
 
     field = 0;
     GX_BITFIELD_SET(field, 21, 11, 1024.0f * mtx[0]);

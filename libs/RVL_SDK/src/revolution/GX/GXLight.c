@@ -31,7 +31,7 @@ void GXInitLightSpot(GXLightObj* light, f32 angle, GXSpotFn fn) {
         fn = GX_SP_OFF;
     }
 
-    rad = cosf((3.1415927f * angle) / 180.0f);
+    rad = (f32)cos((3.1415927f * angle) / 180.0f);
 
     switch (fn) {
     case GX_SP_FLAT:
@@ -154,7 +154,7 @@ void GXInitSpecularDir(GXLightObj* light, f32 x, f32 y, f32 z) {
 
     mag = dirX * dirX + dirY * dirY + dirZ * dirZ;
     if (mag != 0.0f) {
-        mag = 1.0f / sqrtf(mag);
+        mag = 1.0f / (f32)sqrt(mag);
     }
 
     light->dirX = dirX * mag;
@@ -176,12 +176,13 @@ asm void GXLoadLightObjImm(register GXLightObj* light, register u32 id) {
 
     cntlzw r0, id
     lis r4, WGPIPE@ha
-    subfic r5, r0, 0x1f
-    li r0, 0x10
+    subfic r5, r0, 0x1f    
     rlwinm r5, r5, 4, 0x19, 0x1b
+    li r0, 0x10
     stb r0, WGPIPE@l(r4)
     addi r0, r5, 0x600
     oris r0, r0, 0xf
+    subi r5, id, 0x8000
     stw r0, WGPIPE@l(r4)
     lwz r0, 0xc(r3)
     xor r6, r6, r6
@@ -191,16 +192,16 @@ asm void GXLoadLightObjImm(register GXLightObj* light, register u32 id) {
     psq_l f2, 40(light), 0, 0
     psq_l f1, 48(light), 0, 0
     psq_l f0, 56(light), 0, 0
-    stwu r6, WGPIPE@l(r4)
-    stw r6, 0(r4)
-    stw r6, 0(r4)
-    stw r0, 0(r4)
-    psq_st f5, 0(r4), 0, 0
-    psq_st f4, 0(r4), 0, 0
-    psq_st f3, 0(r4), 0, 0
-    psq_st f2, 0(r4), 0, 0
-    psq_st f1, 0(r4), 0, 0
-    psq_st f0, 0(r4), 0, 0
+    stw r6, WGPIPE@l(r4)
+    stw r6, WGPIPE@l(r4)
+    stw r6, WGPIPE@l(r4)
+    stw r0, WGPIPE@l(r4)
+    psq_st f5, 0(r5), 0, 0
+    psq_st f4, 0(r5), 0, 0
+    psq_st f3, 0(r5), 0, 0
+    psq_st f2, 0(r5), 0, 0
+    psq_st f1, 0(r5), 0, 0
+    psq_st f0, 0(r5), 0, 0
 
     li r0, 1
     lwz r3, __GXData
