@@ -438,7 +438,7 @@ BOOL OSCreateThread(OSThread* thread, OSThreadFunc func, void* funcArg,
     OSThread* tail;
     void* sp;
 
-    if (prio < OS_PRIORITY_MIN || prio > OS_PRIORITY_MAX) {
+    if (OS_PRIORITY_MIN > prio || prio > OS_PRIORITY_MAX) {
         return FALSE;
     }
 
@@ -543,6 +543,7 @@ void OSCancelThread(OSThread* thread) {
     OSThread* prev;
 
     enabled = OSDisableInterrupts();
+    __OSCancelInternalAlarms(thread);
 
     switch (thread->state) {
     case OS_THREAD_STATE_READY:
@@ -922,8 +923,26 @@ BOOL OSSetThreadPriority(OSThread* thread, s32 prio) {
 
 static void SleepAlarmHandler(OSAlarm* alarm, OSContext* ctx) {
 #pragma unused(ctx)
+    BOOL resume;    
+    OSThread* alarmThread = (OSThread*)OSGetAlarmUserData(alarm);
+    
+    if (alarmThread->state == OS_THREAD_STATE_EXITED) {
+        resume = FALSE;
+    } else {
+        OSThread* activeThread = OS_THREAD_QUEUE.head;
+        for (; activeThread != NULL; activeThread = activeThread->nextActive) {
+            if (alarmThread == activeThread) {
+                resume = TRUE;
+                goto exit; // TODO: remove this if possible
+            }
+        }
+        resume = FALSE;
+    }
+    exit:
 
-    OSResumeThread((OSThread*)OSGetAlarmUserData(alarm));
+    if(resume) {
+        OSResumeThread((OSThread*)OSGetAlarmUserData(alarm));
+    }
 }
 
 void OSSleepTicks(s64 ticks) {
@@ -940,8 +959,7 @@ void OSSleepTicks(s64 ticks) {
     }
 
     OSCreateAlarm(&alarm);
-    OSSetAlarmTag(&alarm, (u32)thread);
-    OSSetAlarmUserData(&alarm, thread);
+    __OSSetInternalAlarmUserData(&alarm, thread);
     OSSetAlarm(&alarm, ticks, SleepAlarmHandler);
 
     OSSuspendThread(thread);

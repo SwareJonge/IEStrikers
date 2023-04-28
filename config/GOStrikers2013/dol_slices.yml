@@ -102,6 +102,15 @@ libs/RVL_SDK/src/revolution/OS/OSRtc.c:
   .text: [0x8028f800, 0x802902b0]
   .bss: [0x80898540, 0x80898598]
 
+libs/RVL_SDK/src/revolution/OS/OSSync.c:
+  .text: [0x802902b0, 0x80290330]
+
+libs/RVL_SDK/src/revolution/OS/OSThread.c:
+  .text: [0x80290330, 0x802919c0]
+  .sdata: [0x8050ce40, 0x8050ce48]
+  .sbss: [0x8050dc48, 0x8050dc58]
+  .bss: [0x80898598, 0x80898fa0]
+
 libs/RVL_SDK/src/revolution/OS/OSTime.c:
   .text: [0x802919c0, 0x80292090]
   .data: [0x804d2b18, 0x804d2b78]
@@ -144,6 +153,11 @@ libs/RVL_SDK/src/revolution/OS/OSNet.c:
 #libs/RVL_SDK/src/revolution/OS/OSNandbootInfo.c:
   #.text: [0x80293470, 0x80293680]
   #.data: [0x804dec58, 0x804dec78]
+
+#libs/RVL_SDK/src/revolution/OS/OSPlayTime.c:
+  #.text: [0x80293680, 0x804ab8f0]
+  #.data: [0x804dec78, 0x804decb8]
+  #.sdata: [0x8050ce58, 0x8050ce60]
 
 libs/RVL_SDK/src/revolution/OS/OSCrc.c:
   .rodata: [0x804ab8f0, 0x804ab950]

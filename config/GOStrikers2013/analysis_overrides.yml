@@ -6,6 +6,7 @@ forced_types:
 blocked_targets:
   - 0x80004000
   - 0x80480168
+  - 0x80898679
   - 0x808b9332
 blocked_target_ranges: # nothing should ever point to here
   - [0x80004000, 0x80020b00]
