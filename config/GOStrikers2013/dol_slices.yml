@@ -64,6 +64,15 @@ libs/RVL_SDK/src/revolution/OS/OSMemory.c:
 libs/RVL_SDK/src/revolution/OS/OSMutex.c:
   .text: [0x8028eb00, 0x8028ee34]
 
+#libs/RVL_SDK/src/revolution/OS/OSReboot.c:
+  #.text: [0x8028ee40, 0x8028eed0]
+  #.sbss: [0x8050dc30, 0x8050dc38]
+
+#libs/RVL_SDK/src/revolution/OS/OSReset.c:
+  #.text: [0x8028eed0, 0x8028f800]
+  #.data: [0x804d28b0, 0x804d2b18]
+  #.sbss: [0x8050dc38, 0x8050dc48]
+
 libs/RVL_SDK/src/revolution/OS/OSTime.c:
   .text: [0x802919c0, 0x80292090]
   .data: [0x804d2b18, 0x804d2b78]
