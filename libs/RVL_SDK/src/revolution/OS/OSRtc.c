@@ -124,8 +124,8 @@ static BOOL UnlockSram(BOOL save, u32 pos) {
             sram->checksum = 0;
             for (data = (u16*)&sram->counterBias; data < (u16*)&Scb.sramEx;
                  data++) {
-                sram->checksum += *data;
-                sram->invchecksum += ~*data;
+                sram->checksum = sram->checksum + *data;
+                sram->invchecksum = sram->invchecksum + ~*data;
             }
         }
 
@@ -248,7 +248,7 @@ BOOL __OSGetRTCFlags(u32* out) {
     imm = 0x21000800;
     error |= !EXIImm(EXI_CHAN_0, &imm, sizeof(imm), EXI_WRITE, NULL);
     error |= !EXISync(EXI_CHAN_0);
-    error |= !EXIDma(EXI_CHAN_0, &imm, sizeof(imm), EXI_READ, NULL);
+    error |= !EXIImm(EXI_CHAN_0, &imm, sizeof(imm), EXI_READ, NULL);
     error |= !EXISync(EXI_CHAN_0);
     error |= !EXIDeselect(EXI_CHAN_0);
     EXIUnlock(EXI_CHAN_0);
@@ -274,7 +274,7 @@ BOOL __OSClearRTCFlags(void) {
     imm = 0xA1000800;
     error |= !EXIImm(EXI_CHAN_0, &imm, sizeof(imm), EXI_WRITE, NULL);
     error |= !EXISync(EXI_CHAN_0);
-    error |= !EXIDma(EXI_CHAN_0, &flags, sizeof(flags), EXI_WRITE, NULL);
+    error |= !EXIImm(EXI_CHAN_0, &flags, sizeof(flags), EXI_WRITE, NULL);
     error |= !EXISync(EXI_CHAN_0);
     error |= !EXIDeselect(EXI_CHAN_0);
     EXIUnlock(EXI_CHAN_0);

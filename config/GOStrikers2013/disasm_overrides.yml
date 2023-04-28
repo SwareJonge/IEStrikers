@@ -1,6 +1,5 @@
 trim_ctors: true
 trim_dtors: true
 symbol_aligns:
-    0x8028f800: 0x10
     0x802943b0: 0x10
     0x80898240: 0x20

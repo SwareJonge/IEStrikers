@@ -73,8 +73,9 @@ libs/RVL_SDK/src/revolution/OS/OSReset.c:
   .data: [0x804d28b0, 0x804d2b18]
   .sbss: [0x8050dc38, 0x8050dc48]
 
-#libs/RVL_SDK/src/revolution/OS/OSRtc.c:
-  #.text: [0x8028f800, ]
+libs/RVL_SDK/src/revolution/OS/OSRtc.c:
+  .text: [0x8028f800, 0x802902b0]
+  .bss: [0x80898540, 0x80898598]
 
 libs/RVL_SDK/src/revolution/OS/OSTime.c:
   .text: [0x802919c0, 0x80292090]
