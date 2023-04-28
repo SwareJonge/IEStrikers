@@ -31,9 +31,17 @@ libs/RVL_SDK/src/revolution/OS/OSAlloc.c:
   .sbss: [0x8050dbd8, 0x8050dbe0]
 
 libs/RVL_SDK/src/revolution/OS/OSArena.c:
-  .text: [0x80288ba0, 0x80288cd4]
+  .text: [0x80288ba0, 0x80288ce0]
   .sdata: [0x8050ce10, 0x8050ce18]
   .sbss: [0x8050dbe0, 0x8050dbe8]
+
+libs/RVL_SDK/src/revolution/OS/OSAudioSystem.c:
+  .text: [0x80288ce0, 0x802891a0]
+  .data: [0x804d1370, 0x804d13f0]
+
+libs/RVL_SDK/src/revolution/OS/OSCache.c:
+  .text: [0x802891a0, 0x80289800]
+  .data: [0x804d13f0, 0x804d1578]
 
 libs/RVL_SDK/src/revolution/OS/OSContext.c:
   .text: [0x80289800, 0x8028a0d0]

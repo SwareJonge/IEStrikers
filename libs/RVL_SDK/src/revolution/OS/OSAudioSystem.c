@@ -126,12 +126,12 @@ void __OSInitAudioSystem(void) {
     }
     DSP_HW_REGS[DSP_CSR] = ctrl;
 
-    DSP_HW_REGS[DSP_CSR] &= ~DSP_CSR_RES;
+    DSP_HW_REGS[DSP_CSR] = DSP_HW_REGS[DSP_CSR] & ~DSP_CSR_RES;
     while (DSP_HW_REGS[DSP_CSR] & 0x400) {
         ;
     }
 
-    DSP_HW_REGS[DSP_CSR] &= ~DSP_CSR_HALT;
+    DSP_HW_REGS[DSP_CSR] = DSP_HW_REGS[DSP_CSR] & ~DSP_CSR_HALT;
     for (cpuMboxHi = DSP_HW_REGS[DSP_CPUMBOX_H];
          !(cpuMboxHi & DSP_CPUMBOX_H_STATUS);
          cpuMboxHi = DSP_HW_REGS[DSP_CPUMBOX_H]) {
