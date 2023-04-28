@@ -127,3 +127,7 @@ BOOL OSTryLockMutex(OSMutex* mutex) {
     OSRestoreInterrupts(enabled);
     return lock;
 }
+
+void OSInitCond(OSThreadQueue* queue) { OSInitThreadQueue(queue); }
+
+void OSSignalCond(OSThreadQueue* queue) { OSWakeupThread(queue); }

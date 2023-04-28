@@ -20,6 +20,9 @@ void OSUnlockMutex(OSMutex* mutex);
 void __OSUnlockAllMutex(OSThread* thread);
 BOOL OSTryLockMutex(OSMutex* mutex);
 
+void OSInitCond(OSThreadQueue* queue);
+void OSSignalCond(OSThreadQueue* queue);
+
 #ifdef __cplusplus
 }
 #endif
