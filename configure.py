@@ -540,10 +540,10 @@ class CSource(Source):
             self.cflags = c.RVL_SDK_CFLAGS
             if path.endswith("EXIBios.c"):
                 self.cflags = self.cflags.replace("-O4,p", "-O3,p")
+        elif (path.startswith("./libs/PowerPC_EABI_Support/src/MSL/MetroTRK/")):
+            self.cflags = c.METRO_CFLAGS
         elif (path.startswith("./libs/PowerPC_EABI_Support/src/MSL")):
-            self.cflags = c.MSL_C_FLAGS
-            if path.endswith("nubevent.c") or path.endswith("nubinit.c") or path.endswith("msg.c"):
-                self.cflags = self.cflags.replace("-str pool, readonly, reuse", "-str pool, reuse")
+            self.cflags = c.MSL_C_CFLAGS
         elif (path.startswith("./libs/NdevExi2A/src/")):
             self.cflags = c.NDEVEXI2A_CLFAGS
             self.cc = c.REVO_EX_CC

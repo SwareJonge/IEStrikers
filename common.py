@@ -339,12 +339,15 @@ BASE_RUNTIME_CLFAGS = CFLAGS + [
     "-inline off"
 ]
 
-BASE_MSL_C_FLAGS = CFLAGS + [
+BASE_METRO_CFLAGS = CFLAGS + [
     "-O4,p",
     "-use_lmw_stmw on",
     "-func_align 4",
     "-Cpp_exceptions off",
-     "-inline on",
+    "-inline on",
+]
+
+BASE_MSL_C_CFLAGS = BASE_METRO_CFLAGS + [
      "-str pool, readonly, reuse",
      "-ipa file"
 ]
@@ -386,7 +389,8 @@ LOCAL_CFLAGS = [
 DOL_CFLAGS = ' '.join(BASE_DOL_CFLAGS + LOCAL_CFLAGS)
 RVL_SDK_CFLAGS = ' '.join(BASE_RVL_SDK_CFLAGS + LOCAL_CFLAGS)
 RUNTIME_CFLAGS = ' '.join(BASE_RUNTIME_CLFAGS + LOCAL_CFLAGS)
-MSL_C_FLAGS = ' '.join(BASE_MSL_C_FLAGS + LOCAL_CFLAGS)
+METRO_CFLAGS = ' '.join(BASE_METRO_CFLAGS + LOCAL_CFLAGS)
+MSL_C_CFLAGS = ' '.join(BASE_MSL_C_CFLAGS + LOCAL_CFLAGS)
 NDEVEXI2A_CLFAGS = ' '.join(BASE_NDEVEXI2A_CLFAGS + LOCAL_CFLAGS)
 SHD_STD_CLFAGS = ' '.join(BASE_SHD_STD_CLFAGS + LOCAL_CFLAGS)
 NW4R_CFLAGS = ' '.join(BASE_NW4R_CFLAGS + LOCAL_CFLAGS)

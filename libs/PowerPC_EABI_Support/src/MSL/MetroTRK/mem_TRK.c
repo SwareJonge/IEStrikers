@@ -1,86 +1,49 @@
-#include "types.h"
+#include "PowerPC_EABI_Support/MetroTRK/trk.h"
 
-#define WRITE(dst, add, n_dst, n_src) ((u##n_dst*)dst) = ((u##n_dst*)(((u##n_src*)dst) + add)) - 1
-#define WRITE_BYTE(dst, add)          WRITE(dst, add, 8, 32)
-#define WRITE_WORD(dst, add)          WRITE(dst, add, 32, 8)
-
-
-//unused
-void ppc_readbyte1(){
-}
-
-//unused
-void ppc_writebyte1(){
-}
-
-
-void* TRK_memcpy(void* dst, const void* src, size_t n)
+static u8 ppc_readbyte1(const u8 *ptr)
 {
-	const u8* s = (const u8*)src - 1;
-	u8* d       = (u8*)dst - 1;
+	u32 *alignedPtr = (u32 *)((u32)ptr & ~3);
+	return (u8)(*alignedPtr >> ((3 - ((u32)ptr - (u32)alignedPtr)) << 3));
+}
 
-	n++;
-	while (--n != 0)
-		*++d = *++s;
+static void ppc_writebyte1(u8 *ptr, u8 val)
+{
+	u32 iVar1;
+	u32 *alignedPtr;
+	u32 uVar3;
+
+	alignedPtr = (u32 *)((u32)ptr & ~3);
+	iVar1 = (3 - ((u32)ptr - (u32)alignedPtr)) << 3;
+	uVar3 = 0xff << iVar1;
+	*alignedPtr = (*alignedPtr & ~uVar3) | (uVar3 & (val << iVar1));
+}
+
+void *TRK_memcpy(void *dst, const void *src, int n)
+{
+	u8 *srcTemp = (u8 *)src;
+	u8 *dstTemp = (u8 *)dst;
+
+	while (n--)
+	{
+		ppc_writebyte1(dstTemp, ppc_readbyte1(srcTemp));
+		srcTemp++;
+		dstTemp++;
+	}
+
 	return dst;
 }
 
-
-static inline void TRK_fill_mem(void* dst, int val, size_t n)
+void TRK_fill_mem(u8 *dst, int val, int n)
 {
-	u32 v = (u8)val;
-	u32 i, j;
+	u8 b = val;
 
-	WRITE_BYTE(dst, 0);
-
-	if (n >= 32) {
-		i = (~(u32)dst) & 3;
-
-		if (i) {
-			n -= i;
-
-			do {
-				*++(((u8*)dst)) = v;
-			} while (--i);
-		}
-
-		if (v)
-			v |= v << 24 | v << 16 | v << 8;
-
-		WRITE_WORD(dst, 4);
-		WRITE_WORD(dst, 1);
-
-		i = n / 32;
-
-		if (i) {
-			do {
-				for (j = 0; j < 8; j++)
-					*++((u32*)dst) = v;
-			} while (--i);
-		}
-
-		i = (n / 4) % 8;
-
-		if (i) {
-			do {
-				*++((u32*)dst) = v;
-			} while (--i);
-		}
-
-		WRITE_BYTE(dst, 1);
-
-		n %= 4;
+	while (n--)
+	{
+		ppc_writebyte1(dst++, b);
 	}
-
-	if (n)
-		do {
-			*++((u8*)dst) = v;
-		} while (--n);
-
-	return;
 }
 
-void* TRK_memset(void* dst, int val, size_t n)
+void *TRK_memset(void *dst, int val, int n)
 {
 	TRK_fill_mem(dst, val, n);
 	return dst;

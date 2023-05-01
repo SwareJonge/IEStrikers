@@ -548,8 +548,8 @@ libs/PowerPC_EABI_Support/src/MSL/MetroTRK/main_TRK.c:
 libs/PowerPC_EABI_Support/src/MSL/MetroTRK/mainloop.c:
   .text: [0x802c8ecc, 0x802c8fb8]
 
-#libs/PowerPC_EABI_Support/src/MSL/MetroTRK/mem_TRK.c:
-  #.text: [0x802c8fb8, 0x802c921c]
+libs/PowerPC_EABI_Support/src/MSL/MetroTRK/mem_TRK.c:
+  .text: [0x802c8fb8, 0x802c921c]
 
 libs/PowerPC_EABI_Support/src/MSL/MetroTRK/dispatch.c:
   .text: [0x802c921c, 0x802c933c]

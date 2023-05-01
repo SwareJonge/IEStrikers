@@ -504,7 +504,6 @@ void TRK_NubMainLoop(void);
 TRKResult TRKInitializeMutex(void*);
 TRKResult TRKAcquireMutex(void*);
 TRKResult TRKReleaseMutex(void*);
-void* TRK_memcpy(void* dst, const void* src, size_t n);
 
 TRKResult TRKInitializeEventQueue();
 TRKResult TRK_InitializeMessageBuffers();
@@ -556,6 +555,9 @@ TRKResult TRK_InitializeIntDrivenUART(unknown, unknown, void*);
 void usr_put_initialize();
 void TRKTargetSetInputPendingPtr(void*);
 extern void* gTRKInputPendingPtr;
+
+void* TRK_memcpy(void* dst, const void* src, int n);
+void* TRK_memset(void* dst, int val, int n);
 
 int TRK_strlen(const char*);
 
