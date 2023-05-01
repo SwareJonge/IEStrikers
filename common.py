@@ -45,7 +45,7 @@ def get_containing_slice(addr: int) -> Tuple[Binary, SourceDesc]:
     """Finds the binary containing an address and its source file
     Source file is empty string if not decompiled"""
 
-    dol_raw = get_cmd_stdout(f"{SLICES} {DOL_YML} {DOL_SLICES} -p {DOL_SRCDIR} --containing {addr:x}")
+    dol_raw = get_cmd_stdout(f"{SLICES} {DOL_YML} {DOL_SLICES} --containing {addr:x}")
     containing = json.loads(dol_raw)
     return (Binary.DOL, containing)
 
@@ -145,9 +145,6 @@ def load_from_yaml(path: str, default=None):
 
 VERSION = "GOStrikers2013"
 OUTNAME = "InazumaWii" # fun fact: in all other versions it's InazmaWii, only took them a few years to notice it
-
-# Directory for decompiled dol code
-DOL_SRCDIR = "./"
 
 # Include directory
 INCDIR = "include"
@@ -288,9 +285,11 @@ INCDIRS = [
     "libs/PowerPC_EABI_Support/include",
     "libs/PowerPC_EABI_Support/include/stl",
     "libs/PowerPC_EABI_Support/include/stl/internal",
+    "libs/Shade/include" # TODO: move to it's own section
 ]
 MWCC_INCLUDES = ' '.join(f"-i {d}" for d in INCDIRS)
 GCC_INCLUDES = ' '.join(f"-I {d}" for d in INCDIRS)
+
 
 #DEFINES = [ # probably add a flag for European build
     #"DEBUG"
@@ -414,7 +413,6 @@ PPCDIS_DISASM_FLAGS = ' '.join([
 
 @dataclass
 class SourceContext:
-    srcdir: str
     cflags: str
     binary: str
     labels: str
@@ -422,7 +420,7 @@ class SourceContext:
     slices: str
     sdata2_threshold: int
 
-DOL_CTX = SourceContext(DOL_SRCDIR, DOL_CFLAGS, DOL_YML, DOL_LABELS, DOL_RELOCS, DOL_SLICES, DOL_SDATA2_SIZE)
+DOL_CTX = SourceContext(DOL_CFLAGS, DOL_YML, DOL_LABELS, DOL_RELOCS, DOL_SLICES, DOL_SDATA2_SIZE)
 
 ####################
 # diff.py Expected #

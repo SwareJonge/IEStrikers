@@ -535,21 +535,21 @@ class CSource(Source):
         self.cflags = ctx.cflags
         print(path)
         
-        if (path.startswith("./libs/RVL_SDK/src/revolution")):
+        if (path.startswith("libs/RVL_SDK/src/revolution")):
             self.cc = c.SDK_CC
             self.cflags = c.RVL_SDK_CFLAGS
             if path.endswith("EXIBios.c"):
                 self.cflags = self.cflags.replace("-O4,p", "-O3,p")
-        elif (path.startswith("./libs/PowerPC_EABI_Support/src/MSL/MetroTRK/")):
+        elif (path.startswith("libs/PowerPC_EABI_Support/src/MSL/MetroTRK/")):
             self.cflags = c.METRO_CFLAGS
-        elif (path.startswith("./libs/PowerPC_EABI_Support/src/MSL")):
+        elif (path.startswith("libs/PowerPC_EABI_Support/src/MSL")):
             self.cflags = c.MSL_C_CFLAGS
-        elif (path.startswith("./libs/NdevExi2A/src/")):
+        elif (path.startswith("libs/NdevExi2A/src/")):
             self.cflags = c.NDEVEXI2A_CLFAGS
             self.cc = c.REVO_EX_CC
-        elif (path.startswith("./src/Shade/std")):
+        elif (path.startswith("libs/Shade/src/std")):
             self.cflags = c.SHD_STD_CLFAGS
-        elif (path.startswith("./libs/nw4r")):
+        elif (path.startswith("libs/nw4r")):
             self.cflags = c.NW4R_CFLAGS
             if path.endswith("snd_adpcm.cpp"):
                 self.cc = c.REVO_EX_CC
@@ -593,7 +593,7 @@ class CSource(Source):
 
 def load_sources(ctx: c.SourceContext):
     raw = c.get_cmd_stdout(
-        f"{c.SLICES} {ctx.binary} {ctx.slices} -o -p ./"
+        f"{c.SLICES} {ctx.binary} {ctx.slices} -o "
     )
     return [Source.make(ctx, s) for s in json.loads(raw)]
 
