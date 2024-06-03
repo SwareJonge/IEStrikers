@@ -1,0 +1,39 @@
+#ifndef _NEW
+#define _NEW
+
+#include <cstring>
+#include <exception>
+
+inline void* operator new(size_t, void* ptr) throw() { 
+    return ptr; 
+}
+
+namespace std{
+    class bad_alloc : public exception {
+    public:
+        virtual ~bad_alloc(){}
+        virtual const char* what() const{
+            return "bad_alloc";
+        }
+    };
+}
+
+void *operator new(size_t n) throw();
+void *operator new[](size_t n) throw();
+
+void operator delete(void *ptr) throw();
+void operator delete[](void *ptr) throw();
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+void *__sys_alloc(size_t n);
+void __sys_free(void *p);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

@@ -8,14 +8,11 @@ namespace nw4r {
 namespace math {
 
 struct _VEC2 {
-  f32 x;
-  f32 y;
+  f32 x, y;
 };
 
 struct _VEC3 {
-  f32 x;
-  f32 y;
-  f32 z;
+  f32 x, y, z;
 };
 
 struct __MTX33 {
@@ -27,8 +24,9 @@ struct __MTX33 {
 struct _MTX33 {
   union {
     struct __MTX33 e;
-    f32 arr[9];
-    f32 mtx[3][3];
+    
+    f32 m[3][3];
+    f32 a[9];
   };
 };
 
@@ -41,8 +39,8 @@ struct __MTX34 {
 struct _MTX34 {
   union {
     struct __MTX34 e;
-    f32 arr[12];
-    f32 mtx[3][4];
+    f32 m[3][4];
+    f32 a[12];    
   };
 };
 

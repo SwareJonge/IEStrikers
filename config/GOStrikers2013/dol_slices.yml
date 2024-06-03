@@ -194,8 +194,6 @@ libs/RVL_SDK/src/revolution/AI/ai.c:
   .sdata: [0x8050cf08, 0x8050cf10]
   .sbss: [0x8050dec0, 0x8050df00]
 
-#libs/RVL_SDK/src/revolution/AX/AX.c:
-
 # dsp
 libs/RVL_SDK/src/revolution/DSP/dsp.c:
   .text: [0x802a9360, 0x802a95c0]
@@ -678,6 +676,9 @@ libs/RVL_SDK/src/revolution/IPC/ipcProfile.c:
   #.bss: [0x808baee0, 0x808baf40]
 
 # sc
+libs/RVL_SDK/src/revolution/SC/scsystem.c:
+  .text: [0x802D7840, 0x802d91d0]
+
 libs/RVL_SDK/src/revolution/SC/scapi.c:
   .text: [0x802d91d0, 0x802d96d0]
   .data: [0x804e8688, 0x804e86b8]
@@ -701,15 +702,134 @@ libs/RVL_SDK/src/revolution/USB/usb.c:
   .sdata: [0x8050d278, 0x8050d288]
   .sbss: [0x8050e348, 0x8050e358]
 
+#libs/Shade/src/wii_sound.cpp:
+  #.text: [0x80329f80, 0x8032cb10]
+
+libs/Shade/src/wii_main.cpp:
+  .text: [0x8032cb10, 0x8032e6b4]
+  .rodata: [0x804b2588, 0x804b26e8]
+  .sdata: [0x8050d320, 0x8050d338]
+  .sbss: [0x8050e3b8, 0x8050e3d8]
+  .sdata2: [0x80511e50, 0x80511e88]
+  .bss: [0x80900220, 0x809004d8]
+  #extab: [0x80020004, 0x800200c4]
+  #extabindex: [0x80011e54, 0x80011ed4] 
+
+libs/Shade/src/wii_file.cpp:
+  .text: [0x8032e6b4, 0x8032ebf4]
+  .rodata: [0x804b26e8, 0x804b2800]
+  .sdata: [0x8050d338, 0x8050d340]
+  .sbss: [0x8050e3d8, 0x8050e3e8]
+  .bss: [0x809004d8, 0x80900560]
+  
+#libs/Shade/src/shd_main.cpp:
+  #.text: [0x80330f10, 0x80333bb4]
+
+libs/Shade/src/shd_melt.cpp:
+  .text: [0x80333bb4, 0x80333f4c]
+  .rodata: [0x804b2910, 0x804b2950]
+  .sbss: [0x8050e410, 0x8050e420]
+
 libs/Shade/src/std/shd_stdarg.cpp:
   .text: [0x803346e0, 0x8033496c]
   #extab: [0x800120a4, 0x800120b4]
   #extabindex: [0x8002037c, 0x80020394] 
   
+libs/Shade/src/shd_file.cpp:
+  .text: [0x80335ed0, 0x8033673c]
+  .rodata: [0x804b2a30, 0x804b2ba0]
+  .sbss: [0x8050e428, 0x8050e448]
+
+libs/Shade/src/wii_debug.cpp:
+  .text: [0x8033a34c, 0x8033a564]
+  .rodata: [0x804b2c58, 0x804b2cf8]
+  .bss: [0x809012a8, 0x80901aa8]
+  #extab: [0x800205a4, 0x800205bc]
+  #extabindex: [0x80012268, 0x80012278]
+
+libs/Shade/src/movie/MoDemoLogThrow.cpp:
+  .text: [0x80346290, 0x803462dc]
+  .rodata: [0x804b69a0, 0x804b69e0]
+
 libs/RVL_SDK/src/revolution/TPL/TPL.c: # why is this all the way over here? part of HBM?
   .text: [0x80348250, 0x80348390]
   .data: [0x804f09d8, 0x804f0a08]
   .sdata: [0x8050d428, 0x8050d430]
+
+# Private Mobiclip library
+libs/MoEngineLib/Engine/Bignum.cpp:
+  .text: [0x8036c0f0, 0x8036cf80]
+  .rodata: [0x804b7070, 0x804b7170]
+
+#libs/MoEngineLib/Engine/CodecFast.cpp:
+
+libs/MoEngineLib/Engine/Digits.cpp:
+  .text: [0x8036d750, 0x8036d9f0]
+
+libs/MoEngineLib/Engine/ImaAdpcm.cpp:
+  .text: [0x8036d9f0, 0x8036dc10]
+  .rodata: [0x804b7170, 0x804b7238]
+
+libs/MoEngineLib/Engine/MoApi.cpp:
+  .text: [0x8036dc10, 0x8036e8c4]
+  .data: [0x804f5208, 0x804f5548]
+  .sdata: [0x8050d430, 0x8050d438]
+  .sbss: [0x8050e570, 0x8050e578]
+
+#libs/MoEngineLib/Engine/MoDeblockWii.cpp:
+
+libs/MoEngineLib/Engine/MoSdk.cpp:
+  .text: [0x8036fce0, 0x803708d0]
+  .data: [0x804f5548, 0x804f5800]
+  .sdata: [0x8050d440, 0x8050d448]
+
+libs/MoEngineLib/Engine/MoSdkAdpcmDecoder.cpp:
+  .text: [0x803708d0, 0x80370c30]
+  .data: [0x804f5800, 0x804f5878]
+  .sdata: [0x8050d448, 0x8050d458]
+
+libs/MoEngineLib/Engine/MoSdkAudioDecoder.cpp:
+  .text: [0x80370c30, 0x80370fb0]
+  .data: [0x804f5878, 0x804f58f0]
+
+libs/MoEngineLib/Engine/MoSdkDemux.cpp:
+  .text: [0x80370fb0, 0x803711b0]
+
+libs/MoEngineLib/Engine/MoSdkFastAudioDecoder.cpp:
+  .text: [0x803711b0, 0x80371570]
+  .data: [0x804f58f0, 0x804f5958]
+  .sdata: [0x8050d458, 0x8050d460]
+
+libs/MoEngineLib/Engine/MoSdkHeaders.cpp:
+  .text: [0x80371570, 0x80372000]
+  .rodata: [0x804b74e0, 0x804b7628]
+  .data: [0x804f5958, 0x804f5a80]
+  .sdata: [0x8050d460, 0x8050d468]
+  .sdata2: [0x80512150, 0x80512160]
+
+libs/MoEngineLib/Engine/MoSdkInput.cpp:
+  .text: [0x80372000, 0x803724e0]
+  .data: [0x804f5a80, 0x804f5b18]
+
+libs/MoEngineLib/Engine/MoSdkMem.cpp:
+  .text: [0x803724e0, 0x80372610]
+  .data: [0x804f5b18, 0x804f5b30]
+  .sbss: [0x8050e578, 0x8050e588]
+
+libs/MoEngineLib/Engine/MoSdkPcmPassthroughDecoder.cpp:
+  .text: [0x80372610, 0x803727d0] 
+  .data: [0x804f5b30, 0x804f5b78]
+  .sdata: [0x8050d468, 0x8050d470]
+
+libs/MoEngineLib/Engine/MoSdkProcessImage.cpp:
+  .text: [0x803727d0, 0x80372ad0]
+
+libs/MoEngineLib/Engine/MoSdkSeek.cpp:
+  .text: [0x80372ad0, 0x80372d50]
+
+libs/MoEngineLib/Engine/MoSdkVideoDecoder.cpp:
+  .text: [0x80372d50, 0x80373210]
+  .data: [0x804f5b78, 0x804f5c58]
 
 libs/nw4r/db/db_console.cpp:
   .text: [0x80392fb0, 0x8039308c]

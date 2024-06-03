@@ -1,28 +1,32 @@
-#pragma once
+#ifndef NW4R_DB_CONSOLE_H
+#define NW4R_DB_CONSOLE_H
 
 #include "types.h"
 
-// Copied form MKW-SP
+#include "nw4r/ut/TextWriterBase.h"
 
 namespace nw4r {
 namespace db {
     namespace detail {
         struct ConsoleHead
         {
-            u8 _00[0x06 - 0x00];
-            u16 _06;
-            u16 _08;
-            u16 _0A;
-            u16 _0C;
-            u16 _0E;
-            u16 _10;
-            s32 mLineCount;
-            s32 mCurrentTopLine;
-            s16 mPosX;
-            s16 mPosY;
-            u16 mCurLine;
-            bool mIsVisible;
-            u8 _23[0x2c - 0x23];
+            u8 *textBuf;
+            u16 width;
+            u16 height;
+            u16 priority;
+            u16 attr;
+            u16 printTop;
+            u16 printXPos;
+            u16 ringTop;
+            s32 ringTopLineCnt;
+            s32 viewTopLine;
+            s16 viewPosX;
+            s16 viewPosY;
+            u16 viewLines;
+            u8 isVisible;
+            u8 padding_; // should be an array but not needed
+            ut::TextWriterBase *writer;
+            ConsoleHead *next;
         }; // Size: 0x2c
     }
     typedef detail::ConsoleHead *ConsoleHandle;
@@ -32,3 +36,5 @@ namespace db {
     extern ConsoleHandle sAssertionConsole;
 }
 }
+
+#endif

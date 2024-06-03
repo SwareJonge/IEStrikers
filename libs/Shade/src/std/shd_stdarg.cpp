@@ -5,6 +5,9 @@
 #include <Shade/std/shd_cstring.h>
 #include <Shade/std/shd_stdarg.h>
 
+// i'm not entirely sure why this file doesn't inline, it either uses different flags or a pragma was used
+#pragma optimize_for_size on 
+
 void hstrcpy(char *dest, const char *src)
 {
     do

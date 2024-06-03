@@ -1,16 +1,21 @@
 #ifndef RVL_SDK_DVD_BROADWAY_H
 #define RVL_SDK_DVD_BROADWAY_H
+
+#include <revolution/OS/OSAlarm.h>
 #include <revolution/types.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define DVD_LOW_OFFSET(x) ((x) >> 2)
+#define DVD_LOW_SPEED(x) (((x)&3) << 16)
 
 // Forward declarations
 typedef struct DVDDiskID;
 typedef struct DVDDriveInfo;
 typedef struct ESPTicket;
 typedef struct ESPTmd;
-typedef struct OSAlarm;
 
 /**
  * https://wiibrew.org/wiki//dev/di
@@ -52,7 +57,7 @@ u32 DVDLowGetImmBufferReg(void);
 BOOL DVDLowUnmaskStatusInterrupts(void);
 BOOL DVDLowMaskCoverInterrupt(void);
 BOOL DVDLowClearCoverInterrupt(DVDLowCallback callback);
-BOOL __DVDLowTestAlarm(const struct OSAlarm* alarm);
+BOOL __DVDLowTestAlarm(const OSAlarm* alarm);
 
 #ifdef __cplusplus
 }

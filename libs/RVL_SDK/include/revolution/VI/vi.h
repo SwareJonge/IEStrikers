@@ -53,6 +53,7 @@ void VISetNextFrameBuffer(void* fb);
 
 void VISetBlack(BOOL black);
 s32 VIGetRetraceCount(void);
+u32 VIGetNextField();
 
 int VIGetDTVStatus();
 

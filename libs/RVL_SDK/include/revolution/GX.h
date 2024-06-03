@@ -4,14 +4,19 @@
 extern "C" {
 #endif
 
-#include <revolution/GX/GX.h>
 #include <revolution/GX/GXAttr.h>
 #include <revolution/GX/GXBump.h>
 #include <revolution/GX/GXDisplayList.h>
+#include <revolution/GX/GXDraw.h>
 #include <revolution/GX/GXFifo.h>
 #include <revolution/GX/GXFrameBuf.h>
 #include <revolution/GX/GXGeometry.h>
+#include <revolution/GX/GXHardware.h>
+#include <revolution/GX/GXHardwareBP.h>
+#include <revolution/GX/GXHardwareCP.h>
+#include <revolution/GX/GXHardwareXF.h>
 #include <revolution/GX/GXInit.h>
+#include <revolution/GX/GXInternal.h>
 #include <revolution/GX/GXLight.h>
 #include <revolution/GX/GXMisc.h>
 #include <revolution/GX/GXPixel.h>

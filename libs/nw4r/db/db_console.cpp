@@ -4,7 +4,6 @@
 #include "nw4r/db/db_console.h"
 
 // NOTE: this file is incomplete, it misses a lot of functions presumably because it got ifdefd out(Mario Kart Wii has a lot more functions)
-// i'm not aware of any games that have DWARF info with this file
 
 namespace nw4r
 {
@@ -19,25 +18,24 @@ namespace db
         // ...
     }
 
-    // i have trouble believing this is correct
     s32 Console_GetTotalLines(ConsoleHandle console)
     {
-        BOOL ret = OSDisableInterrupts();
-        int v1 = console->_0C - console->_10;
-        if (v1 < 0)
+        BOOL enabled = OSDisableInterrupts();
+        s32 count = console->printTop - console->ringTop;
+        if (count < 0)
         {
-            v1 += console->_06;
+            count += console->height;
         }
 
-        v1 = (u16)v1;
+        count = (u16)count;
 
-        if (console->_0E != 0)
+        if (console->printXPos != 0)
         {
-            v1 = (u16)(v1 + 1);
+            count = (u16)(count + 1);
         }
 
-        s32 lineCnt = console->mLineCount + v1;
-        OSRestoreInterrupts(ret);
+        s32 lineCnt = console->ringTopLineCnt + count; // NOTE: no temp according to DWARF
+        OSRestoreInterrupts(enabled);
 
         return lineCnt;
     }

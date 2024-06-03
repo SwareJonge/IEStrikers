@@ -9,7 +9,8 @@ typedef struct FILE {
     u8 dummy;
 } FILE;
 
-int fclose(FILE*);
+FILE *fopen(const char *filename, const char *mode);
+int fclose(FILE *);
 int fflush(FILE*);
 int __msl_strnicmp(const char *s1, const char *s2, size_t len);
 

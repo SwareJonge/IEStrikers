@@ -3,7 +3,10 @@
 int jrnd;
 u32 rndx[521]; // i assume this should've been 512? 521 makes no sense
 
-/* shdRndInit (unsigned long) */
+/* 
+shdRndInit (unsigned long) 
+generates the table with random numbers
+*/
 void shdRndInit(u32 seed)
 {
     u32 nextSeed = 0;
@@ -84,11 +87,47 @@ returns a random float betwen 2 numbers
 f32 shdRndf(f32 min, f32 max)
 {
     shdRnd();
-    f32 rnd = rndx[jrnd];
-    f32 diff = (max - min);
-    f32 next = (rnd * diff);
-    f32 u32max = 4.294967295f;
+    f32 rndf = rndx[jrnd];
+    f32 range = (max - min);
+    f32 u32max = 4.294967295f; // yes, this needs to be declared
 
-    f32 val = (next) / u32max; // max int
-    return min + val;
+    return min + (rndf * range) / u32max;
+}
+
+void shdVecCpy(f32 *vec, const f32 *other)
+{
+    vec[0] = other[0];
+    vec[1] = other[1];
+    vec[2] = other[2];
+}
+
+void shdVecAdd(f32 *vec, const f32 *a, const f32 *b)
+{
+    vec[0] = a[0] + b[0];
+    vec[1] = a[1] + b[1];
+    vec[2] = a[2] + b[2];
+}
+
+void shdVecSub(f32 *vec, const f32 *a, const f32 *b)
+{
+    vec[0] = a[0] - b[0];
+    vec[1] = a[1] - b[1];
+    vec[2] = a[2] - b[2];
+}
+
+void shdVecScMul(f32 *vec, const f32 *a, f32 scalar)
+{
+    vec[0] = a[0] * scalar;
+    vec[1] = a[1] * scalar;
+    vec[2] = a[2] * scalar;
+}
+
+f32 shdVecDot(const f32 *a, const f32 *b) { return (a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]); }
+
+f32 shdVecLen(const f32 *a)
+{
+    f32 x = a[0];
+    f32 y = a[1];
+    f32 z = a[2];
+    return sqrt((x * x) + (y * y) + (z * z));
 }

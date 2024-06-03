@@ -3,116 +3,110 @@
 void GXSetTevIndirect(GXTevStageID tevStage, GXIndTexStageID texStage,
                       GXIndTexFormat texFmt, GXIndTexBiasSel biasSel,
                       GXIndTexMtxID mtxId, GXIndTexWrap wrapS,
-                      GXIndTexWrap wrapT, GXBool8 addPrev, GXBool8 utcLod,
+                      GXIndTexWrap wrapT, GXBool addPrev, GXBool utcLod,
                       GXIndTexAlphaSel alphaSel) {
-    u32 field = 0;
-    const u32 stage = tevStage + GX_MAX_TEVSTAGE;
+    u32 opcode = tevStage + GX_BP_REG_INDTEVSTAGE0;
 
-    GX_BITFIELD_SET(field, 30, 2, texStage);
-    GX_BITFIELD_SET(field, 28, 2, texFmt);
-    GX_BITFIELD_SET(field, 25, 3, biasSel);
-    GX_BITFIELD_SET(field, 23, 2, alphaSel);
-    GX_BITFIELD_SET(field, 19, 4, mtxId);
-    GX_BITFIELD_SET(field, 16, 3, wrapS);
-    GX_BITFIELD_SET(field, 13, 3, wrapT);
-    GX_BITFIELD_SET(field, 12, 1, utcLod);
-    GX_BITFIELD_SET(field, 11, 1, addPrev);
-    GX_BITFIELD_SET(field, 0, 8, stage);
+    u32 cmd = 0;
+    GX_BP_SET_INDTEVSTAGE_STAGE(cmd, texStage);
+    GX_BP_SET_INDTEVSTAGE_FORMAT(cmd, texFmt);
+    GX_BP_SET_INDTEVSTAGE_BIAS(cmd, biasSel);
+    GX_BP_SET_INDTEVSTAGE_ALPHA(cmd, alphaSel);
+    GX_BP_SET_INDTEVSTAGE_MTX(cmd, mtxId);
+    GX_BP_SET_INDTEVSTAGE_WRAPS(cmd, wrapS);
+    GX_BP_SET_INDTEVSTAGE_WRAPT(cmd, wrapT);
+    GX_BP_SET_INDTEVSTAGE_UTCLOD(cmd, utcLod);
+    GX_BP_SET_INDTEVSTAGE_ADDPREV(cmd, addPrev);
+    GX_BP_SET_OPCODE(cmd, opcode);
 
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = field;
-    __GXData->SHORTS_0x0[1] = 0;
+    GX_BP_LOAD_REG(cmd);
+    gxdt->lastWriteWasXF = FALSE;
 }
 
-void GXSetIndTexMtx(GXIndTexMtxID id, const f32 mtx[6], s8 scaleExp) {
-    u32 val;
-    u32 field;
+void GXSetIndTexMtx(GXIndTexMtxID id, const f32 offset[2][3], s8 scaleExp) {
+    u32 index;
+    u32 cmd;
 
     switch (id) {
     case GX_ITM_0:
     case GX_ITM_1:
     case GX_ITM_2:
-        val = id - 1;
+        index = id - GX_ITM_0;
         break;
     case GX_ITM_S0:
     case GX_ITM_S1:
     case GX_ITM_S2:
-        val = id - 5;
+        index = id - GX_ITM_S0;
         break;
     case GX_ITM_T0:
     case GX_ITM_T1:
     case GX_ITM_T2:
-        val = id - 9;
+        index = id - GX_ITM_T0;
         break;
     case 4:
     case 8:
     default:
-        val = 0;
+        index = 0;
     }
 
-    scaleExp = scaleExp + 0x11;
+    scaleExp = scaleExp + 17;
 
-    field = 0;
-    GX_BITFIELD_SET(field, 21, 11, 1024.0f * mtx[0]);
-    GX_BITFIELD_SET(field, 10, 11, 1024.0f * mtx[3]);
-    GX_BITFIELD_SET(field, 8, 2, scaleExp);
-    GX_BITFIELD_SET(field, 0, 8, (val * 4) - val + 6);
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = field;
+    cmd = 0;
+    GX_BP_SET_INDMTXA_M00(cmd, 1024.0f * offset[0][0]);
+    GX_BP_SET_INDMTXA_M10(cmd, 1024.0f * offset[1][0]);
+    GX_BP_SET_INDMTXA_EXP(cmd, scaleExp);
+    GX_BP_SET_OPCODE(cmd, index * 3 + GX_BP_REG_INDMTX0A);
+    GX_BP_LOAD_REG(cmd);
 
-    field = 0;
-    GX_BITFIELD_SET(field, 21, 11, 1024.0f * mtx[1]);
-    GX_BITFIELD_SET(field, 10, 11, 1024.0f * mtx[4]);
-    field = __rlwimi(field, scaleExp, 20, 8, 9);
-    GX_BITFIELD_SET(field, 0, 8, (val * 4) - val + 7);
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = field;
+    // TODO: Match using GX_BP_SET_INDMTXB_EXP
+    cmd = 0;
+    GX_BP_SET_INDMTXB_M01(cmd, 1024.0f * offset[0][1]);
+    GX_BP_SET_INDMTXB_M11(cmd, 1024.0f * offset[1][1]);
+    cmd = __rlwimi(cmd, scaleExp, 20, 8, 9);
+    GX_BP_SET_OPCODE(cmd, index * 3 + GX_BP_REG_INDMTX0B);
+    GX_BP_LOAD_REG(cmd);
 
-    field = 0;
-    GX_BITFIELD_SET(field, 21, 11, 1024.0f * mtx[2]);
-    GX_BITFIELD_SET(field, 10, 11, 1024.0f * mtx[5]);
-    field = __rlwimi(field, scaleExp, 18, 8, 9);
-    GX_BITFIELD_SET(field, 0, 8, (val * 4) - val + 8);
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = field;
+    // TODO: Match using GX_BP_SET_INDMTXC_EXP
+    cmd = 0;
+    GX_BP_SET_INDMTXC_M02(cmd, 1024.0f * offset[0][2]);
+    GX_BP_SET_INDMTXC_M12(cmd, 1024.0f * offset[1][2]);
+    cmd = __rlwimi(cmd, scaleExp, 18, 8, 9);
+    GX_BP_SET_OPCODE(cmd, index * 3 + GX_BP_REG_INDMTX0C);
+    GX_BP_LOAD_REG(cmd);
 
-    __GXData->SHORTS_0x0[1] = 0;
+    gxdt->lastWriteWasXF = FALSE;
 }
 
 void GXSetIndTexCoordScale(GXIndTexStageID stage, GXIndTexScale scaleS,
                            GXIndTexScale scaleT) {
     switch (stage) {
     case GX_INDTEXSTAGE0:
-        GX_BITFIELD_SET(__GXData->WORD_0x178, 28, 4, scaleS);
-        GX_BITFIELD_SET(__GXData->WORD_0x178, 24, 4, scaleT);
-        GX_BITFIELD_SET(__GXData->WORD_0x178, 0, 8, 0x25);
-        WGPIPE.c = GX_FIFO_ACCESS_BP;
-        WGPIPE.i = __GXData->WORD_0x178;
+        GX_BP_SET_RAS1_SS0_S0(gxdt->ras1_ss0, scaleS);
+        GX_BP_SET_RAS1_SS0_T0(gxdt->ras1_ss0, scaleT);
+        GX_BP_SET_OPCODE(gxdt->ras1_ss0, GX_BP_REG_RAS1_SS0);
+        GX_BP_LOAD_REG(gxdt->ras1_ss0);
         break;
     case GX_INDTEXSTAGE1:
-        GX_BITFIELD_SET(__GXData->WORD_0x178, 20, 4, scaleS);
-        GX_BITFIELD_SET(__GXData->WORD_0x178, 16, 4, scaleT);
-        GX_BITFIELD_SET(__GXData->WORD_0x178, 0, 8, 0x25);
-        WGPIPE.c = GX_FIFO_ACCESS_BP;
-        WGPIPE.i = __GXData->WORD_0x178;
+        GX_BP_SET_RAS1_SS0_S1(gxdt->ras1_ss0, scaleS);
+        GX_BP_SET_RAS1_SS0_T1(gxdt->ras1_ss0, scaleT);
+        GX_BP_SET_OPCODE(gxdt->ras1_ss0, GX_BP_REG_RAS1_SS0);
+        GX_BP_LOAD_REG(gxdt->ras1_ss0);
         break;
     case GX_INDTEXSTAGE2:
-        GX_BITFIELD_SET(__GXData->WORD_0x17C, 28, 4, scaleS);
-        GX_BITFIELD_SET(__GXData->WORD_0x17C, 24, 4, scaleT);
-        GX_BITFIELD_SET(__GXData->WORD_0x17C, 0, 8, 0x26);
-        WGPIPE.c = GX_FIFO_ACCESS_BP;
-        WGPIPE.i = __GXData->WORD_0x17C;
+        GX_BP_SET_RAS1_SS1_S2(gxdt->ras1_ss1, scaleS);
+        GX_BP_SET_RAS1_SS1_T2(gxdt->ras1_ss1, scaleT);
+        GX_BP_SET_OPCODE(gxdt->ras1_ss1, GX_BP_REG_RAS1_SS1);
+        GX_BP_LOAD_REG(gxdt->ras1_ss1);
         break;
     case GX_INDTEXSTAGE3:
-        GX_BITFIELD_SET(__GXData->WORD_0x17C, 20, 4, scaleS);
-        GX_BITFIELD_SET(__GXData->WORD_0x17C, 16, 4, scaleT);
-        GX_BITFIELD_SET(__GXData->WORD_0x17C, 0, 8, 0x26);
-        WGPIPE.c = GX_FIFO_ACCESS_BP;
-        WGPIPE.i = __GXData->WORD_0x17C;
+        GX_BP_SET_RAS1_SS1_S3(gxdt->ras1_ss1, scaleS);
+        GX_BP_SET_RAS1_SS1_T3(gxdt->ras1_ss1, scaleT);
+        GX_BP_SET_OPCODE(gxdt->ras1_ss1, GX_BP_REG_RAS1_SS1);
+        GX_BP_LOAD_REG(gxdt->ras1_ss1);
         break;
     }
 
-    __GXData->SHORTS_0x0[1] = 0;
+    gxdt->lastWriteWasXF = FALSE;
 }
 
 void GXSetIndTexOrder(GXIndTexStageID stage, GXTexCoordID coord,
@@ -127,32 +121,33 @@ void GXSetIndTexOrder(GXIndTexStageID stage, GXTexCoordID coord,
 
     switch (stage) {
     case GX_INDTEXSTAGE0:
-        GX_BITFIELD_SET(__GXData->WORD_0x170, 29, 3, map);
-        GX_BITFIELD_SET(__GXData->WORD_0x170, 26, 3, coord);
+        GX_BP_SET_RAS1_IREF_MAP0(gxdt->ras1_iref, map);
+        GX_BP_SET_RAS1_IREF_TXC0(gxdt->ras1_iref, coord);
         break;
     case GX_INDTEXSTAGE1:
-        GX_BITFIELD_SET(__GXData->WORD_0x170, 23, 3, map);
-        GX_BITFIELD_SET(__GXData->WORD_0x170, 20, 3, coord);
+        GX_BP_SET_RAS1_IREF_MAP1(gxdt->ras1_iref, map);
+        GX_BP_SET_RAS1_IREF_TXC1(gxdt->ras1_iref, coord);
         break;
     case GX_INDTEXSTAGE2:
-        GX_BITFIELD_SET(__GXData->WORD_0x170, 17, 3, map);
-        GX_BITFIELD_SET(__GXData->WORD_0x170, 14, 3, coord);
+        GX_BP_SET_RAS1_IREF_MAP2(gxdt->ras1_iref, map);
+        GX_BP_SET_RAS1_IREF_TXC2(gxdt->ras1_iref, coord);
         break;
     case GX_INDTEXSTAGE3:
-        GX_BITFIELD_SET(__GXData->WORD_0x170, 11, 3, map);
-        GX_BITFIELD_SET(__GXData->WORD_0x170, 8, 3, coord);
+        GX_BP_SET_RAS1_IREF_MAP3(gxdt->ras1_iref, map);
+        GX_BP_SET_RAS1_IREF_TXC3(gxdt->ras1_iref, coord);
         break;
     }
 
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = __GXData->WORD_0x170;
-    __GXData->dirtyFlags |= 0x3;
-    __GXData->SHORTS_0x0[1] = 0;
+    GX_BP_LOAD_REG(gxdt->ras1_iref);
+    gxdt->gxDirtyFlags |= GX_DIRTY_SU_TEX;
+    gxdt->gxDirtyFlags |= GX_DIRTY_BP_MASK;
+    gxdt->lastWriteWasXF = FALSE;
 }
 
 void GXSetNumIndStages(u8 num) {
-    GX_BITFIELD_SET(__GXData->WORD_0x254, 13, 3, num);
-    __GXData->dirtyFlags |= 0x6;
+    GX_BP_SET_GENMODE_NUMINDSTAGES(gxdt->genMode, num);
+    gxdt->gxDirtyFlags |= GX_DIRTY_BP_MASK;
+    gxdt->gxDirtyFlags |= GX_DIRTY_GEN_MODE;
 }
 
 void GXSetTevDirect(GXTevStageID stage) {
@@ -163,14 +158,12 @@ void GXSetTevDirect(GXTevStageID stage) {
 void __GXUpdateBPMask(void) {}
 
 void __GXSetIndirectMask(u32 mask) {
-    GX_BITFIELD_SET(__GXData->WORD_0x174, 24, 8, mask);
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = __GXData->WORD_0x174;
-    __GXData->SHORTS_0x0[1] = 0;
+    GX_BP_SET_INDIMASK_IMASK(gxdt->ind_imask, mask);
+    GX_BP_LOAD_REG(gxdt->ind_imask);
+    gxdt->lastWriteWasXF = FALSE;
 }
 
 void __GXFlushTextureState(void) {
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = __GXData->WORD_0x174;
-    __GXData->SHORTS_0x0[1] = 0;
+    GX_BP_LOAD_REG(gxdt->ind_imask);
+    gxdt->lastWriteWasXF = FALSE;
 }

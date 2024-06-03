@@ -7395,6 +7395,16 @@ global:
     0x8032cb10: main
     0x8032cedc: shdGetTimeMSec__Fv
     0x8032cf50: shdMemGet__FUliSc
+    # HACK, REQUIRED FOR EXTAB WORKAROUND
+    0x8032d0a8: shdInitMem__Fv
+    0x8032d4dc: shdInitGrp__Fv
+    0x8032d2ac: shdAllocatorAllocForExpHeap___FP12MEMAllocatorUl
+    0x8032d2bc: shdAllocatorFreeForExpHeap___FP12MEMAllocatorPv
+    0x8032d2c4: shdAllocator2AllocForExpHeap___FP12MEMAllocatorUl
+    0x8032d378: shdAllocator2FreeForExpHeap___FP12MEMAllocatorPv
+    0x8032e1b0: th_func__FPv
+    0x8032e390: wiiExit__Fii
+    # HACK END
     0x8032d040: shdMemFree__FPv
     0x8032d070: shdGetAllocator__Fi
     0x8032d08c: shdGetAllocator2__Fi
@@ -31200,7 +31210,7 @@ src/wii_sound.cpp:
     # 0x80011ce4: @34450
     # 0x8001fff8: @34451
 
-src/wii_main.cpp:
+libs/Shade/src/wii_main.cpp:
     0x8050d320: vcnted
     0x8050e3b8: Arena1
     0x8050e3bc: Arena2
@@ -31219,8 +31229,8 @@ src/wii_main.cpp:
     # 0x804b2588: @stringBase0
     0x8032e65c: power_cb_func__Fv
     0x8032e674: reset_cb_func__Fv
-    0x8032d0a8: shdInitMem__Fv
-    0x8032d4dc: shdInitGrp__Fv
+    #0x8032d0a8: shdInitMem__Fv
+    #0x8032d4dc: shdInitGrp__Fv
     0x8032cf1c: vint_cb__FUl
     # 0x80511e60: @35243
     # 0x80011e54: @35246
@@ -31233,12 +31243,8 @@ src/wii_main.cpp:
     # 0x80511e70: @LOCAL@shdInitAllocator2ForExpHeap__FP12MEMAllocatorP12MEMiHeapHeadi@sAllocatorFunc
     # 0x80011e6c: @35304
     # 0x80020028: @35305
-    0x8032d2ac: shdAllocatorAllocForExpHeap___FP12MEMAllocatorUl
-    0x8032d2bc: shdAllocatorFreeForExpHeap___FP12MEMAllocatorPv
-    0x8032d2c4: shdAllocator2AllocForExpHeap___FP12MEMAllocatorUl
     # 0x80011e74: @35319
     # 0x80020034: @35320
-    0x8032d378: shdAllocator2FreeForExpHeap___FP12MEMAllocatorPv
     # 0x80011e7c: @35330
     # 0x80020040: @35331
     # 0x80011e84: @35347
@@ -31254,14 +31260,13 @@ src/wii_main.cpp:
     # 0x80020070: @35440
     # 0x80011ea4: @35447
     # 0x8002007c: @35448
-    0x8032e1b0: th_func__FPv
+
     # 0x80011eac: @35469
     # 0x80020088: @35470
     # 0x80011eb4: @35479
     # 0x80020094: @35480
     # 0x80011ebc: @35487
     # 0x800200a0: @35488
-    0x8032e390: wiiExit__Fii
     # 0x80011ec4: @35503
     # 0x800200ac: @35504
     # 0x80011ecc: @35518

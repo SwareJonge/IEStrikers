@@ -7,6 +7,7 @@ from enum import Enum
 from hashlib import sha1
 import json
 import os
+from shutil import which
 from subprocess import PIPE, run
 from sys import executable as PYTHON, platform
 from typing import List, Tuple, Union
@@ -190,25 +191,46 @@ SYMBOLSCRIPT = f"{PYTHON} {PPCDIS}/symbols.py"
 # Codewarrior
 TOOLS = "tools"
 
+COMPILER_DIR = os.path.join(TOOLS, "compilers")
+GC_COMPILER_DIR = os.path.join(COMPILER_DIR, "GC")
+WII_COMPILER_DIR = os.path.join(COMPILER_DIR, "Wii")
+
 # also used for nw4r/snd/snd_adpcm.cpp
-REVO_EX_CW = os.path.join(TOOLS, "0x4199_60831")
-REVO_EX_CC = os.path.join(REVO_EX_CW, "mwcceppc")
+REVO_EX_CW = os.path.join(GC_COMPILER_DIR, "3.0a5.2")
+REVO_EX_CC = os.path.join(REVO_EX_CW, "mwcceppc.exe")
 
-# SDK Used 0x4302_145, however we don't have this, this is the closest version in terms of codegen
-# This compiler also gets used for nw4r, which used 0x4302_158
-SDK_CW = os.path.join(TOOLS, "0x4302_151") 
-SDK_CC = os.path.join(SDK_CW, "mwcceppc")
+SDK_CW = os.path.join(WII_COMPILER_DIR, "1.0")
+SDK_CC = os.path.join(SDK_CW, "mwcceppc.exe")
 
-# TODO: figure out what compiler is used by the game, mobiclip uses Wii MW 1.5(0x4302_188) which isn't available(closest build i have is build 0x4302_182(some 1.4 build))
-# However i think the main game code(GO at least) is compiled with Wii MW 1.7(0x4302_213), DWC is compiled with Wii MW 1.6(0x4302_202)
-CODEWARRIOR = os.path.join(TOOLS, "0x4302_213")
+# NOTE: nw4r most likely uses 1.2(build 158), however the installer is corrupted, this is the closest version available
+NW4R_CW = os.path.join(WII_COMPILER_DIR, "1.1")
+NW4R_CC = os.path.join(NW4R_CW, "mwcceppc.exe")
 
-CC = os.path.join(CODEWARRIOR, "mwcceppc")
-LD = os.path.join(CODEWARRIOR, "mwldeppc")
+MOBICLIP_CW = os.path.join(WII_COMPILER_DIR, "1.5")
+MOBICLIP_CC = os.path.join(MOBICLIP_CW, "mwcceppc.exe")
+
+DWC_CW = os.path.join(WII_COMPILER_DIR, "1.6")
+DWC_CC = os.path.join(DWC_CW, "mwcceppc.exe")
+
+# TODO: Unknown what compiler is used by the game, haven't tested 1.5 or 1.6 but it's newer than 1.3
+CODEWARRIOR = os.path.join(WII_COMPILER_DIR, "1.7")
+
+CC = os.path.join(CODEWARRIOR, "mwcceppc.exe")
+LD = os.path.join(CODEWARRIOR, "mwldeppc.exe")
 if platform != "win32":
-    SDK_CC = f"wine {SDK_CC}"
-    CC = f"wine {CC}"
-    LD = f"wine {LD}"
+    if(which("wibo") is not None):
+        WIN32_WRAPPER = "wibo"
+    elif(which("wine") is not None):
+        WIN32_WRAPPER = "wine"
+    assert WIN32_WRAPPER != "" "Wine or Wibo not found!"
+    
+    REVO_EX_CC = f"{WIN32_WRAPPER} {REVO_EX_CC}"
+    SDK_CC = f"{WIN32_WRAPPER} {SDK_CC}"
+    NW4R_CC = f"{WIN32_WRAPPER} {NW4R_CC}"
+    MOBICLIP_CC = f"{WIN32_WRAPPER} {MOBICLIP_CC}"
+    DWC_CC = f"{WIN32_WRAPPER} {DWC_CC}"
+    CC = f"{WIN32_WRAPPER} {CC}"
+    LD = f"{WIN32_WRAPPER} {LD}"
 
 # DevkitPPC
 DEVKITPPC = os.environ.get("DEVKITPPC")
@@ -285,18 +307,26 @@ INCDIRS = [
     "libs/PowerPC_EABI_Support/include",
     "libs/PowerPC_EABI_Support/include/stl",
     "libs/PowerPC_EABI_Support/include/stl/internal",
-    "libs/Shade/include" # TODO: move to it's own section
+    # TODO: improve build system to seperate these includes
+    "libs/Shade/include", 
+    "libs/libMobiclip/include",
+    "libs/MoEngineLib",
+    "libs/MoEngineLib/Engine",
+    "libs/MoEngineLib/Codecs",
+    "libs/MoEngineLib/Codecs/Decoder/src",
+    "libs/MoEngineLib/Codecs/MoFastaudio/include",
+    "libs/MoEngineLib/Codecs/ImaAdpcm/include"
 ]
+
 MWCC_INCLUDES = ' '.join(f"-i {d}" for d in INCDIRS)
 GCC_INCLUDES = ' '.join(f"-I {d}" for d in INCDIRS)
 
+DEFINES = [ 
+    "MATCHING"
+]
 
-#DEFINES = [ # probably add a flag for European build
-    #"DEBUG"
-    #"EU_RELEASE"
-#]
-#MWCC_DEFINES = ' '.join(f"-d {d}" for d in DEFINES)
-#GCC_DEFINES = ' '.join(f"-D {d}" for d in DEFINES)
+MWCC_DEFINES = ' '.join(f"-d {d}" for d in DEFINES)
+GCC_DEFINES = ' '.join(f"-D {d}" for d in DEFINES)
 
 CPPFLAGS = ' '.join([
     "-nostdinc",
@@ -318,6 +348,7 @@ CFLAGS = [
 BASE_DOL_CFLAGS = CFLAGS + [
     "-O4,s",
     "-use_lmw_stmw on",
+    "-Cpp_exceptions off", # Should be on for shade and game code blegh
     "-ipa file"  # also stupid
 ]
 
@@ -343,7 +374,7 @@ BASE_METRO_CFLAGS = CFLAGS + [
     "-use_lmw_stmw on",
     "-func_align 4",
     "-Cpp_exceptions off",
-    "-inline on",
+    "-inline on"
 ]
 
 BASE_MSL_C_CFLAGS = BASE_METRO_CFLAGS + [
@@ -362,12 +393,22 @@ BASE_NDEVEXI2A_CLFAGS = [
     "-func_align 4"
 ]
 
-BASE_SHD_STD_CLFAGS = BASE_DOL_CFLAGS + [
+BASE_SHD_CLFAGS = BASE_DOL_CFLAGS + [
+    "-fp fmadd",
+    "-rostr",
     "-lang=c++",
-    "-use_lmw_stmw off",
-    "-Cpp_exceptions off",  # should be disabled normally
+    "-O4,p",
+    "-use_lmw_stmw on",
+    "-inline on",
     "-func_align 4",  # get rid of 0s
-    "-inline off"  # probably only for shade std library?
+]
+
+BASE_MOBICLIP_CFLAGS = BASE_DOL_CFLAGS + [
+    "-RTTI on",
+    "-lang=c++",
+    "-O4,p",
+    "-use_lmw_stmw off",
+    "-Cpp_exceptions off"
 ]
 
 BASE_NW4R_CFLAGS = CFLAGS + [
@@ -385,15 +426,16 @@ LOCAL_CFLAGS = [
     "-I-",
     MWCC_INCLUDES
 ]
+
 DOL_CFLAGS = ' '.join(BASE_DOL_CFLAGS + LOCAL_CFLAGS)
 RVL_SDK_CFLAGS = ' '.join(BASE_RVL_SDK_CFLAGS + LOCAL_CFLAGS)
 RUNTIME_CFLAGS = ' '.join(BASE_RUNTIME_CLFAGS + LOCAL_CFLAGS)
 METRO_CFLAGS = ' '.join(BASE_METRO_CFLAGS + LOCAL_CFLAGS)
 MSL_C_CFLAGS = ' '.join(BASE_MSL_C_CFLAGS + LOCAL_CFLAGS)
 NDEVEXI2A_CLFAGS = ' '.join(BASE_NDEVEXI2A_CLFAGS + LOCAL_CFLAGS)
-SHD_STD_CLFAGS = ' '.join(BASE_SHD_STD_CLFAGS + LOCAL_CFLAGS)
+SHD_CLFAGS = ' '.join(BASE_SHD_CLFAGS + LOCAL_CFLAGS)
+MOBICLIP_CFLAGS = ' '.join(BASE_MOBICLIP_CFLAGS + LOCAL_CFLAGS)
 NW4R_CFLAGS = ' '.join(BASE_NW4R_CFLAGS + LOCAL_CFLAGS)
-
 
 LDFLAGS = ' '.join([
     "-fp hard",

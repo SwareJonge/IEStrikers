@@ -21,6 +21,8 @@ extern "C" {
 #define OS_USEC_TO_TICKS(x) ((x) * (OS_TIME_SPEED / 125000) / 8)
 #define OS_NSEC_TO_TICKS(x) ((x) * (OS_TIME_SPEED / 125000) / 8000)
 
+#define OS_DIFF_TICK(tick1, tick2) ((s32)(tick1) - (s32)(tick2))
+
 typedef struct OSCalendarTime {
     s32 sec;       // at 0x0
     s32 min;       // at 0x4

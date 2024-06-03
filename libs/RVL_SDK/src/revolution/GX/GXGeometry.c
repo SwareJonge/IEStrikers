@@ -1,214 +1,212 @@
 #include <revolution/GX.h>
 
-#ifndef NON_MATCHING
-#error __GXSetAmbMat has not yet been matched.
-#endif
-inline void __GXSetAmbMat(u32 flags) {
-    if (flags & GX_DIRTY_AMB_COLOR0) {
-        WGPIPE.c = GX_FIFO_ACCESS_XF;
-        WGPIPE.i = 0x100A;
-        WGPIPE.i = *(u32*)&__GXData->ambColors[0];
+inline void __GXSetAmbMat(u32 dirtyFlags) {
+    if (dirtyFlags & GX_DIRTY_AMB_COLOR0) {
+        GX_XF_LOAD_REG(GX_XF_REG_AMBIENT0, *(u32*)&gxdt->ambColors[0]);
     }
-    if (flags & GX_DIRTY_AMB_COLOR1) {
-        WGPIPE.c = GX_FIFO_ACCESS_XF;
-        WGPIPE.i = 0x100B;
-        WGPIPE.i = *(u32*)&__GXData->ambColors[1];
+
+    if (dirtyFlags & GX_DIRTY_AMB_COLOR1) {
+        GX_XF_LOAD_REG(GX_XF_REG_AMBIENT1, *(u32*)&gxdt->ambColors[1]);
     }
-    if (flags & GX_DIRTY_MAT_COLOR0) {
-        WGPIPE.c = GX_FIFO_ACCESS_XF;
-        WGPIPE.i = 0x100C;
-        WGPIPE.i = *(u32*)&__GXData->matColors[0];
+
+    if (dirtyFlags & GX_DIRTY_MAT_COLOR0) {
+        GX_XF_LOAD_REG(GX_XF_REG_MATERIAL0, *(u32*)&gxdt->matColors[0]);
     }
-    if (flags & GX_DIRTY_MAT_COLOR1) {
-        WGPIPE.c = GX_FIFO_ACCESS_XF;
-        WGPIPE.i = 0x100D;
-        WGPIPE.i = *(u32*)&__GXData->matColors[1];
+
+    if (dirtyFlags & GX_DIRTY_MAT_COLOR1) {
+        GX_XF_LOAD_REG(GX_XF_REG_MATERIAL1, *(u32*)&gxdt->matColors[1]);
     }
 }
 
-#ifndef NON_MATCHING
-#error __GXSetLightChan has not yet been matched.
-#endif
-inline void __GXSetLightChan(u32 flags) {
+inline void __GXSetLightChan(volatile s32 dirtyFlags) {
     int i;
-    u32 bit;
-    u32 val = 0x100E;
+    u32 bits;
+    u32 addr = GX_XF_REG_COLOR0CNTRL;
 
-    if (flags & 0x1000000) {
-        u32 r5 = (__GXData->WORD_0x254 & 0x70) >> 4;
-        WGPIPE.c = GX_FIFO_ACCESS_XF;
-        WGPIPE.i = 0x1009;
-        WGPIPE.i = r5;
+    if (dirtyFlags & GX_DIRTY_NUM_COLORS) {
+        const u32 colors = GX_BP_GET_GENMODE_NUMCOLORS(gxdt->genMode);
+        GX_XF_LOAD_REG(GX_XF_REG_NUMCOLORS, colors);
     }
 
-    bit = flags & 0xF000 >> 12;
+    bits = dirtyFlags;
+    bits = (bits >> 12) & 0xF;
     i = 0;
-    for (; bit != 0; i++, val++, bit >>= 1) {
-        if (bit & 0x1) {
-            WGPIPE.c = GX_FIFO_ACCESS_XF;
-            WGPIPE.i = val;
-            WGPIPE.i = __GXData->WORDS_0xB8[i];
+    for (; bits != 0; i++, addr++, bits >>= 1) {
+        if (bits & 1) {
+            GX_XF_LOAD_REG(addr, gxdt->colorControl[i]);
         }
     }
 }
 
-#ifndef NON_MATCHING
-#error __GXSetTexGen has not yet been matched.
-#endif
-inline void __GXSetTexGen(u32 flags) {
+inline void __GXSetTexGen(volatile s32 dirtyFlags) {
     int i;
-    u32 bit;
-    u32 val = 0x1040;
+    u32 bits;
+    u32 taddr = GX_XF_REG_TEX0;
+    u32 dtaddr;
 
-    if (flags & 0x2000000) {
-        u32 r5 = __GXData->WORD_0x254 & 0xF;
-        WGPIPE.c = GX_FIFO_ACCESS_XF;
-        WGPIPE.i = 0x103F;
-        WGPIPE.i = r5;
+    if (dirtyFlags & GX_DIRTY_NUM_TEX) {
+        const u32 gens = GX_BP_GET_GENMODE_NUMTEX(gxdt->genMode);
+        GX_XF_LOAD_REG(GX_XF_REG_NUMTEX, gens);
     }
 
-    bit = flags & 0x2FF0000 >> 16;
+    bits = dirtyFlags;
+    bits = (bits >> 16) & 0xFF;
     i = 0;
-    for (; bit != 0; val++, i++, bit >>= 1) {
-        u32 r5 = val + 0x10;
-
-        if (bit & 0x1) {
-            WGPIPE.c = GX_FIFO_ACCESS_XF;
-            WGPIPE.i = val;
-            WGPIPE.i = __GXData->WORDS_0xC8[i];
-
-            WGPIPE.c = GX_FIFO_ACCESS_XF;
-            WGPIPE.i = r5;
-            WGPIPE.i = __GXData->WORDS_0xE8[i];
+    for (; bits != 0; taddr++, i++, bits >>= 1) {
+        dtaddr = taddr + GX_XF_REG_DUALTEX0 - GX_XF_REG_TEX0;
+        if (bits & 1) {
+            GX_XF_LOAD_REG(taddr, gxdt->texRegs[i]);
+            GX_XF_LOAD_REG(dtaddr, gxdt->dualTexRegs[i]);
         }
     }
 }
 
-#ifndef NON_MATCHING
-#error __GXSetDirtyState has not yet been matched. (https://decomp.me/scratch/qKk9k)
-#endif
 void __GXSetDirtyState(void) {
-    u32 flags = __GXData->dirtyFlags;
+    u32 tempFlags;
+    u32 dirtyFlags = gxdt->gxDirtyFlags;
 
-    if (flags & GX_DIRTY_SU_TEX) {
+    if (dirtyFlags & GX_DIRTY_SU_TEX) {
         __GXSetSUTexRegs();
     }
-    if (flags & GX_DIRTY_BP_MASK) {
+
+    if (dirtyFlags & GX_DIRTY_BP_MASK) {
         __GXUpdateBPMask();
     }
-    if (flags & GX_DIRTY_GEN_MODE) {
+
+    if (dirtyFlags & GX_DIRTY_GEN_MODE) {
         __GXSetGenMode();
     }
-    if (flags & GX_DIRTY_VCD) {
+
+    if (dirtyFlags & GX_DIRTY_VCD) {
         __GXSetVCD();
     }
-    if (flags & GX_DIRTY_VAT) {
+
+    if (dirtyFlags & GX_DIRTY_VAT) {
         __GXSetVAT();
     }
-    if (flags & GX_DIRTY_VLIM) {
+
+    if (dirtyFlags & (GX_DIRTY_VCD | GX_DIRTY_VAT)) {
         __GXCalculateVLim();
     }
 
-    if (flags & ~0xFF) {
-        if (flags & GX_AMB_MAT_MASK) {
-            __GXSetAmbMat(flags & GX_AMB_MAT_MASK);
-        }
-        if (flags & GX_LIGHT_CHAN_MASK) {
-            __GXSetLightChan(flags & GX_LIGHT_CHAN_MASK);
-        }
-        if (flags & GX_TEX_GEN_MASK) {
-            __GXSetTexGen(flags & GX_TEX_GEN_MASK);
+    dirtyFlags &= ~0xFF;
+    if (dirtyFlags) {
+        tempFlags = dirtyFlags & GX_AMB_MAT_MASK;
+        if (tempFlags != 0) {
+            __GXSetAmbMat(tempFlags);
         }
 
-        if (flags & GX_DIRTY_MTX_IDX) {
+        tempFlags = dirtyFlags & GX_LIGHT_CHAN_MASK;
+        if (tempFlags != 0) {
+            __GXSetLightChan(tempFlags);
+        }
+
+        tempFlags = dirtyFlags & GX_TEX_GEN_MASK;
+        if (tempFlags != 0) {
+            __GXSetTexGen(tempFlags);
+        }
+
+        tempFlags = dirtyFlags & GX_DIRTY_MTX_IDX;
+        if (tempFlags != 0) {
             __GXSetMatrixIndex(0);
             __GXSetMatrixIndex(5);
         }
-        if (flags & GX_DIRTY_VIEWPORT) {
+
+        tempFlags = dirtyFlags & GX_DIRTY_VIEWPORT;
+        if (tempFlags != 0) {
             __GXSetViewport();
         }
-        if (flags & GX_DIRTY_PROJECTION) {
+
+        tempFlags = dirtyFlags & GX_DIRTY_PROJECTION;
+        if (tempFlags != 0) {
             __GXSetProjection();
         }
 
-        __GXData->SHORTS_0x0[1] = 1;
+        gxdt->lastWriteWasXF = TRUE;
     }
-    __GXData->dirtyFlags = 0;
+
+    gxdt->gxDirtyFlags = 0;
 }
 
-void GXBegin(GXPrimitive prim, UNKWORD fmtIndex, u16 num) {
-    if (__GXData->dirtyFlags != 0) {
+void GXBegin(GXPrimitive prim, GXVtxFmt fmt, u16 verts) {
+    if (gxdt->gxDirtyFlags != 0) {
         __GXSetDirtyState();
     }
 
-    if (__GXData->WORD_0x0 == 0) {
+    if (gxdt->WORD_0x0 == 0) {
         __GXSendFlushPrim();
     }
 
-    WGPIPE.c = fmtIndex | prim;
-    WGPIPE.s = num;
+    WGPIPE.c = fmt | prim;
+    WGPIPE.s = verts;
 }
 
 void __GXSendFlushPrim(void) {
     u32 i;
-    u32 sz = __GXData->SHORT_0x4 * __GXData->SHORT_0x6;
+    u32 sz = gxdt->SHORT_0x4 * gxdt->vlim;
 
-    WGPIPE.c = 0x98;
-    WGPIPE.us = __GXData->SHORT_0x4;
+    WGPIPE.uc = GX_TRIANGLESTRIP;
+    WGPIPE.us = gxdt->SHORT_0x4;
 
     for (i = 0; i < sz; i += 4) {
         WGPIPE.i = 0;
     }
 
-    __GXData->SHORTS_0x0[1] = 1;
+    gxdt->lastWriteWasXF = TRUE;
 }
 
-void GXSetLineWidth(u8 width, UNKWORD r5) {
-    GX_BITFIELD_SET(__GXData->WORD_0x7C, 24, 8, width);
-    GX_BITFIELD_SET(__GXData->WORD_0x7C, 13, 3, r5);
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = __GXData->WORD_0x7C;
-    __GXData->SHORTS_0x0[1] = 0;
+void GXSetLineWidth(u8 width, u32 offset) {
+    GX_BP_SET_LINEPTWIDTH_LINESZ(gxdt->linePtWidth, width);
+    GX_BP_SET_LINEPTWIDTH_LINEOFS(gxdt->linePtWidth, offset);
+    GX_BP_LOAD_REG(gxdt->linePtWidth);
+    gxdt->lastWriteWasXF = FALSE;
 }
 
-void GXSetPointSize(u8 size, UNKWORD r5) {
-    GX_BITFIELD_SET(__GXData->WORD_0x7C, 16, 8, size);
-    GX_BITFIELD_SET(__GXData->WORD_0x7C, 10, 3, r5);
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = __GXData->WORD_0x7C;
-    __GXData->SHORTS_0x0[1] = 0;
+void GXSetPointSize(u8 size, u32 offset) {
+    GX_BP_SET_LINEPTWIDTH_POINTSZ(gxdt->linePtWidth, size);
+    GX_BP_SET_LINEPTWIDTH_POINTOFS(gxdt->linePtWidth, offset);
+    GX_BP_LOAD_REG(gxdt->linePtWidth);
+    gxdt->lastWriteWasXF = FALSE;
 }
 
-void GXEnableTexOffsets(UNKWORD coordId, GXBool8 r4, GXBool8 r5) {
-    GX_BITFIELD_SET(__GXData->WORDS_0x108[coordId], 13, 1, r4);
-    GX_BITFIELD_SET(__GXData->WORDS_0x108[coordId], 12, 1, r5);
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = __GXData->WORDS_0x108[coordId];
-    __GXData->SHORTS_0x0[1] = 0;
+void GXEnableTexOffsets(GXTexCoordID id, GXBool lineOfs, GXBool pointOfs) {
+    GX_BP_SET_SU_SSIZE_USELINEOFS(gxdt->txcRegs[id], lineOfs);
+    GX_BP_SET_SU_SSIZE_USEPOINTOFS(gxdt->txcRegs[id], pointOfs);
+    GX_BP_LOAD_REG(gxdt->txcRegs[id]);
+    gxdt->lastWriteWasXF = FALSE;
 }
 
 void GXSetCullMode(GXCullMode mode) {
-    GXCullMode mode2 = (GXCullMode)(mode << 1 & 2 | mode >> 1 & 1);
-    GX_BITFIELD_SET(__GXData->WORD_0x254, 16, 2, mode2);
-    __GXData->dirtyFlags |= GX_DIRTY_GEN_MODE;
+    // Swap bits to get hardware representation (see nw4r::g3d::fifo::cm2hw)
+    GXCullMode bits = (GXCullMode)(mode << 1 & 2 | mode >> 1 & 1);
+    GX_BP_SET_GENMODE_CULLMODE(gxdt->genMode, bits);
+    gxdt->gxDirtyFlags |= GX_DIRTY_GEN_MODE;
 }
 
 void GXGetCullMode(GXCullMode* out) {
-    u32 temp_r4 = __GXData->WORD_0x254;
-    *out =
-        (GXCullMode)(((s32)(temp_r4 >> 14 & 2) >> 1) & ~2 | temp_r4 >> 13 & 2);
+    // TODO: Fakematch? Should use GX_BP_GET_GENMODE_CULLMODE if possible
+    s32 bits = 0;
+    bits |= (s32)(gxdt->genMode >> (13 + 1) & 2) >> 1;
+    bits |= (s32)(gxdt->genMode >> 13 & 2);
+    *out = (GXCullMode)bits;
 }
 
-void GXSetCoPlanar(u8 enable) {
-    GX_BITFIELD_SET(__GXData->WORD_0x254, 12, 1, enable);
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = 0xFE080000;
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = __GXData->WORD_0x254;
+void GXSetCoPlanar(GXBool coplanar) {
+    u32 reg;
+
+    GX_BP_SET_GENMODE_COPLANAR(gxdt->genMode, coplanar);
+
+    // TODO: GX_BP_SET_OPCODE doesn't work.
+    // Did they really write this out?
+    reg = 0;
+    reg |= GX_BP_REG_SSMASK << 24;
+    reg |= 0x80000;
+
+    GX_BP_LOAD_REG(reg);
+    GX_BP_LOAD_REG(gxdt->genMode);
 }
 
 void __GXSetGenMode(void) {
-    WGPIPE.c = GX_FIFO_ACCESS_BP;
-    WGPIPE.i = __GXData->WORD_0x254;
-    __GXData->SHORTS_0x0[1] = 0;
+    GX_BP_LOAD_REG(gxdt->genMode);
+    gxdt->lastWriteWasXF = FALSE;
 }

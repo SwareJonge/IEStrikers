@@ -34,19 +34,19 @@ typedef struct SCConfHeader {
 } SCConfHeader;
 
 static void SetBgJobStatus(SCStatus status);
-static NANDResult SCReloadConfFileAsync(u8* buf, u32 size,
+static s32 SCReloadConfFileAsync(u8* buf, u32 size,
                                         SCAsyncCallback callback);
-static void OpenCallbackFromReload(NANDResult result, NANDCommandBlock* block);
-static void ReadCallbackFromReload(NANDResult result, NANDCommandBlock* block);
-static void CloseCallbackFromReload(NANDResult result, NANDCommandBlock* block);
+static void OpenCallbackFromReload(s32 result, NANDCommandBlock* block);
+static void ReadCallbackFromReload(s32 result, NANDCommandBlock* block);
+static void CloseCallbackFromReload(s32 result, NANDCommandBlock* block);
 static void FinishFromReload(void);
-static void ErrorFromReload(NANDResult result);
-static void CloseCallbackFromReloadError(NANDResult result,
+static void ErrorFromReload(s32 result);
+static void CloseCallbackFromReloadError(s32 result,
                                          NANDCommandBlock* block);
 static void ClearConfBuf(u8* conf);
 static s32 ParseConfBuf(u8* conf, u32 size);
 static BOOL UnpackItem(const u8* data, SCItem* item);
-static void MyNandCallback(NANDResult result, NANDCommandBlock* block);
+static void MyNandCallback(s32 result, NANDCommandBlock* block);
 static void FinishFromFlush(void);
 static void ErrorFromFlush(void);
 
@@ -117,7 +117,7 @@ u32 SCCheckStatus(void) {
     return status;
 }
 
-static NANDResult SCReloadConfFileAsync(u8* buf, u32 size,
+static s32 SCReloadConfFileAsync(u8* buf, u32 size,
                                         SCAsyncCallback callback) {
     int i;
 
@@ -156,7 +156,7 @@ static NANDResult SCReloadConfFileAsync(u8* buf, u32 size,
                                 OpenCallbackFromReload, &Control.commandBlock);
 }
 
-static void OpenCallbackFromReload(NANDResult result, NANDCommandBlock* block) {
+static void OpenCallbackFromReload(s32 result, NANDCommandBlock* block) {
 #pragma unused(block)
 
     if (result == NAND_RESULT_OK) {
@@ -173,7 +173,7 @@ static void OpenCallbackFromReload(NANDResult result, NANDCommandBlock* block) {
     ErrorFromReload(result);
 }
 
-static void ReadCallbackFromReload(NANDResult result, NANDCommandBlock* block) {
+static void ReadCallbackFromReload(s32 result, NANDCommandBlock* block) {
 #pragma unused(block)
 
     if (result == Control.bufferSizes[Control.openFile]) {
@@ -189,7 +189,7 @@ static void ReadCallbackFromReload(NANDResult result, NANDCommandBlock* block) {
                                                : NAND_RESULT_FATAL_ERROR);
 }
 
-static void CloseCallbackFromReload(NANDResult result,
+static void CloseCallbackFromReload(s32 result,
                                     NANDCommandBlock* block) {
 #pragma unused(block)
 
@@ -240,7 +240,7 @@ openFile:
     SetBgJobStatus(status);
 }
 
-static void ErrorFromReload(NANDResult result) {
+static void ErrorFromReload(s32 result) {
     if (Control.openFile == SC_CONF_FILE_SYSTEM) {
         Control.asyncResult = result;
     }
@@ -254,7 +254,7 @@ static void ErrorFromReload(NANDResult result) {
     }
 }
 
-static void CloseCallbackFromReloadError(NANDResult result,
+static void CloseCallbackFromReloadError(s32 result,
                                          NANDCommandBlock* block) {
 #pragma unused(result)
 #pragma unused(block)
@@ -282,7 +282,7 @@ static void ClearConfBuf(u8* conf) {
 }
 
 #ifndef NON_MATCHING
-#error ParseConfBuf has not yet been matched.
+//#error ParseConfBuf has not yet been matched.
 #endif
 static s32 ParseConfBuf(u8* conf, u32 size) {
     ;
@@ -359,7 +359,7 @@ static BOOL FindItemByID(SCItemID id, SCItem* item) {
 }
 
 #ifndef NON_MATCHING
-#error DeleteItemByID has not yet been matched.
+//#error DeleteItemByID has not yet been matched.
 #endif
 static void DeleteItemByID(SCItemID id) {
     ;
@@ -367,7 +367,7 @@ static void DeleteItemByID(SCItemID id) {
 }
 
 #ifndef NON_MATCHING
-#error CreateItemByID has not yet been matched.
+//#error CreateItemByID has not yet been matched.
 #endif
 static BOOL CreateItemByID(SCItemID id, u8 primType, const void* src, u32 len) {
     ;
@@ -522,7 +522,7 @@ void SCFlushAsync(SCFlushCallback callback) {
             OSRestoreInterrupts(enabled);
             ctrl->nandCbState = 0;
 
-            if (NANDPrivateGetTypeAsync(ConfFileName, &ctrl->fileAttr.BYTE_0x0,
+            if (NANDPrivateGetTypeAsync(ConfFileName, (u8*)(u8*)&ctrl->fileAttr.ownerId,
                                         MyNandCallback, &ctrl->commandBlock) !=
                 NAND_RESULT_OK) {
                 ErrorFromFlush();
@@ -536,14 +536,14 @@ void SCFlushAsync(SCFlushCallback callback) {
     }
 }
 
-static void MyNandCallback(NANDResult result, NANDCommandBlock* block) {
+static void MyNandCallback(s32 result, NANDCommandBlock* block) {
 #pragma unused(block)
 
     SCControl* ctrl = &Control;
 
     switch (ctrl->nandCbState) {
     case 0:
-        if (result == NAND_RESULT_OK && ctrl->fileAttr.BYTE_0x0 == 1) {
+        if (result == NAND_RESULT_OK && ctrl->fileAttr.ownerId == 1) {
             ctrl->nandCbState = 1;
             if (NANDPrivateGetStatusAsync(
                     ConfFileName, &ctrl->fileAttr, MyNandCallback,
@@ -568,14 +568,14 @@ static void MyNandCallback(NANDResult result, NANDCommandBlock* block) {
         return;
     case 2:
         ctrl->nandCbState = 3;
-        if (NANDPrivateGetTypeAsync(ConfDirName, &ctrl->fileAttr.BYTE_0x0,
+        if (NANDPrivateGetTypeAsync(ConfDirName, (u8*)&ctrl->fileAttr.ownerId,
                                     MyNandCallback,
                                     &ctrl->commandBlock) != NAND_RESULT_OK) {
             goto error;
         }
         return;
     case 3:
-        if (result == NAND_RESULT_OK && ctrl->fileAttr.BYTE_0x0 == 2) {
+        if (result == NAND_RESULT_OK && ctrl->fileAttr.ownerId == 2) {
             goto case_4_lbl;
         }
         ctrl->nandCbState = 4;

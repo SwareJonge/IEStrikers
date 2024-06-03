@@ -1,6 +1,5 @@
-// WIP
-// this uses -ipa file most likely
-#include <revolution/gx/GXPixel.h>
+#include <revolution/OS.h>
+#include <revolution/GX.h>
 #include <Shade/wii_debug.h>
 #include <Shade/shd.h>
 #include <Shade/shd_calc.h>
@@ -8,9 +7,9 @@
 #include <Shade/shd_memory.h>
 #include <Shade/shd_pad.h>
 #include <Shade/std/shd_cstring.h>
-
-#include "Game/appli.h"
+#include <Shade/std/shd_stdarg.h>
 #include "nw4r/g3d/g3d_camera.h"
+#include "nw4r/ut/ut_color.h"
 
 #define LINE 112
 
@@ -20,50 +19,18 @@
 // EU: Jul 10 2012
 // 2013: Oct 29 2012
 
-long shd_pktbf_sz = 0x180000; // is 0x200000 in EU and 2012, not sure where this belongs
 nw4r::g3d::Camera::PostureInfo g_info;
 
 static float g_vUp[3] = {
     0.0f, 1.0f, 0.0f};
 
-//static shade_sys shdsys;
-
-inline void wiiInitRenderFlag(char cmp)
-{
-    shdsys.field_0x18e[1] = cmp;
-    if (shdsys.field_0x18e[1] > 0)
-    {
-        if (shdsys.field_0x18e[2] > 0)
-        {
-            GXSetZMode(1, GX_LEQUAL, 1);
-        }
-        else
-        {
-            GXSetZMode(1, GX_LEQUAL, 0);
-        }
-    }
-    else
-    {
-        GXSetZMode(0, GX_NEVER, 0);
-    }
-}
-
-inline void wiiSetStateZcmp(char cmp)
-{
-    if (cmp != shdsys.field_0x18e[1])
-    {
-        wiiInitRenderFlag(cmp);
-    }
-}
-
 void shdInit1(void)
 {
     char buf[64];
     int date[3];
-    static long shd_init_flag;
 
     shdwk.flags |= 0x2000e;
-    if (!(shd_init_flag & 1))
+    if (!(shd_init_flag & DISABLE_DEBUG))
     {
         hstrcpy(buf, "16:06:26");
         buf[2] = buf[3];
@@ -89,10 +56,11 @@ void shdInit1(void)
     shdwk.frame_cntedf = (f32)shdwk.frame_cnted;
     shdwk.frame_rate = shdwk.frame_cntedf / 32.0f;
 
-    shdwk.efb_width = 640;
     shdwk.xfb_width = 640;
-    shdwk.efb_height = 480;
+    shdwk.efb_width = 640;    
     shdwk.xfb_height = 480;
+    shdwk.efb_height = 480;    
+
     shdwk.field_0x24 = 16;
     shdwk.field_0x26 = 24;
     //
@@ -103,27 +71,27 @@ void shdInit1(void)
     //
     shdwk.field_0xdc = 4;
     shdwk.field_0xdd = 0;
-    // TODO: names + figure out if this is a matrix?
-    shdwk.field_0x64[1] = 0.0f;
-    shdwk.field_0x64[0] = 0.0f;
-    shdwk.field_0x64[2] = 2.0f;
-    shdwk.field_0x58[0] = 0.0f;
-    shdwk.field_0x58[2] = 4.0f;
-    shdwk.field_0x58[1] = 4.0f;
-    shdwk.field_0x84[2] = 0.0f;
-    shdwk.field_0x84[1] = 0.0f;
-    shdwk.field_0x84[0] = 0.0f;
-    shdwk.field_0x40 = 25;
-    shdwk.field_0x50[1] = 0.0f;
-    shdwk.field_0x50[0] = 1.0f;
-    shdwk.field_0x44[0] = 0.1f;
-    shdwk.field_0x44[1] = 1280.0f;
-    shdwk.field_0x44[2] = 32.0f;
+
+    shdwk.cameraAt[1] = 0.0f;
+    shdwk.cameraAt[0] = 0.0f;
+    shdwk.cameraAt[2] = 2.0f;
+    shdwk.cameraPos[0] = 0.0f;
+    shdwk.cameraPos[2] = 4.0f;
+    shdwk.cameraPos[1] = 4.0f;
+    shdwk.cameraTarget[2] = 0.0f;
+    shdwk.cameraTarget[1] = 0.0f;
+    shdwk.cameraTarget[0] = 0.0f;
+    shdwk.cameraFov = 25;
+    shdwk.cameraAngR = 0.0f;
+    shdwk.cameraAngL = 1.0f;
+    shdwk.cameraNear = 0.1f;
+    shdwk.cameraFar = 1280.0f;
+    shdwk.cameraUnk = 32.0f;
     shdCamCalAng();
     //
-    g_info.INT_0x0 = 0;
-    g_info.VEC3_0x04 = g_vUp;
-    g_info.VEC3_0x10 = nw4r::math::VEC3(0, 0, 0);
+    g_info.tp = 0;
+    g_info.cameraUp = g_vUp;
+    g_info.cameraTarget = nw4r::math::VEC3(0, 0, 0);
     //
     shdwk.field_0xc0 = 0x404040; // probably another GXColor struct?
     shdwk.field_0xbc = 0xffffff;
@@ -133,12 +101,12 @@ void shdInit1(void)
     shdCalNormal(shdwk.field_0xb0);
     shdwk.field_0x90 = 0x606060;
     shdwk.fog = 0x606060;
-    shdwk.field_0x98 = 8.0f;
-    shdwk.field_0x9c = 64.0f;
+    shdwk.fogStart = 8.0f;
+    shdwk.fogEnd = 64.0f;
     shdwk.field_0xa0 = 1;
     shdwk.field_0xa8 = 0xff000000;
     shdwk.field_0xac = 0xff000000;
-    shdsys.field_0x180 = 0.2f;
+    shdsys.shadow_scale = 0.2f;
     shdwk.flags3 = 0;
     shdwk.flags4 = 0;
     shdwk.field4_0xa = 0x80;
@@ -182,7 +150,245 @@ void shdInit2()
     shdResetRenderFlag();
 }
 
-inline void shdResetRenderFlag()
+void shdLoop1()
+{
+    shdwk.exec_frame++;
+    shdwk.field_0x2c += shdwk.frame_cnted;
+    if (shdwk.flags & 2)
+    {
+        // Note: i believe this is inaccurate, the wii outputs 59.94fps, not 60
+        int framerate = (60000 / ((shdwk.frame_cnted * 100) / shdwk.field_0x1c6a));
+        bprintf("v:%2d(%d.%dfps:%d), %d, %d\n", shdwk.frame_cnted, // vertical sync(32 most of the time)
+                framerate / 10, framerate % 10,
+                (int)(shdwk.frame_rate * 1000),                    // i guess this is the amount of intervals?(1(000) for 60 fps, 2(000) for 30fps, 3(000) for 20fps, whatever)
+                shdwk.exec_frame,                                  // execution frame
+                shdwk.field_0x2c / (shdwk.field_0x1c6a * 60));     // seconds passed
+    }
+
+    shdsys.loop1StartTime = OSGetTime();
+    shdPadInput();
+    if (shdwk.flags4 == 0 && shdwk.flags3 == 0)
+    {
+        appLoop1();
+        appLoop2();
+    }
+    shdsys.loop1EndTime = OSGetTime();
+}
+
+void shdLoop3()
+{
+
+}
+
+void shdMchgCleanup()
+{
+    shdSetSprtMend();
+    shdMcbOvrCntClr();
+    
+    /*shdwk._318_1_ = 0;
+    shdwk._1198_1_ = 0;
+    shdwk._2078_1_ = 0;
+    shdwk._2958_1_ = 0;*/
+
+    int i = 0;
+    do
+    {
+        shdVceStop(i);
+        i = i + 1;
+    } while (i < 4);
+    
+    shdEffPause(false);
+    shdEffDisp(true);
+    shdEffDisp2(true);
+}
+
+void wiiResetGP()
+{
+    GXSetLineWidth(6, 0);
+    GXSetPointSize(6, 0);
+
+    GXEnableTexOffsets(GX_TEXCOORD0, FALSE, FALSE);
+    GXEnableTexOffsets(GX_TEXCOORD1, FALSE, FALSE);
+    GXEnableTexOffsets(GX_TEXCOORD2, FALSE, FALSE);
+    GXEnableTexOffsets(GX_TEXCOORD3, FALSE, FALSE);
+    GXEnableTexOffsets(GX_TEXCOORD4, FALSE, FALSE);
+    GXEnableTexOffsets(GX_TEXCOORD5, FALSE, FALSE);
+    GXEnableTexOffsets(GX_TEXCOORD6, FALSE, FALSE);
+    GXEnableTexOffsets(GX_TEXCOORD7, FALSE, FALSE);
+
+    GXSetCullMode(GX_CULL_BACK);
+    GXSetClipMode(GX_CLIP_ENABLE);
+    GXSetCoPlanar(FALSE);
+
+    nw4r::ut::Color fog; 
+    GXSetFog(GX_FOG_NONE, fog, 0, 0, 0, 0);
+    GXSetFogRangeAdj(FALSE, 0, 0);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_COPY);
+    GXSetColorUpdate(TRUE);
+    GXSetAlphaUpdate(FALSE);
+    GXSetZMode(TRUE, GX_LEQUAL, TRUE);
+    GXSetZCompLoc(TRUE);
+    GXSetDither(TRUE);
+    GXSetDstAlpha(FALSE, 255);
+    GXSetNumTevStages(1);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE3, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE4, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE5, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE6, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE7, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE8, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE9, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE10, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE11, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE12, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE13, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE14, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE15, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
+
+    GXSetZTexture(0, 17, 0);
+    GXSetNumIndStages(0);
+
+    GXSetTevDirect(GX_TEVSTAGE0);
+    GXSetTevDirect(GX_TEVSTAGE1);
+    GXSetTevDirect(GX_TEVSTAGE2);
+    GXSetTevDirect(GX_TEVSTAGE3);
+    GXSetTevDirect(GX_TEVSTAGE4);
+    GXSetTevDirect(GX_TEVSTAGE5);
+    GXSetTevDirect(GX_TEVSTAGE6);
+    GXSetTevDirect(GX_TEVSTAGE7);
+    GXSetTevDirect(GX_TEVSTAGE8);
+    GXSetTevDirect(GX_TEVSTAGE9);
+    GXSetTevDirect(GX_TEVSTAGE10);
+    GXSetTevDirect(GX_TEVSTAGE11);
+    GXSetTevDirect(GX_TEVSTAGE12);
+    GXSetTevDirect(GX_TEVSTAGE13);
+    GXSetTevDirect(GX_TEVSTAGE14);
+    GXSetTevDirect(GX_TEVSTAGE15);
+
+    GXSetNumChans(0);
+    GXSetNumTexGens(0);
+}
+
+void wiiSetWideMode(int mode) {
+    if(mode != 0) {
+        shdwk.isWideMode = 1;
+        shdwk.aspect_ratio = 16.f / 9.f;
+        shdwk.xfb_width = 852; // shouldn't this be 854? 480 * (16/9) = 853.33 which is closer to 854...
+    }
+    else {
+        shdwk.isWideMode = 0;
+        shdwk.aspect_ratio = (f32)shdwk.efb_width / (f32)shdwk.efb_height;
+    }
+}
+
+void shdCalCamMat()
+{
+
+}
+
+void shdCnvScreen(float *, const float *)
+{
+
+}
+
+void render_ot(int, int)
+{
+
+}
+
+void draw_ratebar()
+{
+
+}
+
+u32 *entry_ottag(int, u32, int)
+{
+
+}
+
+int shdZtoOT(float)
+{
+
+}
+
+void wiiErrDisp()
+{
+
+}
+
+// fabricated
+inline void wiiSetRenderFlag(s8 cmp)
+{
+    shdsys.field_0x18e[1] = cmp;
+    if (shdsys.field_0x18e[1] > 0)
+    {
+        if (shdsys.field_0x18e[2] > 0)
+        {
+            GXSetZMode(TRUE, GX_LEQUAL, TRUE);
+        }
+        else
+        {
+            GXSetZMode(TRUE, GX_LEQUAL, FALSE);
+        }
+    }
+    else
+    {
+        GXSetZMode(FALSE, GX_NEVER, FALSE);
+    }
+}
+
+void wiiSetStateZcmp(s8 cmp)
+{
+    if (shdsys.field_0x18e[1] != cmp)
+    {
+        wiiSetRenderFlag(cmp);
+    }
+}
+
+void wiiSetStatePjMtx(s8)
+{
+}
+
+void wiiSetStateTex(s16)
+{
+
+}
+
+void wiiSetStateTev(s8)
+{
+}
+
+void wiiSetStateSemi(s8)
+{
+}
+
+void wiiSetStateVtxFmt(s16)
+{
+}
+
+void wiiSetStateLighting(s8)
+{
+}
+
+void wiiSetStateFog(s8)
+{
+}
+
+void wiiSetStateCull(s8)
+{
+}
+
+void wiiSetStateClip(s8)
+{
+}
+
+void shdResetRenderFlag()
 {
     shdsys.field_0x18e[3] = -1;
     shdsys.field_0x18e[10] = -1;
@@ -197,6 +403,6 @@ inline void shdResetRenderFlag()
     shdsys.field_0x18c = -99;
 
     shdsys.field_0x18e[2] = 1;
-    wiiInitRenderFlag(1);
+    wiiSetRenderFlag(1);
     shdsys.field_0x200 = 0;
 }

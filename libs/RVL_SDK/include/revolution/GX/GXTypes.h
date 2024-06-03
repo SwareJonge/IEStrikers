@@ -6,15 +6,46 @@ extern "C" {
 #endif
 
 /**
- * @brief Common types used throughout many GX files.
+ * Pack value into bitfield.
+ * Value is shifted to the specified bit position.
+ * (Bit indices are LSB)
+ */
+#define GX_BITSET(field, pos, size, value)                                     \
+    __rlwimi((field), (value), 31 - (pos) - (size) + 1, (pos), (pos) + (size)-1)
+
+/**
+ * Compose value from bitfield.
+ * Value is shifted after masking.
+ * (Bit indices are LSB)
+ */
+#define GX_BITGET(field, pos, size)                                            \
+    ((field) >> (31 - (pos) - (size) + 1) & ((1 << (size)) - 1))
+
+/**
+ * Pack value into bitfield.
+ * Value is not shifted, only masked.
+ * (Bit indices are LSB)
+ */
+#define GX_BITSET_TRUNC(field, pos, size, value)                               \
+    __rlwimi((field), (value), 0, (pos), (pos) + (size)-1)
+
+/**
+ * Compose value from bitfield.
+ * Value is not shifted, only masked.
+ * (Bit indices are LSB)
+ */
+#define GX_BITGET_TRUNC(field, pos, size)                                      \
+    ((field) & (((1 << (size)) - 1) << (32 - (pos) - (size))))
+
+/**
+ * Common types used throughout many GX files.
  * To avoid circular depencies, common structures and all enums have been moved
  * here. Everything is organized in alphabetical order.
  */
 
-//! TODO: Many GX functions use 8-bit booleans.
-//! As those files are decompiled, update prototypes that use u8 -> GXBool8,
-//! so it is evident to callers that the 8-bit value is meant to be TRUE/FALSE
-typedef unsigned char GXBool8;
+// Differentiate between 8-byte and boolean values
+// Real name! (from patent)
+typedef unsigned char GXBool;
 
 /**
  * Common structs
@@ -81,11 +112,18 @@ typedef enum _GXAttr {
     GX_NRM_MTX_ARRAY,
     GX_TEX_MTX_ARRAY,
     GX_LIGHT_ARRAY,
-    GX_VA_NBT,
+    GX_VA_NBT, // All three normal elements (normal/binormal/tangent)
 
     GX_VA_MAX_ATTR,
     GX_VA_NULL = 255
 } GXAttr;
+
+typedef enum _GXAttrType {
+    GX_NONE,   //! No data sent
+    GX_DIRECT, //! Data sent directly to FIFO
+    GX_INDEX8, //! 8-bit index sent to FIFO
+    GX_INDEX16 //! 16-bit index sent to FIFO
+} GXAttrType;
 
 typedef enum _GXBlendFactor {
     GX_BL_ZERO,
@@ -124,6 +162,13 @@ typedef enum _GXChannelID {
     GX_COLOR_NULL = 255
 } GXChannelID;
 
+// TODO: Fabricated names from patent
+typedef enum _GXClipMode {
+    // "ClipDisable" in XF mem, so 0 = enable
+    GX_CLIP_ENABLE,
+    GX_CLIP_DISABLE,
+} GXClipMode;
+
 typedef enum _GXColorSrc { GX_SRC_REG, GX_SRC_VTX } GXColorSrc;
 
 typedef enum _GXCompare {
@@ -136,6 +181,36 @@ typedef enum _GXCompare {
     GX_GEQUAL,
     GX_ALWAYS
 } GXCompare;
+
+typedef enum _GXCompCnt {
+    GX_POS_XY = 0,
+    GX_POS_XYZ,
+
+    GX_NRM_XYZ = 0,
+    GX_NRM_NBT,
+    GX_NRM_NBT3,
+
+    GX_CLR_RGB = 0,
+    GX_CLR_RGBA,
+
+    GX_TEX_S = 0,
+    GX_TEX_ST
+} GXCompCnt;
+
+typedef enum _GXCompType {
+    GX_U8,
+    GX_S8,
+    GX_U16,
+    GX_S16,
+    GX_F32,
+
+    GX_RGB565 = 0,
+    GX_RGB8,
+    GX_RGBX8,
+    GX_RGBA4,
+    GX_RGBA6,
+    GX_RGBA8
+} GXCompType;
 
 typedef enum _GXCullMode {
     GX_CULL_NONE,
@@ -152,19 +227,36 @@ typedef enum _GXDirtyFlag {
     GX_DIRTY_GEN_MODE = (1 << 2),
     GX_DIRTY_VCD = (1 << 3),
     GX_DIRTY_VAT = (1 << 4),
+    // . . .
     GX_DIRTY_AMB_COLOR0 = (1 << 8),
     GX_DIRTY_AMB_COLOR1 = (1 << 9),
     GX_DIRTY_MAT_COLOR0 = (1 << 10),
     GX_DIRTY_MAT_COLOR1 = (1 << 11),
+    GX_DIRTY_CHAN_COLOR0 = (1 << 12),
+    GX_DIRTY_CHAN_COLOR1 = (1 << 13),
+    GX_DIRTY_CHAN_ALPHA0 = (1 << 14),
+    GX_DIRTY_CHAN_ALPHA1 = (1 << 15),
+    GX_DIRTY_TEX0 = (1 << 16),
+    GX_DIRTY_TEX1 = (1 << 17),
+    GX_DIRTY_TEX2 = (1 << 18),
+    GX_DIRTY_TEX3 = (1 << 19),
+    GX_DIRTY_TEX4 = (1 << 20),
+    GX_DIRTY_TEX5 = (1 << 21),
+    GX_DIRTY_TEX6 = (1 << 22),
+    GX_DIRTY_TEX7 = (1 << 23),
+    GX_DIRTY_NUM_COLORS = (1 << 24),
+    GX_DIRTY_NUM_TEX = (1 << 25),
     GX_DIRTY_MTX_IDX = (1 << 26),
     GX_DIRTY_PROJECTION = (1 << 27),
     GX_DIRTY_VIEWPORT = (1 << 28),
 
-    GX_DIRTY_VLIM = GX_DIRTY_VCD | GX_DIRTY_VAT,
-
     GX_AMB_MAT_MASK = GX_DIRTY_AMB_COLOR0 | GX_DIRTY_AMB_COLOR1 |
                       GX_DIRTY_MAT_COLOR0 | GX_DIRTY_MAT_COLOR1,
-    GX_LIGHT_CHAN_MASK = 0x100F000,
+
+    GX_LIGHT_CHAN_MASK = GX_DIRTY_CHAN_COLOR0 | GX_DIRTY_CHAN_COLOR1 |
+                         GX_DIRTY_CHAN_ALPHA0 | GX_DIRTY_CHAN_ALPHA1 |
+                         GX_DIRTY_NUM_COLORS,
+
     GX_TEX_GEN_MASK = 0x2FF0000,
 } GXDirtyFlag;
 
@@ -184,12 +276,17 @@ typedef enum _GXFogType {
     GX_FOG_PERSP_REVEXP = 6,
     GX_FOG_PERSP_REVEXP2 = 7,
 
-    GX_FOG_ORTHO_LIN = 10,
-    GX_FOG_ORTHO_EXP = 12,
-    GX_FOG_ORTHO_EXP2 = 13,
-    GX_FOG_ORTHO_REVEXP = 14,
-    GX_FOG_ORTHO_REVEXP2 = 15,
+    // Fourth bit is set to mark orthographic
+    GX_FOG_ORTHO_LIN = 1 << 3 | GX_FOG_PERSP_LIN,
+    GX_FOG_ORTHO_EXP = 1 << 3 | GX_FOG_PERSP_EXP,
+    GX_FOG_ORTHO_EXP2 = 1 << 3 | GX_FOG_PERSP_EXP2,
+    GX_FOG_ORTHO_REVEXP = 1 << 3 | GX_FOG_PERSP_REVEXP,
+    GX_FOG_ORTHO_REVEXP2 = 1 << 3 | GX_FOG_PERSP_REVEXP2
 } GXFogType;
+
+// Access components of the fog type
+#define GX_FOG_GET_PROJ(x) ((x) >> 3 & 1)
+#define GX_FOG_GET_FSEL(x) ((x)&7)
 
 typedef enum _GXIndTexAlphaSel {
     GX_ITBA_OFF,
@@ -305,6 +402,29 @@ typedef enum _GXLogicOp {
     GX_LO_SET
 } GXLogicOp;
 
+// TODO: Fabricated name
+typedef enum _GXMtxType {
+    GX_MTX_3x4,
+    GX_MTX_2x4,
+} GXMtxType;
+
+typedef enum _GXPixelFmt {
+    GX_PF_RGB8_Z24,    // from Dolphin
+    GX_PF_RGBA6_Z24,   // from EGG
+    GX_PF_RGBA565_Z16, // from Dolphin
+    GX_PF_Z24,         // from Dolphin
+    GX_PF_Y8,          // from Dolphin
+    GX_PF_U8,          // from Dolphin
+    GX_PF_V8,          // from Dolphin
+    GX_PF_YUV420,      // from Dolphin
+
+    GX_MAX_PIXELFMT
+} GXPixelFmt;
+
+/**
+ * Matrix column index into XF memory.
+ * (Multiply by row dimension to get XF mem offset)
+ */
 typedef enum _GXPosNrmMtx {
     GX_PNMTX0 = 0,
     GX_PNMTX1 = 3,
@@ -327,6 +447,11 @@ typedef enum _GXPrimitive {
     GX_TRIANGLEFAN = 0xA0,
     GX_QUADS = 0x80,
 } GXPrimitive;
+
+typedef enum _GXProjectionType {
+    GX_PERSPECTIVE,
+    GX_ORTHOGRAPHIC
+} GXProjectionType;
 
 typedef enum _GXSpotFn {
     GX_SP_OFF,
@@ -640,6 +765,33 @@ typedef enum _GXTexMapID {
     GX_TEX_DISABLE
 } GXTexMapID;
 
+// TODO: Fabricated names
+typedef enum _GXTexMtx {
+    // Any dimension (in standard XF matrix memory)
+    GX_TEXMTX0 = 30,
+    GX_TEXMTX1 = 33,
+    GX_TEXMTX2 = 36,
+    GX_TEXMTX3 = 39,
+    GX_TEXMTX4 = 42,
+    GX_TEXMTX5 = 45,
+    GX_TEXMTX6 = 48,
+    GX_TEXMTX7 = 51,
+    GX_TEXMTX8 = 54,
+    GX_TEXMTX9 = 57,
+
+    // 3x4 matrices (in dual-tex XF matrix memory)
+    GX_DTEXMTX0 = 64,
+    GX_DTEXMTX1 = 67,
+    GX_DTEXMTX2 = 70,
+    GX_DTEXMTX3 = 73,
+    GX_DTEXMTX4 = 76,
+    GX_DTEXMTX5 = 79,
+    GX_DTEXMTX6 = 82,
+    GX_DTEXMTX7 = 85,
+    GX_DTEXMTX8 = 88,
+    GX_DTEXMTX9 = 91,
+} GXTexMtx;
+
 typedef enum _GXTexWrapMode {
     GX_CLAMP,
     GX_REPEAT,
@@ -655,6 +807,27 @@ typedef enum _GXTlutFmt {
 
     GX_MAX_TLUTFMT
 } GXTlutFmt;
+
+// TODO: Fabricated name
+typedef enum _GXVtxFmt {
+    GX_VTXFMT0, // from patent
+    GX_VTXFMT1,
+    GX_VTXFMT2,
+    GX_VTXFMT3,
+    GX_VTXFMT4,
+    GX_VTXFMT5,
+    GX_VTXFMT6,
+    GX_VTXFMT7,
+
+    GX_MAX_VTXFMT,
+} GXVtxFmt;
+
+typedef enum _GXZFmt {
+    GX_ZC_LINEAR, // from patent
+    GX_ZC_NEAR,   // from Dolphin
+    GX_ZC_MID,    // from Dolphin
+    GX_ZC_FAR,    // from Dolphin
+} GXZFmt;
 
 #ifdef __cplusplus
 }

@@ -7,6 +7,9 @@
 #define CLAMP(low, high, x)                                                    \
     ((x) > (high) ? (high) : ((x) < (low) ? (low) : (x)))
 
+// True if X is aligned to N bytes, else false
+#define IS_ALIGNED(X, N) (((X) & ((N)-1)) == 0)
+
 #define ROUND_UP(x, align) (((x) + (align)-1) & (-(align)))
 #define ROUND_UP_PTR(x, align)                                                 \
     ((void*)((((u32)(x)) + (align)-1) & (~((align)-1))))

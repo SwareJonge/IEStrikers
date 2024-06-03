@@ -25,6 +25,9 @@ extern "C" {
 #define PI      3.1415927f
 #define HALF_PI 1.5707964f
 
+#define M_PI 3.141592653589793f
+#define M_SQRT3 1.7320508075688772f
+
 #define LONG_TAU 6.2831854820251465
 
 

@@ -36,7 +36,9 @@ void MEMiInitHeapHead(MEMiHeapHead* heap, u32 magic, void* start, void* end,
 void MEMiFinalizeHeap(MEMiHeapHead* heap);
 MEMiHeapHead* MEMFindContainHeap(const void* memBlock);
 
-static inline uintptr_t GetUIntPtr(const void* p) { return (uintptr_t)p; }
+static inline unsigned int* GetUIntPtr(const void* p) {
+    return (unsigned int*)p;
+}
 
 static inline void* AddU32ToPtr(const void* p, u32 ofs) {
     return (void*)(GetUIntPtr(p) + ofs);

@@ -22,10 +22,13 @@ import common as c
 
 # Check CW was added
 # os.path.exists("tools/0x4201_142/mwcceppc.exe") and \
-assert os.path.exists("tools/0x4199_60831/mwcceppc.exe") and \
-    os.path.exists("tools/0x4302_151/mwcceppc.exe") and \
-    os.path.exists("tools/0x4302_213/mwcceppc.exe") and \
-    os.path.exists("tools/0x4302_213/mwldeppc.exe"), \
+assert os.path.exists("tools/compilers/GC/3.0a5.2/mwcceppc.exe") and \
+    os.path.exists("tools/compilers/Wii/1.0/mwcceppc.exe") and \
+    os.path.exists("tools/compilers/Wii/1.1/mwcceppc.exe") and \
+    os.path.exists("tools/compilers/Wii/1.5/mwcceppc.exe") and \
+    os.path.exists("tools/compilers/Wii/1.6/mwcceppc.exe") and \
+    os.path.exists("tools/compilers/Wii/1.7/mwcceppc.exe") and \
+    os.path.exists("tools/compilers/Wii/1.7/mwldeppc.exe"), \
     "Error: Codewarrior not found!"
 
 # Check binaries were added
@@ -528,7 +531,6 @@ class AsmSource(Source):
             inputs = self.src_path
         )
 
-
 class CSource(Source):
     def __init__(self, ctx: c.SourceContext, path: str):
         self.cc = c.CC # if a library uses a different compiler, change it here
@@ -547,10 +549,14 @@ class CSource(Source):
         elif (path.startswith("libs/NdevExi2A/src/")):
             self.cflags = c.NDEVEXI2A_CLFAGS
             self.cc = c.REVO_EX_CC
-        elif (path.startswith("libs/Shade/src/std")):
-            self.cflags = c.SHD_STD_CLFAGS
+        elif (path.startswith("libs/MoEngineLib")):
+            self.cflags = c.MOBICLIP_CFLAGS
+            self.cc = c.MOBICLIP_CC
+        elif (path.startswith("libs/Shade/src")):
+            self.cflags = c.SHD_CLFAGS
         elif (path.startswith("libs/nw4r")):
             self.cflags = c.NW4R_CFLAGS
+            self.cc = c.NW4R_CC
             if path.endswith("snd_adpcm.cpp"):
                 self.cc = c.REVO_EX_CC
 

@@ -61,8 +61,8 @@ namespace g3d
 
     struct ResNameData
     {
-        u32 mLength;
-        char mName[0x1C];
+        u32 len;
+        char str[0x1C];
     };
 
     struct ResName
@@ -73,12 +73,12 @@ namespace g3d
 
         inline u32 GetLength() const
         {
-            return mRes.ref().mLength;
+            return mRes.ref().len;
         }
 
         inline const char *GetName() const
         {
-            return mRes.ref().mName;
+            return mRes.ref().str;
         }
 
         bool operator==(ResName) const;

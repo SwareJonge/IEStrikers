@@ -36,6 +36,7 @@ void __OSShutdownDevices(u32 event);
 void __OSGetDiscState(u8* out);
 void OSShutdownSystem(void);
 void OSReturnToMenu(void);
+void OSReturnToDataManager(void);
 u32 OSGetResetCode(void);
 void OSResetSystem(u32 arg0, u32 arg1, u32 arg2);
 void OSRestart(int arg);

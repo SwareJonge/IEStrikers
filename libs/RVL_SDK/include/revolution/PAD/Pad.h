@@ -8,6 +8,7 @@ extern "C" {
 extern u32 __PADSpec;
 
 BOOL __PADDisableRecalibration(BOOL);
+BOOL PADRecalibrate(u32 mask);
 
 #ifdef __cplusplus
 }

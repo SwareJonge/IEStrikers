@@ -31,13 +31,13 @@ typedef enum {
     SC_REGION_CN,
 } SCProductGameRegion;
 
-typedef struct SCRegion {
+typedef struct SCArea {
     s8 area;      // at 0x0
     char name[4]; // at 0x1
 } SCArea;
 
-typedef struct SCGameRegion {
-    s8 region;      // at 0x0
+typedef struct SCRegion {
+    s8 region;    // at 0x0
     char name[3]; // at 0x1
 } SCRegion;
 
