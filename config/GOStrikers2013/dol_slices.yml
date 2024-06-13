@@ -676,8 +676,11 @@ libs/RVL_SDK/src/revolution/IPC/ipcProfile.c:
   #.bss: [0x808baee0, 0x808baf40]
 
 # sc
-libs/RVL_SDK/src/revolution/SC/scsystem.c:
-  .text: [0x802D7840, 0x802d91d0]
+#libs/RVL_SDK/src/revolution/SC/scsystem.c:
+  #.text: [0x802D7840, 0x802d91d0]
+  #.data: [0x804e8530, 0x804e8688]
+  #.sdata: [0x8050d060, 0x8050d170]
+  #.sbss: [0x8050e218, 0x8050e230]
 
 libs/RVL_SDK/src/revolution/SC/scapi.c:
   .text: [0x802d91d0, 0x802d96d0]
